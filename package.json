@@ -1,17 +1,18 @@
 {
-  "name": "di",
-  "version": "0.0.1",
-  "description": "Dependency Injection for Node.js. Heavily inspired by AngularJS.",
+  "name": "didi",
+  "version": "0.0.2",
+  "description": "Dependency Injection for JavaScript",
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script test/*"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/vojtajina/node-di.git"
+    "url": "git://github.com/Nikku/di-di.git"
   },
   "keywords": [
     "di",
+    "inversion of control",
     "dependency",
     "injection",
     "injector"
