@@ -1,6 +1,8 @@
-## Dependency Injection framework for Node.js
+## Dependency Injection for JavaScript
 
-### Why Dependency Injection ?
+> A fork of [node-di](node-di) that adds support for the minification save array notation.
+
+## Why Dependency Injection?
 There are two things - **Dependency Injection pattern** (aka Inversion of Control) and **Dependency Injection framework**.
 
 The Dependency Injection pattern is about separating the instantiation of objects from the actual logic and behavior that they encapsulate. This pattern has many benefits such as:
@@ -14,7 +16,7 @@ Following this pattern is, of course, possible without any framework.
 However, if you do follow the Dependency Injection pattern, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. The Dependency Injection framework saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies...
 
 
-### Example
+## Example
 
 ```js
 var Car = function(engine) {
@@ -51,8 +53,28 @@ injector.invoke(function(car) {
   car.start();
 });
 ```
-For more examples, check out [the tests](/vojtajina/node-di/blob/master/test/injector.spec.coffee). You can also check out [Karma](https://github.com/karma-runner/karma) and its plugins for more complex examples.
 
+For more examples, check out [the tests](/Nikku/node-di/blob/master/test/injector.spec.coffee). You can also check out [Karma](https://github.com/karma-runner/karma) and its plugins for more complex examples.
+
+## Usage
+
+### On the web
+
+If you are working on the web use the minification save array notation to declare types or factories and their respective dependencies:
+
+```javascript
+var module = {
+  'car': ['type', [ 'engine', Car ]],
+  ...
+};
+
+var di = require('di');
+var injector = new di.Injector([module]);
+
+injector.invoke(['car', function(car) {
+  car.start();
+}]);
+```
 
 ### Registering stuff
 
@@ -96,6 +118,13 @@ var Car = function(/* engine */ e, /* x._weird */ x) {
 };
 ```
 
+You can also the minification save array notation known from [AngularJS][AngularJS]:
+```js
+var Car = [ 'engine', 'trunk', function(e, t) {
+  // will inject objects bound to 'engine' and 'trunk'
+}];
+```
+
 Sometimes it is helpful to inject only a specific property of some object:
 ```js
 var Engine = function(/* config.engine.power */ power) {
@@ -108,25 +137,31 @@ var module = {
 };
 ```
 
-### Differences to Angular's DI
+
+## Differences to ...
+
+#### [node-di][node-di]
+
+- support for array notation
+
+#### Angular DI
 
 - no config/runtime phases (configuration happens by injecting a config object)
 - no global module register
-- no array annotations (comments annotations instead)
 - comment annotation
-- no decorators (maybe not yet?)
+- no decorators
 - service -> type
 - child injectors
 - private modules
 
 
 ---------
-Made for [Karma]. Heavily influenced by [AngularJS]. Also inspired by [Guice] and [Pico Container].
+
+Made for NodeJS _and_ the web. Based on [node-di][node-di].
+
 
 [AngularJS]: http://angularjs.org/
-[Pico Container]: http://picocontainer.codehaus.org/
-[Guice]: http://code.google.com/p/google-guice/
-[Karma]: http://karma-runner.github.io/
+[node-di]: https://github.com/vojtajina/node-di
 
 
 <!--
