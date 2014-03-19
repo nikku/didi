@@ -77,6 +77,25 @@ describe 'injector', ->
       expect(fooInstance.bar).to.deep.equal {baz: 'baz-value', abc: 'abc-value'}
       expect(fooInstance.baz).to.equal 'baz-value'
 
+    it 'should resolve dependencies (array notation)', ->
+      class Foo
+        constructor: (@bar, @baz) ->
+
+      bar = (baz, abc) ->
+        baz: baz
+        abc: abc
+
+      module = new Module
+      module.type 'foo', ['bar', 'baz', Foo]
+      module.factory 'bar', ['baz', 'abc', bar]
+      module.value 'baz', 'baz-value'
+      module.value 'abc', 'abc-value'
+
+      injector = new Injector [module]
+      fooInstance = injector.get 'foo'
+      expect(fooInstance.bar).to.deep.equal {baz: 'baz-value', abc: 'abc-value'}
+      expect(fooInstance.baz).to.equal 'baz-value'
+
 
     it 'should inject properties', ->
       module = new Module
@@ -129,7 +148,7 @@ describe 'injector', ->
       module.factory 'b', bFn
 
       injector = new Injector [module]
-      expect(-> injector.get 'a').to.throw 'Can not resolve circular dependency! ' +
+      expect(-> injector.get 'a').to.throw 'Cannot resolve circular dependency! ' +
                                            '(Resolving: a -> b -> a)'
 
 
@@ -149,6 +168,19 @@ describe 'injector', ->
 
       expect(injector.invoke bar).to.deep.equal {baz: 'baz-value', abc: 'abc-value'}
 
+    it 'should resolve dependencies (array notation)', ->
+      bar = (baz, abc) ->
+        baz: baz
+        abc: abc
+
+      module = new Module
+      module.value 'baz', 'baz-value'
+      module.value 'abc', 'abc-value'
+
+      injector = new Injector [module]
+
+      expect(injector.invoke ['baz', 'abc', bar]).to.deep.equal {baz: 'baz-value', abc: 'abc-value'}
+
 
     it 'should invoke function on given context', ->
       context = {}
@@ -161,12 +193,12 @@ describe 'injector', ->
     it 'should throw error if a non function given', ->
       injector = new Injector []
 
-      expect(-> injector.invoke 123).to.throw 'Can not invoke "123". Expected a function!'
-      expect(-> injector.invoke 'abc').to.throw 'Can not invoke "abc". Expected a function!'
-      expect(-> injector.invoke null).to.throw 'Can not invoke "null". Expected a function!'
-      expect(-> injector.invoke undefined).to.throw 'Can not invoke "undefined". ' +
+      expect(-> injector.invoke 123).to.throw 'Cannot invoke "123". Expected a function!'
+      expect(-> injector.invoke 'abc').to.throw 'Cannot invoke "abc". Expected a function!'
+      expect(-> injector.invoke null).to.throw 'Cannot invoke "null". Expected a function!'
+      expect(-> injector.invoke undefined).to.throw 'Cannot invoke "undefined". ' +
                                                     'Expected a function!'
-      expect(-> injector.invoke {}).to.throw 'Can not invoke "[object Object]". ' +
+      expect(-> injector.invoke {}).to.throw 'Cannot invoke "[object Object]". ' +
                                              'Expected a function!'
 
 
@@ -292,7 +324,7 @@ describe 'injector', ->
       injector = new Injector [moduleParent]
       moduleChild = new Module
 
-      expect(-> injector.createChild [], ['b']).to.throw 'No provider for "b". Can not use ' +
+      expect(-> injector.createChild [], ['b']).to.throw 'No provider for "b". Cannot use ' +
                                                          'provider from the parent!'
 
 

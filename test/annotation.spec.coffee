@@ -42,8 +42,8 @@ describe 'annotation', ->
 
 
     it 'should throw error if a non function given', ->
-      expect(-> parse 123).to.throw 'Can not annotate "123". Expected a function!'
-      expect(-> parse 'abc').to.throw 'Can not annotate "abc". Expected a function!'
-      expect(-> parse null).to.throw 'Can not annotate "null". Expected a function!'
-      expect(-> parse undefined).to.throw 'Can not annotate "undefined". Expected a function!'
-      expect(-> parse {}).to.throw 'Can not annotate "[object Object]". Expected a function!'
+      expect(-> parse 123).to.throw 'Cannot annotate "123". Expected a function!'
+      expect(-> parse 'abc').to.throw 'Cannot annotate "abc". Expected a function!'
+      expect(-> parse null).to.throw 'Cannot annotate "null". Expected a function!'
+      expect(-> parse undefined).to.throw 'Cannot annotate "undefined". Expected a function!'
+      expect(-> parse {}).to.throw 'Cannot annotate "[object Object]". Expected a function!'
