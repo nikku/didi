@@ -1,4 +1,6 @@
-## Dependency Injection for JavaScript
+# Dependency Injection for JavaScript
+
+[![Build Status](https://travis-ci.org/Nikku/didi.png?branch=master)](https://travis-ci.org/Nikku/didi)
 
 > A fork of [node-di](node-di) that adds support for the minification save array notation.
 
