@@ -57,7 +57,6 @@ describe 'injector', ->
 
 
     it 'should reuse module', ->
-
       class FooType
         constructor: -> @name = 'foo'
 
@@ -74,6 +73,29 @@ describe 'injector', ->
 
       injector2 = new Injector [module]
       expect(injector2.get('foo')).to.equal(injector2.get('bar'))
+
+
+    it 'should reuse inject fn', ->
+      class FooType
+        constructor: -> @name = 'foo'
+
+      barFactory = (foo) ->
+        foo
+
+      module = new Module
+      module.type('foo', [ FooType ])
+      module.factory('bar', [ 'foo', barFactory ])
+
+      injector = new Injector [module]
+
+      fn = (foo, bar) ->
+        expect(foo).to.equal injector.get('foo')
+        expect(bar).to.equal injector.get('bar')
+
+      annotatedFn = [ 'foo', 'bar', fn ]
+
+      injector.invoke annotatedFn
+      injector.invoke annotatedFn
 
 
     it 'should resolve dependencies', ->
