@@ -324,8 +324,8 @@ describe 'injector', ->
       injector = new Injector [moduleParent]
       moduleChild = new Module
 
-      expect(-> injector.createChild [], ['b']).to.throw 'No provider for "b". Cannot use ' +
-                                                         'provider from the parent!'
+      expect(-> injector.createChild [], ['b'])
+        .to.throw 'No provider for "b". Cannot use provider from the parent!'
 
 
   describe 'private modules', ->
@@ -418,6 +418,7 @@ describe 'injector', ->
 
 
   describe 'scopes', ->
+
     it 'should force new instances per scope', ->
       Foo = ->
       Foo.$scope = ['request']
@@ -440,3 +441,46 @@ describe 'injector', ->
       requestInjector = injector.createChild [], ['request']
       expect(requestInjector.get 'foo').to.not.equal foo
       expect(requestInjector.get 'bar').to.equal bar
+
+
+  describe 'override', ->
+
+    it 'should replace definition via override module', ->
+      class Foo
+        constructor: (@bar, @baz) ->
+          {bar: @bar, baz: @baz}
+
+      createBlub = (@foo) ->
+        @foo
+
+      base = new Module
+      base.type 'foo', ['bar', 'baz', Foo]
+      base.factory 'blub', ['foo', createBlub]
+      base.value 'baz', 'baz-value'
+      base.value 'abc', 'abc-value'
+
+      extension = new Module
+      extension.type 'foo', ['baz', 'abc', Foo]
+
+      injector = new Injector [base, extension]
+
+      expectedFoo = {bar: 'baz-value', baz: 'abc-value'}
+
+      expect(injector.get 'foo').to.deep.equal expectedFoo
+      expect(injector.get 'blub').to.deep.equal expectedFoo
+
+
+    it 'should mock element via value', -> 
+      createBar = () -> {a: 'realA'}
+
+      base = new Module
+      base.factory 'bar', createBar
+
+      mocked = { a: 'A' }
+
+      mock = new Module
+      mock.value 'bar', mocked
+
+      injector = new Injector [base, mock]
+
+      expect(injector.get 'bar').to.equal mocked
