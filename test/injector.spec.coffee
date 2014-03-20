@@ -56,6 +56,26 @@ describe 'injector', ->
       expect(injector.get 'baz').to.equal(injector.get 'baz')
 
 
+    it 'should reuse module', ->
+
+      class FooType
+        constructor: -> @name = 'foo'
+
+      barFactory = (foo) ->
+        foo
+
+      module = new Module
+      module.type('foo', [ FooType ])
+      module.factory('bar', [ 'foo', barFactory ])
+
+      injector1 = new Injector [module]
+
+      expect(injector1.get('foo')).to.equal(injector1.get('bar'))
+
+      injector2 = new Injector [module]
+      expect(injector2.get('foo')).to.equal(injector2.get('bar'))
+
+
     it 'should resolve dependencies', ->
       class Foo
         constructor: (@bar, @baz) ->
