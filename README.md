@@ -1,6 +1,6 @@
 # Dependency Injection for JavaScript
 
-[![Build Status](https://travis-ci.org/Nikku/didi.png?branch=master)](https://travis-ci.org/Nikku/didi)
+[![Build Status](https://travis-ci.org/nikku/didi.png?branch=master)](https://travis-ci.org/nikku/didi)
 
 > A fork of [node-di](node-di) that adds support for the minification save array notation.
 
@@ -172,5 +172,5 @@ Token - each Object dependency (not an Object itself) is identified via a Token.
 Injector - a container or context, capable of resolving Object dependencies and caching references to Objects constructed during the dependency resolution process.
 Provider - a recipe for constructing Objects, typically a constructor or factory function
 Binding - a mapping between a Token and a Provider
-Module - a set of bindings. A Module is used to configure an Injector and defines which Objects can be resolved via an Injector. Module can also be used to override Object definitions (for reconfiguration or mocking purposes). 
+Module - a set of bindings. A Module is used to configure an Injector and defines which Objects can be resolved via an Injector. Module can also be used to override Object definitions (for reconfiguration or mocking purposes).
 -->
