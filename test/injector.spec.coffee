@@ -39,6 +39,9 @@ describe 'injector', ->
       expect(injector.get 'baz').to.deep.equal {name: 'baz'}
       expect(injector.get 'baz').to.be.an.instanceof BazType
 
+      # default to strict=true
+      expect(injector.get('bar', true)).to.equal 'bar value'
+
 
     it 'should always return the same instance', ->
       class BazType
@@ -176,6 +179,16 @@ describe 'injector', ->
 
       injector = new Injector [module]
       expect(-> injector.get 'a').to.throw 'No provider for "c"! (Resolving: a -> b -> c)'
+
+
+    it 'should return null if non-strict and no provider', ->
+      module = new Module
+
+      injector = new Injector [module]
+
+      notDefined = injector.get('not-defined', false)
+
+      expect(notDefined).to.be.null
 
 
     it 'should throw error if circular dependency', ->
@@ -512,7 +525,7 @@ describe 'injector', ->
       expect(injector.get 'blub').to.deep.equal expectedFoo
 
 
-    it 'should mock element via value', -> 
+    it 'should mock element via value', ->
       createBar = () -> {a: 'realA'}
 
       base = new Module
