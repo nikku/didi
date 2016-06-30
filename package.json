@@ -4,7 +4,8 @@
   "description": "Dependency Injection for JavaScript",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --compilers coffee:coffee-script test/*"
+    "test": "grunt test",
+    "all": "grunt"
   },
   "repository": {
     "type": "git",
@@ -18,12 +19,13 @@
     "injector"
   ],
   "devDependencies": {
-    "grunt": "~0.4",
-    "grunt-simple-mocha": "~0.4",
-    "grunt-contrib-jshint": "~0.6",
-    "mocha": "~1.12",
     "chai": "~1.7",
-    "coffee-script": "~1.6"
+    "coffee-script": "~1.6",
+    "grunt": "~0.4",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-jshint": "~0.6",
+    "grunt-simple-mocha": "~0.4",
+    "mocha": "~1.12"
   },
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "license": "MIT"
