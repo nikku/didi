@@ -29,7 +29,6 @@ module.exports = (grunt) ->
 
       options:
         quotmark: 'single'
-        camelcase: true
         strict: true
         trailing: true
         curly: true
@@ -42,7 +41,6 @@ module.exports = (grunt) ->
         undef: true
         boss: true
         node: true
-        es5: true
         globals: {}
 
   # grunt.loadTasks 'tasks'
