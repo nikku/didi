@@ -37,15 +37,6 @@
     "source-map-support": "^0.5.0",
     "webpack": "^3.7.1"
   },
-  "directories": [
-    "lib"
-  ],
-  "files": [
-    "dist/didi.js",
-    "dist/didi.js.map",
-    "LICENSE",
-    "README.md"
-  ],
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "license": "MIT"
 }

@@ -1,4 +1,6 @@
 test
-.*
-di.sublime-*
-Gruntfile.coffee
+.babelrc
+.eslintrc
+.gitignore
+.travis.yml
+webpack.config.js
