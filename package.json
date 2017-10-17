@@ -2,10 +2,15 @@
   "name": "didi",
   "version": "0.1.1",
   "description": "Dependency Injection for JavaScript",
-  "main": "lib/index.js",
+  "main": "dist/didi.js",
+  "module": "lib/index.js",
   "scripts": {
-    "test": "grunt test",
-    "all": "grunt"
+    "all": "run-s lint test bundle",
+    "bundle": "NODE_ENV=production webpack",
+    "lint": "eslint 'lib/**/*.js' 'test/**/*.js'",
+    "test": "mocha",
+    "prepare": "run-s bundle",
+    "prepublishOnly": "run-s test"
   },
   "repository": {
     "type": "git",
@@ -19,14 +24,24 @@
     "injector"
   ],
   "devDependencies": {
-    "chai": "~1.7",
-    "coffee-script": "~1.6",
-    "grunt": "~0.4",
-    "grunt-cli": "^1.2.0",
-    "grunt-contrib-jshint": "~0.6",
-    "grunt-simple-mocha": "~0.4",
-    "mocha": "~1.12"
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-preset-env": "^1.6.0",
+    "babel-register": "^6.26.0",
+    "chai": "^4.1.2",
+    "eslint": "^4.9.0",
+    "eslint-plugin-mocha": "^4.11.0",
+    "mocha": "^4.0.1",
+    "npm-run-all": "^4.1.1",
+    "source-map-support": "^0.5.0",
+    "webpack": "^3.7.1"
   },
+  "files": [
+    "dist/didi.js",
+    "dist/didi.map.js",
+    "README.md"
+  ],
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "license": "MIT"
 }
