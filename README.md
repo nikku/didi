@@ -145,6 +145,7 @@ var module = {
 #### [node-di][node-di]
 
 - support for array notation
+- supports [ES2015](http://babeljs.io/learn-es2015/)
 
 #### Angular DI
 
