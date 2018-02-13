@@ -2,6 +2,8 @@
 test
 .babelrc
 .eslintrc
+.eslintignore
 .gitignore
 .travis.yml
-webpack.config.js
+CHANGELOG.md
+rollup.config.js
