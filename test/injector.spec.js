@@ -8,10 +8,14 @@ describe('injector', function() {
 
   it('should consume an object as a module', function() {
 
-    class BazType {
+    class BubType {
       constructor() {
-        this.name = 'baz';
+        this.name = 'bub';
       }
+    }
+
+    function BazType() {
+      this.name = 'baz';
     }
 
     var module = {
@@ -22,13 +26,21 @@ describe('injector', function() {
         }
       ],
       bar: ['value', 'bar-value'],
-      baz: ['type', BazType]
+      baz: ['type', BazType],
+      bub: ['type', BubType]
     };
     var injector = new Injector([module]);
 
     expect(injector.get('foo')).to.equal('foo-value');
     expect(injector.get('bar')).to.equal('bar-value');
-    expect(injector.get('baz')).to.be.an.instanceof(BazType);
+
+    var bub = injector.get('bub');
+    expect(bub).to.be.an.instanceof(BubType);
+    expect(bub.name).to.eql('bub');
+
+    var baz = injector.get('baz');
+    expect(baz).to.be.an.instanceof(BazType);
+    expect(baz.name).to.eql('baz');
   });
 
 

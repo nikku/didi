@@ -28,6 +28,19 @@ describe('annotation', function() {
       return expect(annotate('aa', 'bb', fn)).to.equal(fn);
     });
 
+
+    it('should annotate class constructor', function() {
+      class Foo {
+        constructor(a, b) { }
+      }
+
+      annotate('aa', 'bb', Foo);
+
+      expect(Foo.$inject).to.deep.equal(['aa', 'bb']);
+
+      return expect(annotate('aa', 'bb', Foo)).to.equal(Foo);
+    });
+
   });
 
 
@@ -37,6 +50,15 @@ describe('annotation', function() {
       var fn;
       fn = function(one, two) {};
       return expect(parse(fn)).to.deep.equal(['one', 'two']);
+    });
+
+
+    it('should parse constructor argument names without comments', function() {
+      class Foo {
+        constructor(one, two) {}
+      }
+
+      return expect(parse(Foo)).to.deep.equal(['one', 'two']);
     });
 
 
