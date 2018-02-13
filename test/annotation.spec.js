@@ -1,12 +1,14 @@
-var expect = require('chai').expect;
+import { expect } from 'chai';
 
-var a = require('../lib/annotation');
+import {
+  annotate,
+  parse
+} from '../lib/annotation';
+
 
 describe('annotation', function() {
 
   describe('annotate', function() {
-
-    var annotate = a.annotate;
 
     it('should set $inject property on the last argument', function() {
       var fn;
@@ -30,8 +32,6 @@ describe('annotation', function() {
 
 
   describe('parse', function() {
-
-    var parse = a.parse;
 
     it('should parse argument names without comments', function() {
       var fn;

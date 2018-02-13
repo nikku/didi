@@ -1,10 +1,10 @@
-var expect = require('chai').expect;
+import { expect } from 'chai';
+
+import Module from '../lib/module';
+import Injector from '../lib/injector';
 
 
 describe('injector', function() {
-
-  var Module = require('../lib/module');
-  var Injector = require('../lib/injector');
 
   it('should consume an object as a module', function() {
 
