@@ -62,6 +62,17 @@ describe('annotation', function() {
     });
 
 
+    it('should parse non-constructor class', function() {
+      class Car {
+        start() {
+          this.started = true;
+        }
+      }
+
+      return expect(parse(Car)).to.deep.equal([ ]);
+    });
+
+
     it('should parse comment annotation', function() {
       var fn;
       fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
