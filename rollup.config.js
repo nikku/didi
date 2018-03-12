@@ -1,8 +1,19 @@
 import uglify from 'rollup-plugin-uglify';
 import babel from 'rollup-plugin-babel';
 
+function bbl() {
+  return babel({
+    babelrc: false,
+    presets: [
+      [
+        'env', {
+          modules: false
+        }
+      ]
+    ]
+  });
+}
 
-// rollup.config.js (building more than one bundle)
 export default [
   {
     input: 'lib/index.js',
@@ -12,16 +23,7 @@ export default [
       name: 'didi'
     },
     plugins: [
-      babel({
-        babelrc: false,
-        presets: [
-          [
-            'env', {
-              modules: false
-            }
-          ]
-        ]
-      })
+      bbl()
     ]
   },
   {
@@ -32,16 +34,7 @@ export default [
       name: 'didi'
     },
     plugins: [
-      babel({
-        babelrc: false,
-        presets: [
-          [
-            'env', {
-              modules: false
-            }
-          ]
-        ]
-      }),
+      bbl(),
       uglify()
     ]
   },
@@ -50,13 +43,19 @@ export default [
     output: {
       file: 'dist/index.cjs.js',
       format: 'cjs'
-    }
+    },
+    plugins: [
+      bbl()
+    ]
   },
   {
     input: 'lib/index.js',
     output: {
       file: 'dist/index.mjs',
       format: 'es'
-    }
+    },
+    plugins: [
+      bbl()
+    ]
   }
 ];
