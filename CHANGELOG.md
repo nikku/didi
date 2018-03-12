@@ -6,6 +6,17 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 3.0.0
+
+### Breaking Changes
+
+* `CHORE`: don't expose `lib` folder; library consumers should use API exposed via bundled artifacts
+
+### Other Improvements
+
+* `FEAT`: allow local overrides on `Injector#invoke`
+* `CHORE`: babelify all produced bundles
+
 ## 2.0.1
 
 * `FIX`: make injection work on constructor less ES2015 `class`
