@@ -2,7 +2,7 @@
   "name": "didi",
   "version": "2.0.1",
   "description": "Dependency Injection for JavaScript",
-  "main": "dist/index.cjs.js",
+  "main": "dist/index.js",
   "module": "dist/index.mjs",
   "scripts": {
     "all": "run-s lint test bundle",
