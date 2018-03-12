@@ -75,6 +75,7 @@ describe('annotation', function() {
 
     it('should parse comment annotation', function() {
       var fn;
+      // eslint-disable-next-line spaced-comment
       fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
       return expect(parse(fn)).to.deep.equal(['one', 'two', 'three']);
     });
