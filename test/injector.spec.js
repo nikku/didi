@@ -408,6 +408,28 @@ describe('injector', function() {
       });
     });
 
+
+    it('should resolve with local overrides', function() {
+      class FooType {
+        constructor() {
+          throw new Error('foo broken');
+        }
+      }
+
+      var module = {
+        foo: [ 'type', FooType ]
+      };
+
+      var injector = new Injector([ module ]);
+
+      var annotatedFn = ['foo', 'bar', function(foo, bar) {
+        expect(foo).to.eql('FOO');
+        expect(bar).to.equal(undefined);
+      }];
+
+      injector.invoke(annotatedFn, null, { foo: 'FOO', bar: undefined });
+    });
+
   });
 
 
