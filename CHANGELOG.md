@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 3.2.0
+
+* `CHORE`: mark library as side-effect free via `sideEffects: false`
+
 ## 3.1.0
 
 * `CHORE`: add `browser` field
