@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/nikku/didi.png?branch=master)](https://travis-ci.org/nikku/didi)
 
-> A fork of [node-di][node-di] that adds support for the minification save array notation.
+> A maintained fork of [node-di][node-di] that adds support for ES6 and the minification save array notation.
 
 ## Why Dependency Injection?
 There are two things - **Dependency Injection pattern** (aka Inversion of Control) and **Dependency Injection framework**.
