@@ -1,61 +1,52 @@
 import uglify from 'rollup-plugin-uglify';
 import babel from 'rollup-plugin-babel';
 
-function bbl() {
-  return babel({
-    babelrc: false,
-    presets: [
-      [
-        'env', {
-          modules: false
-        }
+import pkg from './package.json';
+
+function pgl(plugins=[]) {
+  return [
+    babel({
+      babelrc: false,
+      presets: [
+        [
+          'env', {
+            modules: false
+          }
+        ]
       ]
-    ]
-  });
+    }),
+    ...plugins
+  ];
 }
 
 export default [
+  // browser-friendly UMD build
   {
     input: 'lib/index.js',
     output: {
-      file: 'dist/didi.umd.js',
-      format: 'umd',
-      name: 'didi'
+      name: 'didi',
+      file: pkg.browser,
+      format: 'umd'
     },
-    plugins: [
-      bbl()
-    ]
+    plugins: pgl()
   },
   {
     input: 'lib/index.js',
     output: {
-      file: 'dist/didi.umd.prod.js',
-      format: 'umd',
-      name: 'didi'
+      name: 'didi',
+      file: pkg.browser.replace(/\.js$/, '.prod.js'),
+      format: 'umd'
     },
-    plugins: [
-      bbl(),
+    plugins: pgl([
       uglify()
-    ]
+    ])
   },
   {
     input: 'lib/index.js',
-    output: {
-      file: 'dist/index.js',
-      format: 'cjs'
-    },
-    plugins: [
-      bbl()
-    ]
-  },
-  {
-    input: 'lib/index.js',
-    output: {
-      file: 'dist/index.mjs',
-      format: 'es'
-    },
-    plugins: [
-      bbl()
-    ]
+    output: [
+      { file: pkg.main, format: 'cjs' },
+      { file: pkg.module, format: 'es' }
+    ],
+    plugins: pgl()
   }
 ];

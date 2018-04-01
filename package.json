@@ -3,7 +3,8 @@
   "version": "3.0.0",
   "description": "Dependency Injection for JavaScript",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.esm.js",
+  "browser": "dist/didi.umd.js",
   "scripts": {
     "all": "run-s lint test bundle test:integration",
     "bundle": "NODE_ENV=production rollup -c",
