@@ -6,6 +6,12 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 4.0.0
+
+### Breaking Changes
+
+* `FIX`: remove browser field again; it confuses modern module bundlers. This partially reverts `v3.1.0`
+
 ## 3.2.0
 
 * `CHORE`: mark library as side-effect free via `sideEffects: false`

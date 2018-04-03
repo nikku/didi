@@ -19,13 +19,15 @@ function pgl(plugins=[]) {
   ];
 }
 
+const umdDist = 'dist/didi.umd.js';
+
 export default [
   // browser-friendly UMD build
   {
     input: 'lib/index.js',
     output: {
       name: 'didi',
-      file: pkg.browser,
+      file: umdDist,
       format: 'umd'
     },
     plugins: pgl()
@@ -34,7 +36,7 @@ export default [
     input: 'lib/index.js',
     output: {
       name: 'didi',
-      file: pkg.browser.replace(/\.js$/, '.prod.js'),
+      file: umdDist.replace(/\.js$/, '.prod.js'),
       format: 'umd'
     },
     plugins: pgl([
