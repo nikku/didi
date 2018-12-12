@@ -56,7 +56,7 @@ injector.invoke(function(car) {
 });
 ```
 
-For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.coffee). You can also check out [Karma](https://github.com/karma-runner/karma) and its plugins for more complex examples.
+For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js). You can also check out [Karma](https://github.com/karma-runner/karma) and its plugins for more complex examples.
 
 ## Usage
 
