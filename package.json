@@ -8,7 +8,7 @@
   "source": "lib/index.js",
   "scripts": {
     "all": "run-s lint test bundle test:integration",
-    "bundle": "NODE_ENV=production rollup -c",
+    "bundle": "cross-env NODE_ENV=production rollup -c",
     "lint": "eslint .",
     "test": "mocha -r esm test/*.spec.js",
     "test:integration": "mocha test/integration/*.spec.js",
@@ -28,13 +28,14 @@
   ],
   "devDependencies": {
     "chai": "^4.1.2",
+    "cross-env": "^5.2.1",
     "eslint": "^5.6.1",
     "eslint-plugin-bpmn-io": "^0.6.0",
     "esm": "^3.0.84",
     "mocha": "^5.2.0",
     "npm-run-all": "^4.1.2",
     "rollup": "^0.66.5",
-    "rollup-plugin-terser": "^5.1.1"
+    "rollup-plugin-terser": "^5.1.3"
   },
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "license": "MIT",
