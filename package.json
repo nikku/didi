@@ -6,7 +6,7 @@
   "module": "dist/index.esm.js",
   "scripts": {
     "all": "run-s lint test bundle test:integration",
-    "bundle": "NODE_ENV=production rollup -c",
+    "bundle": "cross-env NODE_ENV=production rollup -c",
     "lint": "eslint .",
     "test": "mocha -r esm test/*.spec.js",
     "test:integration": "mocha test/integration/*.spec.js",
@@ -28,6 +28,7 @@
     "babel-core": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "chai": "^4.1.2",
+    "cross-env": "^5.2.0",
     "eslint": "^5.6.1",
     "eslint-plugin-bpmn-io": "^0.6.0",
     "esm": "^3.0.84",
