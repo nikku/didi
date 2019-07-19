@@ -10,14 +10,16 @@ const srcEntry = pkg.source;
 
 const umdDist = pkg['umd:main'];
 
+const umdName = 'Didi';
+
 export default [
   // browser-friendly UMD build
   {
     input: srcEntry,
     output: {
-      name: 'didi',
       file: umdDist.replace(/\.js$/, '.prod.js'),
-      format: 'umd'
+      format: 'umd',
+      name: umdName
     },
     plugins: pgl([
       terser()
@@ -27,9 +29,9 @@ export default [
     input: srcEntry,
     output: [
       {
-        name: 'didi',
         file: umdDist,
-        format: 'umd'
+        format: 'umd',
+        name: umdName
       },
       { file: pkg.main, format: 'cjs' },
       { file: pkg.module, format: 'es' }
