@@ -1,4 +1,4 @@
-import { uglify } from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
 
 import pkg from './package.json';
 
@@ -20,7 +20,7 @@ export default [
       format: 'umd'
     },
     plugins: pgl([
-      uglify()
+      terser()
     ])
   },
   {
