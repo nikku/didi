@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+* `FEAT`: add async injector :tada:
+* `CHORE`: no-babel build
+* `CHORE`: minify using `terser`
+
 ## 4.0.0
 
 ### Breaking Changes
