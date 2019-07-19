@@ -1,6 +1,9 @@
 language: node_js
+
 node_js:
-  - node
-sudo: false
+  - 'node'
+  - '10'
+  - '8'
+
 script:
   - npm run all
