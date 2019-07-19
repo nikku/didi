@@ -1,22 +1,9 @@
 import { uglify } from 'rollup-plugin-uglify';
-import babel from 'rollup-plugin-babel';
 
 import pkg from './package.json';
 
 function pgl(plugins=[]) {
-  return [
-    babel({
-      babelrc: false,
-      presets: [
-        [
-          'env', {
-            modules: false
-          }
-        ]
-      ]
-    }),
-    ...plugins
-  ];
+  return plugins;
 }
 
 const srcEntry = pkg.source;

@@ -1,7 +1,6 @@
 !dist
 lib
 test
-.babelrc
 .eslintrc
 .eslintignore
 .gitignore
