@@ -1,13 +1,14 @@
 var expect = require('chai').expect;
 
-var annotate = require('../../').annotate;
-var Injector = require('../../').Injector;
-var Module = require('../../').Module;
-
 
 describe('integration', function() {
 
-  describe('bundle', function() {
+  describe('cjs bundle', function() {
+
+    var annotate = require('../../').annotate;
+    var Injector = require('../../').Injector;
+    var Module = require('../../').Module;
+
 
     it('should expose API', function() {
       expect(annotate).to.exist;
@@ -51,6 +52,19 @@ describe('integration', function() {
       var baz = injector.get('baz');
       expect(baz).to.be.an.instanceof(BazType);
       expect(baz.name).to.eql('baz');
+    });
+
+  });
+
+
+  describe('umd bundle', function() {
+
+    var didi = require('../../dist/didi.umd.prod.js');
+
+    it('should expose API', function() {
+      expect(didi.annotate).to.exist;
+      expect(didi.Injector).to.exist;
+      expect(didi.Module).to.exist;
     });
 
   });
