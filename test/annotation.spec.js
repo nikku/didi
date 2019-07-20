@@ -2,7 +2,7 @@ import { expect } from 'chai';
 
 import {
   annotate,
-  parse
+  parseAnnotations
 } from '../lib/annotation';
 
 
@@ -44,12 +44,12 @@ describe('annotation', function() {
   });
 
 
-  describe('parse', function() {
+  describe('parseAnnotations', function() {
 
     it('should parse argument names without comments', function() {
       var fn;
       fn = function(one, two) {};
-      return expect(parse(fn)).to.deep.equal(['one', 'two']);
+      return expect(parseAnnotations(fn)).to.deep.equal(['one', 'two']);
     });
 
 
@@ -58,14 +58,14 @@ describe('annotation', function() {
         constructor(one, two) {}
       }
 
-      return expect(parse(Foo)).to.deep.equal(['one', 'two']);
+      return expect(parseAnnotations(Foo)).to.deep.equal(['one', 'two']);
     });
 
 
     it('should parse async function', function() {
       async function foo(a, b) {}
 
-      return expect(parse(foo)).to.deep.equal([ 'a', 'b' ]);
+      return expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
     });
 
 
@@ -76,7 +76,7 @@ describe('annotation', function() {
         }
       }
 
-      return expect(parse(Car)).to.deep.equal([ ]);
+      return expect(parseAnnotations(Car)).to.deep.equal([ ]);
     });
 
 
@@ -84,43 +84,43 @@ describe('annotation', function() {
       var fn;
       // eslint-disable-next-line spaced-comment
       fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
-      return expect(parse(fn)).to.deep.equal(['one', 'two', 'three']);
+      return expect(parseAnnotations(fn)).to.deep.equal(['one', 'two', 'three']);
     });
 
 
     it('should parse mixed comments with argument names', function() {
       var fn;
       fn = function(/* one */ a, b,/*   three*/c) {};
-      return expect(parse(fn)).to.deep.equal(['one', 'b', 'three']);
+      return expect(parseAnnotations(fn)).to.deep.equal(['one', 'b', 'three']);
     });
 
 
     it('should parse empty arguments', function() {
       var fn;
       fn = function() {};
-      return expect(parse(fn)).to.deep.equal([]);
+      return expect(parseAnnotations(fn)).to.deep.equal([]);
     });
 
 
     it('should throw error if a non function given', function() {
       expect(function() {
-        return parse(123);
+        return parseAnnotations(123);
       }).to.throw('Cannot annotate "123". Expected a function!');
 
       expect(function() {
-        return parse('abc');
+        return parseAnnotations('abc');
       }).to.throw('Cannot annotate "abc". Expected a function!');
 
       expect(function() {
-        return parse(null);
+        return parseAnnotations(null);
       }).to.throw('Cannot annotate "null". Expected a function!');
 
       expect(function() {
-        return parse(void 0);
+        return parseAnnotations(void 0);
       }).to.throw('Cannot annotate "undefined". Expected a function!');
 
       expect(function() {
-        return parse({});
+        return parseAnnotations({});
       }).to.throw('Cannot annotate "[object Object]". Expected a function!');
     });
 
