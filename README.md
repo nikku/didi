@@ -13,9 +13,9 @@ The _Dependency Injection pattern_ is about separating the instantiation of obje
 - **code reuse** - such an object is much easier to reuse in other environments, because it is not coupled to a specific implementation of its dependencies,
 - and **much easier to test**, because testing is essentially about instantiating a single object without the rest of the environment.
 
-Following this pattern is, of course, possible without any framework.
+If you do follow this pattern without a framework, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. 
 
-However, if you do follow the Dependency Injection pattern, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. `didi` is the _Dependency Injection framework_ that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies.
+`didi` is the _Dependency Injection framework_ that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies.
 
 
 ## Example
