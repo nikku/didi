@@ -2,43 +2,41 @@
 
 [![Build Status](https://travis-ci.org/nikku/didi.png?branch=master)](https://travis-ci.org/nikku/didi)
 
-A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) micro framework for JavaScript. 
+A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) container for JavaScript. 
 
- 
-## The Case for Dependency Injection
+## About
 
-The _Dependency Injection pattern_ is about separating the instantiation of objects from the actual logic and behavior that they encapsulate. This pattern has many benefits such as:
+[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) decouples component and component dependency instantiation from component behavior. This benefits your applications in a few ways: 
 
-- **explicit dependencies** - all dependencies are passed in as constructor arguments, which makes it easy to understand how particular object depends on the rest of the environment,
-- **code reuse** - such an object is much easier to reuse in other environments, because it is not coupled to a specific implementation of its dependencies,
-- and **much easier to test**, because testing is essentially about instantiating a single object without the rest of the environment.
+- **explicit dependencies** - all dependencies are passed in as constructor arguments, which makes it easy to understand how particular object depends on the rest of the environment
+- **code reuse** - such an object is much easier to reuse in other environments, because it is not coupled to a specific implementation of its dependencies
+- **much easier to test** - component dependencies can be mocked trivially / overridden for testing
 
-If you do follow this pattern without a framework, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. 
+Following this pattern without a framework, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. 
 
-`didi` is the _Dependency Injection framework_ that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies.
+`didi` is a dependency injection container that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies.
 
 
 ## Example
 
 ```js
-var Car = function(engine) {
+function Car(engine) {
   this.start = function() {
     engine.start();
   };
-};
+}
 
-var createPetrolEngine = function(power) {
+function createPetrolEngine(power) {
   return {
     start: function() {
       console.log('Starting engine with ' + power + 'hp');
     }
   };
-};
-
+}
 
 // a module is just a plain JavaScript object
 // it is a recipe for the injector, how to instantiate stuff
-var module = {
+const carModule = {
   // if an object asks for 'car', the injector will call new Car(...) to produce it
   'car': ['type', Car],
   // if an object asks for 'engine', the injector will call createPetrolEngine(...) to produce it
@@ -47,101 +45,116 @@ var module = {
   'power': ['value', 1184] // probably Bugatti Veyron
 };
 
-
-var di = require('di');
-var injector = new di.Injector([module]);
+const { Injector } = require('didi');
+const injector = new Injector([
+  carModule
+]);
 
 injector.invoke(function(car) {
   car.start();
 });
 ```
 
-For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js). You can also check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), to libraries that heavily use dependency injection at its core.
+For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js). 
+
+You can also check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), tow libraries that heavily use dependency injection at its core.
+
 
 ## Usage
 
-### On the web
+### On the Web
 
 Use the minification save array notation to declare types or factories and their respective dependencies:
 
 ```javascript
-var module = {
+const carModule = {
   'car': ['type', [ 'engine', Car ]],
   ...
 };
 
-var di = require('di');
-var injector = new di.Injector([module]);
+const {
+  Injector
+} = require('didi');
+
+const injector = new Injector([
+  carModule
+])
 
 injector.invoke(['car', function(car) {
   car.start();
 }]);
 ```
 
-### Registering stuff
 
-#### type(token, Constructor)
+### Registering Stuff
+
+#### `type(token, Constructor)`
+
 To produce the instance, `Constructor` will be called with `new` operator.
 ```js
-var module = {
+const module = {
   'engine': ['type', DieselEngine]
 };
 ```
 
-#### factory(token, factoryFn)
+#### `factory(token, factoryFn)`
+
 To produce the instance, `factoryFn` will be called (without any context) and its result will be used.
 ```js
-var module = {
+const module = {
   'engine': ['factory', createDieselEngine]
 };
 ```
 
-#### value(token, value)
+#### `value(token, value)`
+
 Register the final value.
+
 ```js
-var module = {
+const module = {
   'power': ['value', 1184]
 };
 ```
 
 
 ### Annotation
+
 The injector looks up tokens based on argument names:
 ```js
-var Car = function(engine, license) {
+function Car(engine, license) {
   // will inject objects bound to 'engine' and 'license' tokens
-};
+}
 ```
 
 You can also use comments:
 ```js
-var Car = function(/* engine */ e, /* x._weird */ x) {
+function Car(/* engine */ e, /* x._weird */ x) {
   // will inject objects bound to 'engine' and 'x._weird' tokens
-};
+}
 ```
 
 You can also the minification save array notation known from [AngularJS][AngularJS]:
 ```js
-var Car = [ 'engine', 'trunk', function(e, t) {
+const Car = [ 'engine', 'trunk', function(e, t) {
   // will inject objects bound to 'engine' and 'trunk'
 }];
 ```
 
 Sometimes it is helpful to inject only a specific property of some object:
 ```js
-var Engine = function(/* config.engine.power */ power) {
+function Engine(/* config.engine.power */ power) {
   // will inject 1184 (config.engine.power),
   // assuming there is no direct binding for 'config.engine.power' token
-};
+}
 
-var module = {
+const engineModule = {
   'config': ['value', {engine: {power: 1184}, other : {}}]
 };
 ```
 
 ## Credits
 
-Built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork of that adds support for ES6 and the minification save array notation. 
+This library is built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification save array notation and other features.
 
 
 ## Differences to ...
@@ -162,9 +175,9 @@ Built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a m
 - private modules
 
 
----------
+## License
 
-Made for NodeJS _and_ the web. Based on [node-di][node-di].
+MIT
 
 
 [AngularJS]: http://angularjs.org/
