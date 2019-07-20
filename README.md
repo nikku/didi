@@ -1,6 +1,6 @@
 # `didi`
 
-[![Build Status](https://travis-ci.org/nikku/didi.png?branch=master)](https://travis-ci.org/nikku/didi)
+[![Build Status](https://travis-ci.org/nikku/didi.svg?branch=master)](https://travis-ci.org/nikku/didi)
 
 A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) container for JavaScript. 
 
