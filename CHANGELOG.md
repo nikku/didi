@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 5.1.0
+
+* `DOCS`: improve
+
 ## 5.0.1
 
 * `FIX`: remove async injector from main bundle, will be released seperately
