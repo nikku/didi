@@ -1,13 +1,13 @@
-# Dependency Injection for JavaScript
+# `didi`
 
 [![Build Status](https://travis-ci.org/nikku/didi.png?branch=master)](https://travis-ci.org/nikku/didi)
 
-> A maintained fork of [node-di][node-di] that adds support for ES6 and the minification save array notation.
+A [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) micro framework for JavaScript. 
 
-## Why Dependency Injection?
-There are two things - **Dependency Injection pattern** (aka Inversion of Control) and **Dependency Injection framework**.
+ 
+## The Case for Dependency Injection
 
-The Dependency Injection pattern is about separating the instantiation of objects from the actual logic and behavior that they encapsulate. This pattern has many benefits such as:
+The _Dependency Injection pattern_ is about separating the instantiation of objects from the actual logic and behavior that they encapsulate. This pattern has many benefits such as:
 
 - **explicit dependencies** - all dependencies are passed in as constructor arguments, which makes it easy to understand how particular object depends on the rest of the environment,
 - **code reuse** - such an object is much easier to reuse in other environments, because it is not coupled to a specific implementation of its dependencies,
@@ -15,7 +15,7 @@ The Dependency Injection pattern is about separating the instantiation of object
 
 Following this pattern is, of course, possible without any framework.
 
-However, if you do follow the Dependency Injection pattern, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. The Dependency Injection framework saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies...
+However, if you do follow the Dependency Injection pattern, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. `didi` is the _Dependency Injection framework_ that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies.
 
 
 ## Example
@@ -56,13 +56,13 @@ injector.invoke(function(car) {
 });
 ```
 
-For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js). You can also check out [Karma](https://github.com/karma-runner/karma) and its plugins for more complex examples.
+For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js). You can also check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), to libraries that heavily use dependency injection at its core.
 
 ## Usage
 
 ### On the web
 
-If you are working on the web use the minification save array notation to declare types or factories and their respective dependencies:
+Use the minification save array notation to declare types or factories and their respective dependencies:
 
 ```javascript
 var module = {
@@ -139,6 +139,10 @@ var module = {
 };
 ```
 
+## Credits
+
+Built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork of that adds support for ES6 and the minification save array notation. 
+
 
 ## Differences to ...
 
@@ -165,13 +169,3 @@ Made for NodeJS _and_ the web. Based on [node-di][node-di].
 
 [AngularJS]: http://angularjs.org/
 [node-di]: https://github.com/vojtajina/node-di
-
-
-<!--
-Object - a member of object graph in an application that can have dependencies on instances of other types (i.e. other Objects).
-Token - each Object dependency (not an Object itself) is identified via a Token. Token is typically an annotation, string constant or a class/type
-Injector - a container or context, capable of resolving Object dependencies and caching references to Objects constructed during the dependency resolution process.
-Provider - a recipe for constructing Objects, typically a constructor or factory function
-Binding - a mapping between a Token and a Provider
-Module - a set of bindings. A Module is used to configure an Injector and defines which Objects can be resolved via an Injector. Module can also be used to override Object definitions (for reconfiguration or mocking purposes).
--->
