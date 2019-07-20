@@ -6,15 +6,15 @@ A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection
 
 ## About
 
-[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) decouples component and component dependency instantiation from component behavior. This benefits your applications in a few ways: 
+[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) decouples component and component dependency instantiation from component behavior. That benefits your applications in the following ways: 
 
 - **explicit dependencies** - all dependencies are passed in as constructor arguments, which makes it easy to understand how particular object depends on the rest of the environment
-- **code reuse** - such an object is much easier to reuse in other environments, because it is not coupled to a specific implementation of its dependencies
+- **code reuse** - such a component is much easier to reuse in other environments because it is not coupled to a specific implementation of its dependencies
 - **much easier to test** - component dependencies can be mocked trivially / overridden for testing
 
-Following this pattern without a framework, you typically end up with some kind of nasty `main()` method, where you instantiate all the objects and wire them together. 
+Following this pattern without a framework, you typically end up with some nasty `main()` method, where you instantiate all the objects and wire them together. 
 
-`didi` is a dependency injection container that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies and the framework does transitively resolve these dependencies.
+`didi` is a dependency injection container that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies, and the framework does transitively resolve these dependencies.
 
 
 ## Example
@@ -57,7 +57,7 @@ injector.invoke(function(car) {
 
 For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js). 
 
-You can also check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), tow libraries that heavily use dependency injection at its core.
+You can also check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at its core.
 
 
 ## Usage
@@ -99,7 +99,8 @@ const module = {
 
 #### `factory(token, factoryFn)`
 
-To produce the instance, `factoryFn` will be called (without any context) and its result will be used.
+To produce the instance, `factoryFn` is called without any context. The factories return value will be used.
+
 ```js
 const module = {
   'engine': ['factory', createDieselEngine]
@@ -120,6 +121,7 @@ const module = {
 ### Annotation
 
 The injector looks up tokens based on argument names:
+
 ```js
 function Car(engine, license) {
   // will inject objects bound to 'engine' and 'license' tokens
@@ -157,7 +159,7 @@ const engineModule = {
 This library is built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification save array notation and other features.
 
 
-## Differences to ...
+## Differences to...
 
 #### [node-di][node-di]
 
