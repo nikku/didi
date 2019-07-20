@@ -62,6 +62,13 @@ describe('annotation', function() {
     });
 
 
+    it('should parse async function', function() {
+      async function foo(a, b) {}
+
+      return expect(parse(foo)).to.deep.equal([ 'a', 'b' ]);
+    });
+
+
     it('should parse non-constructor class', function() {
       class Car {
         start() {
