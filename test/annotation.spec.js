@@ -69,6 +69,20 @@ describe('annotation', function() {
     });
 
 
+    it('should parse lambda', function() {
+      const foo = (a, b) => {};
+
+      return expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
+    });
+
+
+    it('should parse async lambda', function() {
+      const foo = async (a, b) => {};
+
+      return expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
+    });
+
+
     it('should parse non-constructor class', function() {
       class Car {
         start() {
