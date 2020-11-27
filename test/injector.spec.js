@@ -254,6 +254,7 @@ describe('injector', function() {
 
 
     it('should throw error with full path if no provider', function() {
+
       // a requires b requires c (not provided)
       function aFn(b) {
         return 'a-value';
@@ -568,6 +569,7 @@ describe('injector', function() {
 
 
     it('should force new instance using provider from grand parent', function() {
+
       // regression
       var moduleGrandParent = new Module;
       moduleGrandParent.value('x', 'x-grand-parent');

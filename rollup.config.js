@@ -13,6 +13,7 @@ const umdDist = pkg['umd:main'];
 const umdName = 'Didi';
 
 export default [
+
   // browser-friendly UMD build
   {
     input: srcEntry,
