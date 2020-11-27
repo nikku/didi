@@ -1,7 +1,7 @@
-export type ProviderType = 'value' | 'factory' | 'type';
+export type ProviderType = 'value' | 'factory' | 'type' | 'private';
 
 export type ServiceDeclaration =
-  [ string, ProviderType, any ] |
+  [ ProviderType, any ] |
   [ function(string) : any, string, ProviderType, any ];
 
 export type ModuleDeclaration = {
