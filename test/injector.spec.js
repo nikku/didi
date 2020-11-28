@@ -53,7 +53,8 @@ describe('injector', function() {
         }
       }
 
-      var module = new Module;
+      var module = new Module();
+
       module.factory('foo', function() {
         return {
           name: 'foo'
@@ -85,7 +86,7 @@ describe('injector', function() {
         }
       }
 
-      var module = new Module;
+      var module = new Module();
       module.factory('foo', function() {
         return {
           name: 'foo'
@@ -113,7 +114,7 @@ describe('injector', function() {
         return foo;
       }
 
-      var module = new Module;
+      var module = new Module();
       module.type('foo', [FooType]);
       module.factory('bar', ['foo', barFactory]);
 
@@ -137,7 +138,7 @@ describe('injector', function() {
         return foo;
       }
 
-      var module = new Module;
+      var module = new Module();
       module.type('foo', [FooType]);
       module.factory('bar', ['foo', barFactory]);
 
@@ -170,7 +171,7 @@ describe('injector', function() {
       }
       bar.$inject = ['baz', 'abc'];
 
-      var module = new Module;
+      var module = new Module();
       module.type('foo', Foo);
       module.factory('bar', bar);
       module.value('baz', 'baz-value');
@@ -203,7 +204,7 @@ describe('injector', function() {
         };
       };
 
-      var module = new Module;
+      var module = new Module();
       module.type('foo', ['bar', 'baz', Foo]);
       module.factory('bar', ['baz', 'abc', bar]);
       module.value('baz', 'baz-value');
@@ -221,7 +222,7 @@ describe('injector', function() {
 
 
     it('should inject properties', function() {
-      var module = new Module;
+      var module = new Module();
       module.value('config', {
         a: 1,
         b: {
@@ -237,7 +238,7 @@ describe('injector', function() {
 
 
     it('should inject dotted service if present', function() {
-      var module = new Module;
+      var module = new Module();
       module.value('a.b', 'a.b value');
 
       var injector = new Injector([module]);
@@ -246,7 +247,7 @@ describe('injector', function() {
 
 
     it('should provide "injector"', function() {
-      var module = new Module;
+      var module = new Module();
       var injector = new Injector([module]);
 
       expect(injector.get('injector')).to.equal(injector);
@@ -266,7 +267,7 @@ describe('injector', function() {
       }
       bFn.$inject = ['c'];
 
-      var module = new Module;
+      var module = new Module();
       module.factory('a', aFn);
       module.factory('b', bFn);
 
@@ -279,7 +280,7 @@ describe('injector', function() {
 
 
     it('should return null if non-strict and no provider', function() {
-      var module = new Module;
+      var module = new Module();
       var injector = new Injector([module]);
       var notDefined = injector.get('not-defined', false);
 
@@ -298,7 +299,7 @@ describe('injector', function() {
       }
       bFn.$inject = ['a'];
 
-      var module = new Module;
+      var module = new Module();
       module.factory('a', aFn);
       module.factory('b', bFn);
 
@@ -322,7 +323,7 @@ describe('injector', function() {
       }
       bar.$inject = ['baz', 'abc'];
 
-      var module = new Module;
+      var module = new Module();
       module.value('baz', 'baz-value');
       module.value('abc', 'abc-value');
 
@@ -343,7 +344,7 @@ describe('injector', function() {
         };
       }
 
-      var module = new Module;
+      var module = new Module();
       module.value('baz', 'baz-value');
       module.value('abc', 'abc-value');
 
@@ -358,7 +359,7 @@ describe('injector', function() {
 
     it('should invoke function on given context', function() {
       var context = {};
-      var module = new Module;
+      var module = new Module();
       var injector = new Injector([module]);
 
       injector.invoke((function() {
@@ -397,7 +398,7 @@ describe('injector', function() {
         return { baz: a, abc: abc };
       }
 
-      var module = new Module;
+      var module = new Module();
       module.value('baz', 'baz-value');
       module.value('abc', 'abc-value');
 
@@ -445,7 +446,7 @@ describe('injector', function() {
       }
       Foo.$inject = ['abc', 'baz'];
 
-      var module = new Module;
+      var module = new Module();
       module.value('baz', 'baz-value');
       module.value('abc', 'abc-value');
 
@@ -459,7 +460,7 @@ describe('injector', function() {
 
     it('should return returned value from constructor if an object returned', function() {
 
-      var module = new Module;
+      var module = new Module();
       var injector = new Injector([module]);
       var returnedObj = {};
       function ObjCls() {
@@ -483,10 +484,10 @@ describe('injector', function() {
   describe('child', function() {
 
     it('should inject from child', function() {
-      var moduleParent = new Module;
+      var moduleParent = new Module();
       moduleParent.value('a', 'a-parent');
 
-      var moduleChild = new Module;
+      var moduleChild = new Module();
       moduleChild.value('a', 'a-child');
       moduleChild.value('d', 'd-child');
 
@@ -507,10 +508,10 @@ describe('injector', function() {
 
 
     it('should inject from parent if not provided in child', function() {
-      var moduleParent = new Module;
+      var moduleParent = new Module();
       moduleParent.value('a', 'a-parent');
 
-      var moduleChild = new Module;
+      var moduleChild = new Module();
       moduleChild.factory('b', function(a) {
         return {
           a: a
@@ -527,12 +528,12 @@ describe('injector', function() {
 
 
     it('should inject from parent but never use dependency from child', function() {
-      var moduleParent = new Module;
+      var moduleParent = new Module();
       moduleParent.factory('b', function(c) {
         return 'b-parent';
       });
 
-      var moduleChild = new Module;
+      var moduleChild = new Module();
       moduleChild.value('c', 'c-child');
 
       var injector = new Injector([moduleParent]);
@@ -544,7 +545,7 @@ describe('injector', function() {
 
 
     it('should force new instance in child', function() {
-      var moduleParent = new Module;
+      var moduleParent = new Module();
       moduleParent.factory('b', function(c) {
         return {
           c: c
@@ -558,7 +559,7 @@ describe('injector', function() {
         c: 'c-parent'
       });
 
-      var moduleChild = new Module;
+      var moduleChild = new Module();
       moduleChild.value('c', 'c-child');
 
       var child = injector.createChild([moduleChild], ['b']);
@@ -571,7 +572,7 @@ describe('injector', function() {
     it('should force new instance using provider from grand parent', function() {
 
       // regression
-      var moduleGrandParent = new Module;
+      var moduleGrandParent = new Module();
       moduleGrandParent.value('x', 'x-grand-parent');
 
       var injector = new Injector([ moduleGrandParent ]);
@@ -583,7 +584,7 @@ describe('injector', function() {
 
 
     it('should throw error if forced provider does not exist', function() {
-      var moduleParent = new Module;
+      var moduleParent = new Module();
       var injector = new Injector([moduleParent]);
 
       expect(function() {
@@ -813,13 +814,13 @@ describe('injector', function() {
         return foo1;
       }
 
-      var base = new Module;
+      var base = new Module();
       base.type('foo', ['bar', 'baz', Foo]);
       base.factory('blub', ['foo', createBlub]);
       base.value('baz', 'baz-value');
       base.value('abc', 'abc-value');
 
-      var extension = new Module;
+      var extension = new Module();
       extension.type('foo', ['baz', 'abc', Foo]);
 
       var injector = new Injector([base, extension]);
@@ -840,13 +841,13 @@ describe('injector', function() {
         };
       }
 
-      var base = new Module;
+      var base = new Module();
       base.factory('bar', createBar);
       var mocked = {
         a: 'A'
       };
 
-      var mock = new Module;
+      var mock = new Module();
       mock.value('bar', mocked);
 
       var injector = new Injector([base, mock]);
