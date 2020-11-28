@@ -6,6 +6,8 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+* `FEAT`: add type definitions
+
 ## 5.2.1
 
 * `FIX`: detect arguments in (async) closures, too
