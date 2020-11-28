@@ -3,7 +3,7 @@ var { expect } = require('chai');
 
 describe('integration', function() {
 
-  describe('cjs bundle', function() {
+  describe('node bundle', function() {
 
     var annotate = require('../../').annotate;
     var Injector = require('../../').Injector;
@@ -29,18 +29,19 @@ describe('integration', function() {
         this.name = 'baz';
       }
 
-      var module = {
-        foo: [
-          'factory',
-          function() {
-            return 'foo-value';
-          }
-        ],
-        bar: ['value', 'bar-value'],
-        baz: ['type', BazType],
-        bub: ['type', BubType]
-      };
-      var injector = new Injector([module]);
+      var injector = new Injector([
+        {
+          foo: [
+            'factory',
+            function() {
+              return 'foo-value';
+            }
+          ],
+          bar: ['value', 'bar-value'],
+          baz: ['type', BazType],
+          bub: ['type', BubType]
+        }
+      ]);
 
       expect(injector.get('foo')).to.equal('foo-value');
       expect(injector.get('bar')).to.equal('bar-value');
@@ -56,17 +57,5 @@ describe('integration', function() {
 
   });
 
-
-  describe('umd bundle', function() {
-
-    var didi = require('../../dist/didi.umd.prod.js');
-
-    it('should expose API', function() {
-      expect(didi.annotate).to.exist;
-      expect(didi.Injector).to.exist;
-      expect(didi.Module).to.exist;
-    });
-
-  });
 
 });
