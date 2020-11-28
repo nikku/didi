@@ -5,27 +5,39 @@ import {
   parseAnnotations
 } from '../lib/annotation';
 
+/**
+ * @typedef {import('../lib/types').InjectAnnotated } InjectAnnotated
+ */
+
 
 describe('annotation', function() {
 
   describe('annotate', function() {
 
     it('should set $inject property on the last argument', function() {
-      var fn;
-      fn = function(a, b) {
+      var fn = function(a, b) {
         return null;
       };
+
       annotate('aa', 'bb', fn);
-      return expect(fn.$inject).to.deep.equal(['aa', 'bb']);
+
+      return expect(/** @type InjectAnnotated */ (fn).$inject).to.deep.equal(['aa', 'bb']);
     });
 
 
     it('should return the function', function() {
-      var fn;
-      fn = function(a, b) {
+      var fn = function(a, b) {
         return null;
       };
-      return expect(annotate('aa', 'bb', fn)).to.equal(fn);
+      expect(annotate('aa', 'bb', fn)).to.equal(fn);
+    });
+
+
+    it('should inject using array args', function() {
+      var fn = function(a, b) {
+        return null;
+      };
+      expect(annotate([ 'aa', 'bb', fn ])).to.equal(fn);
     });
 
 
@@ -34,11 +46,9 @@ describe('annotation', function() {
         constructor(a, b) { }
       }
 
-      annotate('aa', 'bb', Foo);
+      expect(annotate('aa', 'bb', Foo).$inject).to.deep.equal(['aa', 'bb']);
 
-      expect(Foo.$inject).to.deep.equal(['aa', 'bb']);
-
-      return expect(annotate('aa', 'bb', Foo)).to.equal(Foo);
+      expect(annotate('aa', 'bb', Foo)).to.equal(Foo);
     });
 
   });
@@ -49,7 +59,7 @@ describe('annotation', function() {
     it('should parse argument names without comments', function() {
       var fn;
       fn = function(one, two) {};
-      return expect(parseAnnotations(fn)).to.deep.equal(['one', 'two']);
+      expect(parseAnnotations(fn)).to.deep.equal(['one', 'two']);
     });
 
 

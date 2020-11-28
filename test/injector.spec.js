@@ -3,6 +3,10 @@ import { expect } from 'chai';
 import Module from '../lib/module';
 import Injector from '../lib/injector';
 
+/**
+ * @typedef {import('../lib/types').ModuleDeclaration} ModuleDeclaration
+ */
+
 
 describe('injector', function() {
 
@@ -18,18 +22,19 @@ describe('injector', function() {
       this.name = 'baz';
     }
 
-    var module = {
-      foo: [
-        'factory',
-        function() {
-          return 'foo-value';
-        }
-      ],
-      bar: ['value', 'bar-value'],
-      baz: ['type', BazType],
-      bub: ['type', BubType]
-    };
-    var injector = new Injector([module]);
+    var injector = new Injector([
+      {
+        foo: [
+          'factory',
+          function() {
+            return 'foo-value';
+          }
+        ],
+        bar: ['value', 'bar-value'],
+        baz: ['type', BazType],
+        bub: ['type', BubType]
+      }
+    ]);
 
     expect(injector.get('foo')).to.equal('foo-value');
     expect(injector.get('bar')).to.equal('bar-value');
@@ -418,11 +423,11 @@ describe('injector', function() {
         }
       }
 
-      var module = {
-        foo: [ 'type', FooType ]
-      };
-
-      var injector = new Injector([ module ]);
+      var injector = new Injector([
+        {
+          foo: [ 'type', FooType ]
+        }
+      ]);
 
       var annotatedFn = ['foo', 'bar', function(foo, bar) {
         expect(foo).to.eql('FOO');
@@ -598,36 +603,37 @@ describe('injector', function() {
   describe('private modules', function() {
 
     it('should only expose public bindings', function() {
-      var mA = {
-        __exports__: ['publicFoo'],
-        'publicFoo': [
-          'factory',
-          function(privateBar) {
-            return {
-              dependency: privateBar
-            };
-          }
-        ],
-        'privateBar': ['value', 'private-value']
-      };
-      var mB = {
-        'bar': [
-          'factory',
-          function(privateBar) {
-            return null;
-          }
-        ],
-        'baz': [
-          'factory',
-          function(publicFoo) {
-            return {
-              dependency: publicFoo
-            };
-          }
-        ]
-      };
+      var injector = new Injector([
+        {
+          __exports__: ['publicFoo'],
+          'publicFoo': [
+            'factory',
+            function(privateBar) {
+              return {
+                dependency: privateBar
+              };
+            }
+          ],
+          'privateBar': ['value', 'private-value']
+        },
+        {
+          'bar': [
+            'factory',
+            function(privateBar) {
+              return null;
+            }
+          ],
+          'baz': [
+            'factory',
+            function(publicFoo) {
+              return {
+                dependency: publicFoo
+              };
+            }
+          ]
+        }
+      ]);
 
-      var injector = new Injector([mA, mB]);
       var publicFoo = injector.get('publicFoo');
 
       expect(publicFoo).to.exist;
@@ -646,28 +652,29 @@ describe('injector', function() {
 
 
     it('should allow name collisions in private bindings', function() {
-      var mA = {
-        __exports__: ['foo'],
-        'foo': [
-          'factory',
-          function(conflict) {
-            return conflict;
-          }
-        ],
-        'conflict': ['value', 'private-from-a']
-      };
-      var mB = {
-        __exports__: ['bar'],
-        'bar': [
-          'factory',
-          function(conflict) {
-            return conflict;
-          }
-        ],
-        'conflict': ['value', 'private-from-b']
-      };
 
-      var injector = new Injector([mA, mB]);
+      var injector = new Injector([
+        {
+          __exports__: ['foo'],
+          'foo': [
+            'factory',
+            function(conflict) {
+              return conflict;
+            }
+          ],
+          'conflict': ['value', 'private-from-a']
+        },
+        {
+          __exports__: ['bar'],
+          'bar': [
+            'factory',
+            function(conflict) {
+              return conflict;
+            }
+          ],
+          'conflict': ['value', 'private-from-b']
+        }
+      ]);
 
       expect(injector.get('foo')).to.equal('private-from-a');
       expect(injector.get('bar')).to.equal('private-from-b');
@@ -675,20 +682,21 @@ describe('injector', function() {
 
 
     it('should allow forcing new instance', function() {
-      var module = {
-        __exports__: ['foo'],
-        'foo': [
-          'factory',
-          function(bar) {
-            return {
-              bar: bar
-            };
-          }
-        ],
-        'bar': ['value', 'private-bar']
-      };
 
-      var injector = new Injector([module]);
+      var injector = new Injector([
+        {
+          __exports__: ['foo'],
+          'foo': [
+            'factory',
+            function(bar) {
+              return {
+                bar: bar
+              };
+            }
+          ],
+          'bar': ['value', 'private-bar']
+        }
+      ]);
 
       var firstChild = injector.createChild([], ['foo']);
       var secondChild = injector.createChild([], ['foo']);
@@ -701,24 +709,25 @@ describe('injector', function() {
 
 
     it('should load additional __modules__', function() {
-      var mB = {
+
+      var otherModule = /** @type ModuleDeclaration */ ({
         'bar': ['value', 'bar-from-other-module']
-      };
+      });
 
-      var mA = {
-        __exports__: ['foo'],
-        __modules__: [mB],
-        'foo': [
-          'factory',
-          function(bar) {
-            return {
-              bar: bar
-            };
-          }
-        ]
-      };
-
-      var injector = new Injector([mA]);
+      var injector = new Injector([
+        {
+          __exports__: ['foo'],
+          __modules__: [otherModule],
+          'foo': [
+            'factory',
+            function(bar) {
+              return {
+                bar: bar
+              };
+            }
+          ]
+        }
+      ]);
       var foo = injector.get('foo');
 
       expect(foo).to.exist;
@@ -727,33 +736,34 @@ describe('injector', function() {
 
 
     it('should only create one private child injector', function() {
-      var m = {
-        __exports__: ['foo', 'bar'],
-        'foo': [
-          'factory',
-          function(bar) {
-            return {
-              bar: bar
-            };
-          }
-        ],
-        'bar': [
-          'factory',
-          function(internal) {
-            return {
-              internal: internal
-            };
-          }
-        ],
-        'internal': [
-          'factory',
-          function() {
-            return {};
-          }
-        ]
-      };
 
-      var injector = new Injector([m]);
+      var injector = new Injector([
+        {
+          __exports__: ['foo', 'bar'],
+          'foo': [
+            'factory',
+            function(bar) {
+              return {
+                bar: bar
+              };
+            }
+          ],
+          'bar': [
+            'factory',
+            function(internal) {
+              return {
+                internal: internal
+              };
+            }
+          ],
+          'internal': [
+            'factory',
+            function() {
+              return {};
+            }
+          ]
+        }
+      ]);
       var foo = injector.get('foo');
       var bar = injector.get('bar');
       var childInjector = injector.createChild([], ['foo', 'bar']);
@@ -779,12 +789,12 @@ describe('injector', function() {
       }
       createBar.$scope = ['session'];
 
-      var m = {
-        'foo': ['type', Foo],
-        'bar': ['factory', createBar]
-      };
-
-      var injector = new Injector([m]);
+      var injector = new Injector([
+        {
+          'foo': ['type', Foo],
+          'bar': ['factory', createBar]
+        }
+      ]);
       var foo = injector.get('foo');
       var bar = injector.get('bar');
 

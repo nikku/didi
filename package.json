@@ -7,10 +7,12 @@
   "umd:main": "dist/didi.umd.js",
   "source": "lib/index.js",
   "scripts": {
-    "all": "run-s lint lint:types test bundle test:integration",
+    "all": "run-s lint test bundle test:integration",
     "bundle": "cross-env NODE_ENV=production rollup -c",
+    "lint": "run-s lint:*",
+    "lint:eslint": "eslint .",
     "lint:types": "tsc --pretty --noEmit",
-    "lint": "eslint .",
+    "lint:test-types": "tsc --project test --pretty --noEmit",
     "test": "mocha -r esm test/*.spec.js",
     "test:integration": "mocha test/integration/*.spec.js",
     "prepare": "run-s bundle",
@@ -28,6 +30,7 @@
     "injector"
   ],
   "devDependencies": {
+    "@types/mocha": "^8.0.4",
     "chai": "^4.1.2",
     "cross-env": "^7.0.2",
     "eslint": "^7.14.0",
