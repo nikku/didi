@@ -6,3 +6,4 @@ test
 .gitignore
 .travis.yml
 rollup.config.js
+tsconfig.json
