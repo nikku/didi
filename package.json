@@ -16,8 +16,8 @@
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
     "test": "mocha -r esm test/*.spec.js",
     "test:integration": "mocha test/integration/*.spec.js",
-    "prepare": "run-s bundle",
-    "prepublishOnly": "run-s test:integration"
+    "prepare": "run-s check-types:src bundle copy-types",
+    "prepublishOnly": "run-s check-types:integration test:integration"
   },
   "repository": {
     "type": "git",
