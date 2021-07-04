@@ -4,6 +4,7 @@
   "description": "Dependency Injection for JavaScript",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "types": "dist/types/lib/index.d.ts",
   "umd:main": "dist/didi.umd.js",
   "source": "lib/index.js",
   "scripts": {
