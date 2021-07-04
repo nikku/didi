@@ -14,36 +14,46 @@ export type ScopeAnnotated = {
 
 export type Annotated = InjectAnnotated & ScopeAnnotated;
 
-export type Constructor<T extends unknown> = {
-  new (...args: any[]): T;
+export type Constructor<T> = (
+  { new (...args: any[]): T } |
+  { (...args: any[]): T }
+) & Annotated;
+
+export type FactoryFunction<T> = {
   (...args: any[]): T;
 } & Annotated;
 
-export type FactoryFunction<T extends unknown> = {
-  (...args: any[]): T;
-} & Annotated;
+export type ArrayArgs<T> =
+  [ T ] |
+  [ string, T ] |
+  [ string, string, T ] |
+  [ string, string, string, T ] |
+  [ string, string, string, string, T ] |
+  [ string, string, string, string, string, T ] |
+  [ string, string, string, string, string, string, T ] |
+  [ string, string, string, string, string, string, string, T ] |
+  [ string, string, string, string, string, string, string, string, T ] |
+  [ string, string, string, string, string, string, string, string, string, T ];
 
-export type ArrayArgs<T> = [ ...string[], T ];
-
-export type ServiceProvider<T extends unknown> = {
+export type ServiceProvider<T> = {
   (name: string): T
 };
 
-export type FactoryDeclaration = FactoryFunction | ArrayArgs<FactoryFunction>;
+export type FactoryDeclaration<T> = FactoryFunction<T> | ArrayArgs<FactoryFunction<T>>;
 
-export type TypeDeclaration = Constructor | ArrayArgs<Constructor>;
+export type TypeDeclaration<T> = Constructor<T> | ArrayArgs<Constructor<T>>;
 
-export type ValueDeclaration = any;
+export type ValueDeclaration<T> = T;
 
 type Declaration<T, D> = [ T, D ] | [ T, D, 'private' ];
 
-export type ServiceDeclaration =
-  Declaration<ValueType, ValueDeclaration> |
-  Declaration<TypeType, TypeDeclaration> |
-  Declaration<FactoryType, FactoryDeclaration>;
+export type ServiceDeclaration<T> =
+  Declaration<ValueType, ValueDeclaration<T>> |
+  Declaration<TypeType, TypeDeclaration<T>> |
+  Declaration<FactoryType, FactoryDeclaration<T>>;
 
 export type ModuleDeclaration = {
   __exports__?: string[],
   __modules__?: ModuleDeclaration[],
-  [name: string]: ServiceDeclaration | ModuleDeclaration[] | string[]
+  [name: string]: ServiceDeclaration<?> | ModuleDeclaration[] | string[]
 };

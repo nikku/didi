@@ -128,10 +128,14 @@ describe('annotation', function() {
 
     it('should throw error if a non function given', function() {
       expect(function() {
+
+        // @ts-ignore-next-line
         return parseAnnotations(123);
       }).to.throw('Cannot annotate "123". Expected a function!');
 
       expect(function() {
+
+        // @ts-ignore-next-line
         return parseAnnotations('abc');
       }).to.throw('Cannot annotate "abc". Expected a function!');
 
@@ -144,6 +148,8 @@ describe('annotation', function() {
       }).to.throw('Cannot annotate "undefined". Expected a function!');
 
       expect(function() {
+
+        // @ts-ignore-next-line
         return parseAnnotations({});
       }).to.throw('Cannot annotate "[object Object]". Expected a function!');
     });
