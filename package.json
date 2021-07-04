@@ -48,5 +48,8 @@
   },
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "license": "MIT",
-  "sideEffects": false
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ]
 }
