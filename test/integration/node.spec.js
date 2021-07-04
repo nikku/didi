@@ -5,9 +5,9 @@ describe('integration', function() {
 
   describe('node bundle', function() {
 
-    var annotate = require('../../').annotate;
-    var Injector = require('../../').Injector;
-    var Module = require('../../').Module;
+    var annotate = require('../..').annotate;
+    var Injector = require('../..').Injector;
+    var Module = require('../..').Module;
 
 
     it('should expose API', function() {

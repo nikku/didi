@@ -7,17 +7,20 @@
   "umd:main": "dist/didi.umd.js",
   "source": "lib/index.js",
   "scripts": {
-    "all": "run-s lint check-types:src check-types:test test bundle copy-types check-types:integration test:integration",
+    "all": "run-s lint test bundle generate-types check-types integration-test",
     "bundle": "cross-env NODE_ENV=production rollup -c",
-    "copy-types": "cp lib/types.d.ts dist/types.d.ts",
-    "lint": "eslint .",
-    "check-types:src": "tsc --pretty --declaration --emitDeclarationOnly --outDir dist/types",
+    "generate-types": "run-s generate-types:tsc generate-types:copy-shared",
+    "generate-types:tsc": "tsc --pretty --declaration --removeComments --emitDeclarationOnly --outDir dist/types",
+    "generate-types:copy-shared": "cp lib/types.d.ts dist/types/lib/types.d.ts",
+    "lint": "run-s lint:*",
+    "lint:eslint": "eslint .",
+    "lint:tsc": "tsc --pretty --noEmit",
+    "check-types": "run-s check-types:*",
     "check-types:test": "tsc --project test --pretty --noEmit",
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
     "test": "mocha -r esm test/*.spec.js",
-    "test:integration": "mocha test/integration/*.spec.js",
-    "prepare": "run-s check-types:src bundle copy-types",
-    "prepublishOnly": "run-s check-types:integration test:integration"
+    "integration-test": "mocha test/integration/*.spec.js",
+    "prepare": "run-s bundle generate-types"
   },
   "repository": {
     "type": "git",
@@ -41,7 +44,7 @@
     "npm-run-all": "^4.1.2",
     "rollup": "^2.33.3",
     "rollup-plugin-terser": "^7.0.2",
-    "typescript": "^4.1.2"
+    "typescript": "^4.3.5"
   },
   "author": "Vojta Jina <vojta.jina@gmail.com>",
   "license": "MIT",
