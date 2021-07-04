@@ -1,6 +1,6 @@
 # `didi`
 
-[![Build Status](https://img.shields.io/github/workflow/status/nikku/didi/ci)](https://github.com/nikku/didi/actions?query=workflow%3Aci)
+[![Build Status](https://img.shields.io/github/workflow/status/nikku/didi/CI)](https://github.com/nikku/didi/actions?query=workflow%3ACI)
 
 A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) container for JavaScript.
 
