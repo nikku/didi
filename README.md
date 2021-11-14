@@ -163,8 +163,9 @@ This library is built on top of the (now unmaintained) [node-di][node-di] librar
 
 #### [node-di][node-di]
 
-- support for array notation
+- supports array notation
 - supports [ES2015](http://babeljs.io/learn-es2015/)
+- bundles type definitions
 
 #### Angular DI
 
