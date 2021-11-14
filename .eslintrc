@@ -1,3 +1,14 @@
 {
-  "extends": "plugin:bpmn-io/es6"
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint"
+  ],
+  "extends": [
+    "plugin:bpmn-io/es6",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": [ "warn", { "ignoreRestArgs": true } ]
+  }
 }

@@ -11,7 +11,7 @@
     "all": "run-s lint test bundle check-types integration-test",
     "bundle": "cross-env NODE_ENV=production rollup -c",
     "lint": "run-s lint:*",
-    "lint:eslint": "eslint .",
+    "lint:eslint": "eslint --ext .ts --ext .js .",
     "lint:tsc": "tsc --pretty --noEmit",
     "check-types": "run-s check-types:*",
     "check-types:test": "tsc --project test --pretty --noEmit",
@@ -33,6 +33,8 @@
   ],
   "devDependencies": {
     "@types/mocha": "^8.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
     "chai": "^4.1.2",
     "cross-env": "^7.0.2",
     "eslint": "^7.14.0",
