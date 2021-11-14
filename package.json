@@ -17,7 +17,7 @@
     "check-types:test": "tsc --project test --pretty --noEmit",
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
     "test": "mocha -r esm test/*.spec.js",
-    "integration-test": "mocha -r ts-node/register test/integration/*.spec.{js,ts}",
+    "integration-test": "(cd test/integration && mocha -r ts-node/register *.spec.{js,ts})",
     "prepare": "run-s bundle"
   },
   "repository": {
