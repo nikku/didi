@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 6.1.0
+
+* `FEAT`: move to pre-built type definitions
+
 ## 6.0.0
 
 * `FEAT`: add type definitions
