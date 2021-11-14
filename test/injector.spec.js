@@ -4,7 +4,7 @@ import Module from '../lib/module';
 import Injector from '../lib/injector';
 
 /**
- * @typedef {import('../lib/types').ModuleDeclaration} ModuleDeclaration
+ * @typedef {import('..').ModuleDeclaration} ModuleDeclaration
  */
 
 

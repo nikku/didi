@@ -6,7 +6,7 @@ import {
 } from '../lib/annotation';
 
 /**
- * @typedef {import('../lib/types').InjectAnnotated } InjectAnnotated
+ * @typedef {import('..').InjectAnnotated } InjectAnnotated
  */
 
 
