@@ -56,6 +56,12 @@ describe('typed', function() {
           }
         ],
         bar: ['value', 'bar-value'],
+        foop: [
+          'factory',
+          function(bar: string) {
+            return bar;
+          }
+        ],
         baz: ['type', BazType],
         bub: ['type', BubType]
       }
@@ -64,12 +70,14 @@ describe('typed', function() {
     // when
     const foo = injector.get('foo') as string;
     const bar = injector.get('bar') as string;
+    const foop = injector.get('foop') as string;
     const bub = injector.get<BubType>('bub');
     const baz = injector.get('baz') as BazType;
 
     // then
     expect(foo).to.eql('foo-value');
     expect(bar).to.eql('bar-value');
+    expect(foop).to.eql('bar-value');
 
     expect(bub).to.be.an.instanceof(BubType);
     expect(bub.bar).to.eql('bar-value');
