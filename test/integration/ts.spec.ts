@@ -103,4 +103,18 @@ describe('typed', function() {
     expect(bub.bar).to.eql('bar-value');
   });
 
+
+  it('should ignore extension', function() {
+
+    // given
+    const injector = new Injector([
+      {
+        __wooop__: [ 'bub' ]
+      }
+    ]);
+
+    // then
+    expect(injector).to.exist;
+  });
+
 });
