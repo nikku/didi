@@ -1,0 +1,106 @@
+import { Injector } from '../..';
+
+import { expect } from 'chai';
+
+
+describe('typed', function() {
+
+  class BubType {
+    bar: string;
+
+    constructor(bar: string) {
+      this.bar = bar;
+    }
+  }
+
+  class BazType {
+    name: string;
+
+    constructor() {
+      this.name = 'baz';
+    }
+  }
+
+
+  it('should instantiate', function() {
+
+    // when
+    const injector = new Injector([
+      {
+        foo: [
+          'factory',
+          function() {
+            return 'foo-value';
+          }
+        ],
+        bar: ['value', 'bar'],
+        baz: ['type', BazType],
+        bub: ['type', BubType]
+      }
+    ]);
+
+    // then
+    expect(injector).to.exist;
+  });
+
+
+  it('should get', function() {
+
+    // given
+    const injector = new Injector([
+      {
+        foo: [
+          'factory',
+          function() {
+            return 'foo-value';
+          }
+        ],
+        bar: ['value', 'bar-value'],
+        baz: ['type', BazType],
+        bub: ['type', BubType]
+      }
+    ]);
+
+    // when
+    const foo = injector.get('foo') as string;
+    const bar = injector.get('bar') as string;
+    const bub = injector.get<BubType>('bub');
+    const baz = injector.get('baz') as BazType;
+
+    // then
+    expect(foo).to.eql('foo-value');
+    expect(bar).to.eql('bar-value');
+
+    expect(bub).to.be.an.instanceof(BubType);
+    expect(bub.bar).to.eql('bar-value');
+
+    expect(baz).to.be.an.instanceof(BazType);
+    expect(baz.name).to.eql('baz');
+  });
+
+
+  it('should get nested', function() {
+
+    // given
+    const injector = new Injector([
+      {
+        __exports__: [ 'bub' ],
+        __modules__: [
+          {
+            bar: ['value', 'bar-value']
+          }
+        ],
+        bub: ['type', BubType]
+      }
+    ]);
+
+    // when
+    const bub = injector.get<BubType>('bub');
+    const bar = injector.get('bar', false);
+
+    // then
+    expect(bar).not.to.exist;
+    expect(bub.bar).to.eql('bar-value');
+  });
+
+});
