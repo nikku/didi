@@ -810,7 +810,7 @@ describe('injector', function() {
   });
 
 
-  return describe('override', function() {
+  describe('override', function() {
 
     it('should replace definition via override module', function() {
       class Foo {
