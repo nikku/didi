@@ -148,7 +148,7 @@ describe('injector', function() {
       const injector = new Injector([ module ]);
       function fn(foo, bar) {
         expect(foo).to.equal(injector.get('foo'));
-        return expect(bar).to.equal(injector.get('bar'));
+        expect(bar).to.equal(injector.get('bar'));
       }
       const annotatedFn = [ 'foo', 'bar', fn ];
 
