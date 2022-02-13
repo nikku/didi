@@ -19,6 +19,10 @@ export type Constructor<T> = (
   { (...args: any[]): T }
 );
 
+export type InitializerFunction = {
+  (...args: any[]): unknown
+} & Annotated;
+
 export type FactoryFunction<T> = {
   (...args: any[]): T;
 } & Annotated;
@@ -39,6 +43,8 @@ export type ServiceProvider<T> = {
   (name: string): T;
 };
 
+export type Initializer = InitializerFunction | ArrayArgs<InitializerFunction>;
+
 export type FactoryDefinition<T> = FactoryFunction<T> | ArrayArgs<FactoryFunction<T>>;
 
 export type TypeDefinition<T> = Constructor<T> | ArrayArgs<Constructor<T>>;
@@ -55,7 +61,10 @@ export type ServiceDeclaration<T> =
   TypedDeclaration<FactoryType, FactoryDefinition<T>>;
 
 export type ModuleDeclaration = {
-  [name: string]: ServiceDeclaration<unknown> | ModuleDeclaration[] | string[];
+  [name: string]: ServiceDeclaration<unknown> | unknown;
+  __init__?: Array<string|InitializerFunction>;
+  __exports__?: Array<string>;
+  __modules__?: Array<ModuleDeclaration>;
 };
 
 // injector.js

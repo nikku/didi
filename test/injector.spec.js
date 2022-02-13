@@ -922,4 +922,111 @@ describe('injector', function() {
 
   });
 
+
+  describe('initialize (__init__)', function() {
+
+    it('should init component', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          __init__: [ 'foo' ],
+          'foo': ['factory', function(bar) {
+            bar.initialized = true;
+
+            return bar;
+          } ],
+          'bar': ['value', {}]
+        }
+      ]);
+
+      // when
+      const bar = injector.get('bar');
+
+      // then
+      expect(bar.initialized).to.be.true;
+    });
+
+
+    it('should call initializer', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          __init__: [ function(bar) {
+            bar.initialized = true;
+          } ],
+          'bar': ['value', {}]
+        }
+      ]);
+
+      // when
+      const bar = injector.get('bar');
+
+      // then
+      expect(bar.initialized).to.be.true;
+    });
+
+
+    describe('private modules', function() {
+
+      it('should init with child injector', function() {
+
+        const privateBar = {};
+
+        const injector = new Injector([
+          {
+            __exports__: ['publicFoo'],
+            __init__: [ function(privateBar) {
+              privateBar.initialized = true;
+            } ],
+            'publicFoo': [
+              'factory',
+              function(privateBar) {
+                return {
+                  privateBar
+                };
+              }
+            ],
+            'privateBar': ['value', {} ]
+          }
+        ]);
+
+        const publicFoo = injector.get('publicFoo');
+
+        expect(publicFoo.privateBar.initialized).to.be.true;
+      });
+
+    });
+
+
+    describe('error handling', function() {
+
+      it('should indicate missing dependency', function() {
+        expect(function() {
+          new Injector([
+            {
+              __init__: [ 'foo' ]
+            }
+          ]);
+        }).to.throw(/Failed to initialize!/);
+      });
+
+
+      it('should indicate initialization error', function() {
+        expect(function() {
+          new Injector([
+            {
+              __init__: [ function() {
+                throw new Error('INIT ERROR');
+              } ]
+            }
+          ]);
+        }).to.throw(/Failed to initialize!/);
+      });
+
+    });
+
+  });
+
 });
