@@ -708,30 +708,66 @@ describe('injector', function() {
     });
 
 
-    it('should load additional __modules__', function() {
+    describe('additional __modules__', function() {
 
-      var otherModule = /** @type ModuleDeclaration */ ({
-        'bar': ['value', 'bar-from-other-module']
+      it('should load', function() {
+
+        var otherModule = /** @type ModuleDeclaration */ ({
+          'bar': ['value', 'bar-from-other-module']
+        });
+
+        var injector = new Injector([
+          {
+            __exports__: ['foo'],
+            __modules__: [otherModule],
+            'foo': [
+              'factory',
+              function(bar) {
+                return {
+                  bar: bar
+                };
+              }
+            ]
+          }
+        ]);
+        var foo = injector.get('foo');
+
+        expect(foo).to.exist;
+        expect(foo.bar).to.equal('bar-from-other-module');
+
+        expect(function() {
+          injector.get('bar');
+        }).to.throw('No provider for "bar"! (Resolving: bar)');
       });
 
-      var injector = new Injector([
-        {
-          __exports__: ['foo'],
-          __modules__: [otherModule],
-          'foo': [
-            'factory',
-            function(bar) {
-              return {
-                bar: bar
-              };
-            }
-          ]
-        }
-      ]);
-      var foo = injector.get('foo');
 
-      expect(foo).to.exist;
-      expect(foo.bar).to.equal('bar-from-other-module');
+      it('should re-use', function() {
+
+        var otherModule = /** @type ModuleDeclaration */ ({
+          'bar': ['value', {}]
+        });
+
+        var injector = new Injector([
+          otherModule,
+          {
+            __exports__: ['foo'],
+            __modules__: [otherModule],
+            'foo': [
+              'factory',
+              function(bar) {
+                return {
+                  bar: bar
+                };
+              }
+            ]
+          }
+        ]);
+        var foo = injector.get('foo');
+
+        expect(foo).to.exist;
+        expect(foo.bar).to.equal(injector.get('bar'));
+      });
+
     });
 
 
