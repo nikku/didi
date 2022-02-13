@@ -16,7 +16,7 @@
     "check-types": "run-s check-types:*",
     "check-types:test": "tsc --project test --pretty --noEmit",
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
-    "test": "mocha -r esm test/*.spec.js",
+    "test": "nyc --reporter=lcov mocha -r esm test/*.spec.js",
     "integration-test": "(cd test/integration && mocha -r ts-node/register *.spec.{js,ts})",
     "prepare": "run-s bundle"
   },
@@ -43,6 +43,7 @@
     "esm": "^3.2.25",
     "mocha": "^8.2.1",
     "npm-run-all": "^4.1.2",
+    "nyc": "^15.1.0",
     "rollup": "^2.33.3",
     "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.4.0",
