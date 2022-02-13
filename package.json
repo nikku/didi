@@ -49,7 +49,7 @@
     "ts-node": "^10.4.0",
     "typescript": "^4.3.5"
   },
-  "author": "Vojta Jina <vojta.jina@gmail.com>",
+  "author": "Nico Rehwaldt <https://github.com/nikku>",
   "license": "MIT",
   "sideEffects": false,
   "files": [
