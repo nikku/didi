@@ -10,7 +10,6 @@ describe('integration', function() {
     it('should expose API', function() {
       expect(didi.annotate).to.exist;
       expect(didi.Injector).to.exist;
-      expect(didi.Module).to.exist;
     });
 
   });
