@@ -33,9 +33,9 @@ describe('typed', function() {
             return 'foo-value';
           }
         ],
-        bar: ['value', 'bar'],
-        baz: ['type', BazType],
-        bub: ['type', BubType]
+        bar: [ 'value', 'bar' ],
+        baz: [ 'type', BazType ],
+        bub: [ 'type', BubType ]
       }
     ]);
 
@@ -55,15 +55,15 @@ describe('typed', function() {
             return 'foo-value';
           }
         ],
-        bar: ['value', 'bar-value'],
+        bar: [ 'value', 'bar-value' ],
         foop: [
           'factory',
           function(bar: string) {
             return bar;
           }
         ],
-        baz: ['type', BazType],
-        bub: ['type', BubType]
+        baz: [ 'type', BazType ],
+        bub: [ 'type', BubType ]
       }
     ]);
 
@@ -95,10 +95,10 @@ describe('typed', function() {
         __exports__: [ 'bub' ],
         __modules__: [
           {
-            bar: ['value', 'bar-value']
+            bar: [ 'value', 'bar-value' ]
           }
         ],
-        bub: ['type', BubType]
+        bub: [ 'type', BubType ]
       }
     ]);
 

@@ -35,9 +35,9 @@ describe('integration', function() {
               return 'foo-value';
             }
           ],
-          bar: ['value', 'bar-value'],
-          baz: ['type', BazType],
-          bub: ['type', BubType]
+          bar: [ 'value', 'bar-value' ],
+          baz: [ 'type', BazType ],
+          bub: [ 'type', BubType ]
         }
       ]);
 

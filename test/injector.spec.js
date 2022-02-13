@@ -29,9 +29,9 @@ describe('injector', function() {
             return 'foo-value';
           }
         ],
-        bar: ['value', 'bar-value'],
-        baz: ['type', BazType],
-        bub: ['type', BubType]
+        bar: [ 'value', 'bar-value' ],
+        baz: [ 'type', BazType ],
+        bub: [ 'type', BubType ]
       }
     ]);
 
@@ -116,14 +116,14 @@ describe('injector', function() {
       }
 
       const module = /** @type ModuleDeclaration */ ({
-        foo: [ 'type', [FooType] ],
-        bar: [ 'factory', ['foo', barFactory] ],
+        foo: [ 'type', [ FooType ] ],
+        bar: [ 'factory', [ 'foo', barFactory ] ],
       });
 
-      const injector1 = new Injector([module]);
+      const injector1 = new Injector([ module ]);
       expect(injector1.get('foo')).to.equal(injector1.get('bar'));
 
-      const injector2 = new Injector([module]);
+      const injector2 = new Injector([ module ]);
       expect(injector2.get('foo')).to.equal(injector2.get('bar'));
     });
 
@@ -141,16 +141,16 @@ describe('injector', function() {
       }
 
       const module = /** @type ModuleDeclaration */ ({
-        'foo': [ 'type', [FooType] ],
-        'bar': ['factory', ['foo', barFactory] ]
+        'foo': [ 'type', [ FooType ] ],
+        'bar': [ 'factory', [ 'foo', barFactory ] ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
       function fn(foo, bar) {
         expect(foo).to.equal(injector.get('foo'));
         return expect(bar).to.equal(injector.get('bar'));
       }
-      const annotatedFn = ['foo', 'bar', fn];
+      const annotatedFn = [ 'foo', 'bar', fn ];
 
       injector.invoke(annotatedFn);
       injector.invoke(annotatedFn);
@@ -164,7 +164,7 @@ describe('injector', function() {
           this.baz = baz1;
         }
       }
-      Foo.$inject = ['bar', 'baz'];
+      Foo.$inject = [ 'bar', 'baz' ];
 
       function bar(baz, abc) {
         return {
@@ -172,7 +172,7 @@ describe('injector', function() {
           abc: abc
         };
       }
-      bar.$inject = ['baz', 'abc'];
+      bar.$inject = [ 'baz', 'abc' ];
 
       const module = /** @type ModuleDeclaration */ ({
         foo: [ 'type', Foo ],
@@ -181,7 +181,7 @@ describe('injector', function() {
         abc: [ 'value', 'abc-value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
       const fooInstance = injector.get('foo');
 
       expect(fooInstance.bar).to.deep.equal({
@@ -209,13 +209,13 @@ describe('injector', function() {
       };
 
       const module = /** @type ModuleDeclaration */ ({
-        foo: [ 'type', ['bar', 'baz', Foo] ],
-        bar: [ 'factory', ['baz', 'abc', bar] ],
+        foo: [ 'type', [ 'bar', 'baz', Foo ] ],
+        bar: [ 'factory', [ 'baz', 'abc', bar ] ],
         baz: [ 'value', 'baz-value' ],
         abc: [ 'value', 'abc-value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
       const fooInstance = injector.get('foo');
 
       expect(fooInstance.bar).to.deep.equal({
@@ -236,7 +236,7 @@ describe('injector', function() {
         } ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
       expect(injector.get('config.a')).to.equal(1);
       expect(injector.get('config.b.c')).to.equal(2);
@@ -248,7 +248,7 @@ describe('injector', function() {
         'a.b': [ 'value', 'a.b value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
       expect(injector.get('a.b')).to.equal('a.b value');
     });
 
@@ -266,19 +266,19 @@ describe('injector', function() {
       function aFn(b) {
         return 'a-value';
       }
-      aFn.$inject = ['b'];
+      aFn.$inject = [ 'b' ];
 
       function bFn(c) {
         return 'b-value';
       }
-      bFn.$inject = ['c'];
+      bFn.$inject = [ 'c' ];
 
       const module = /** @type ModuleDeclaration */ ({
         a: [ 'factory', aFn ],
         b: [ 'factory', bFn ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
       expect(function() {
         return injector.get('a');
@@ -308,7 +308,7 @@ describe('injector', function() {
         b: [ 'factory', [ 'a', bFn ] ],
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
       expect(function() {
         return injector.get('a');
@@ -327,14 +327,14 @@ describe('injector', function() {
           abc: abc
         };
       }
-      bar.$inject = ['baz', 'abc'];
+      bar.$inject = [ 'baz', 'abc' ];
 
       const module = /** @type ModuleDeclaration */ ({
         baz: [ 'value', 'baz-value' ],
         abc: [ 'value', 'abc-value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
       expect(injector.invoke(bar)).to.deep.equal({
         baz: 'baz-value',
@@ -356,9 +356,9 @@ describe('injector', function() {
         abc: [ 'value', 'abc-value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
-      expect(injector.invoke(['baz', 'abc', bar])).to.deep.equal({
+      expect(injector.invoke([ 'baz', 'abc', bar ])).to.deep.equal({
         baz: 'baz-value',
         abc: 'abc-value'
       });
@@ -410,7 +410,7 @@ describe('injector', function() {
         abc: [ 'value', 'abc-value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
       expect(injector.invoke(bar)).to.deep.equal({
         baz: 'baz-value',
@@ -432,10 +432,10 @@ describe('injector', function() {
         }
       ]);
 
-      const annotatedFn = ['foo', 'bar', function(foo, bar) {
+      const annotatedFn = [ 'foo', 'bar', function(foo, bar) {
         expect(foo).to.eql('FOO');
         expect(bar).to.equal(undefined);
-      }];
+      } ];
 
       injector.invoke(annotatedFn, null, { foo: 'FOO', bar: undefined });
     });
@@ -452,14 +452,14 @@ describe('injector', function() {
           this.baz = baz1;
         }
       }
-      Foo.$inject = ['abc', 'baz'];
+      Foo.$inject = [ 'abc', 'baz' ];
 
       const module = /** @type ModuleDeclaration */ ({
         baz: [ 'value', 'baz-value' ],
         abc: [ 'value', 'abc-value' ]
       });
 
-      const injector = new Injector([module]);
+      const injector = new Injector([ module ]);
 
       expect(injector.instantiate(Foo)).to.deep.equal({
         abc: 'abc-value',
@@ -501,8 +501,8 @@ describe('injector', function() {
         d: [ 'value', 'd-child' ]
       });
 
-      const injector = new Injector([moduleParent]);
-      const child = injector.createChild([moduleChild]);
+      const injector = new Injector([ moduleParent ]);
+      const child = injector.createChild([ moduleChild ]);
 
       expect(child.get('d')).to.equal('d-child');
       expect(child.get('a')).to.equal('a-child');
@@ -530,8 +530,8 @@ describe('injector', function() {
         } ]
       });
 
-      const injector = new Injector([moduleParent]);
-      const child = injector.createChild([moduleChild]);
+      const injector = new Injector([ moduleParent ]);
+      const child = injector.createChild([ moduleChild ]);
 
       expect(child.get('b')).to.deep.equal({
         a: 'a-parent'
@@ -550,8 +550,8 @@ describe('injector', function() {
         c: [ 'value', 'c-child' ]
       });
 
-      const injector = new Injector([moduleParent]);
-      const child = injector.createChild([moduleChild]);
+      const injector = new Injector([ moduleParent ]);
+      const child = injector.createChild([ moduleChild ]);
 
       expect(function() {
         return child.get('b');
@@ -566,9 +566,9 @@ describe('injector', function() {
             c: c
           };
         } ],
-        c: [ 'value', 'c-parent']
+        c: [ 'value', 'c-parent' ]
       });
-      const injector = new Injector([moduleParent]);
+      const injector = new Injector([ moduleParent ]);
 
       expect(injector.get('b')).to.deep.equal({
         c: 'c-parent'
@@ -578,7 +578,7 @@ describe('injector', function() {
         c: [ 'value', 'c-child' ]
       });
 
-      const child = injector.createChild([moduleChild], ['b']);
+      const child = injector.createChild([ moduleChild ], [ 'b' ]);
       expect(child.get('b')).to.deep.equal({
         c: 'c-child'
       });
@@ -596,7 +596,7 @@ describe('injector', function() {
 
       const injector = new Injector([ moduleGrandParent ]);
 
-      const grandChildInjector = injector.createChild([]).createChild([], ['x']);
+      const grandChildInjector = injector.createChild([]).createChild([], [ 'x' ]);
 
       expect(grandChildInjector).to.exist;
       expect(grandChildInjector.get('x')).to.equal(x);
@@ -607,7 +607,7 @@ describe('injector', function() {
       const injector = new Injector([]);
 
       expect(function() {
-        return injector.createChild([], ['b']);
+        return injector.createChild([], [ 'b' ]);
       }).to.throw('No provider for "b". Cannot use provider from the parent!');
     });
 
@@ -619,7 +619,7 @@ describe('injector', function() {
     it('should only expose public bindings', function() {
       const injector = new Injector([
         {
-          __exports__: ['publicFoo'],
+          __exports__: [ 'publicFoo' ],
           'publicFoo': [
             'factory',
             function(privateBar) {
@@ -628,7 +628,7 @@ describe('injector', function() {
               };
             }
           ],
-          'privateBar': ['value', 'private-value']
+          'privateBar': [ 'value', 'private-value' ]
         },
         {
           'bar': [
@@ -669,24 +669,24 @@ describe('injector', function() {
 
       const injector = new Injector([
         {
-          __exports__: ['foo'],
+          __exports__: [ 'foo' ],
           'foo': [
             'factory',
             function(conflict) {
               return conflict;
             }
           ],
-          'conflict': ['value', 'private-from-a']
+          'conflict': [ 'value', 'private-from-a' ]
         },
         {
-          __exports__: ['bar'],
+          __exports__: [ 'bar' ],
           'bar': [
             'factory',
             function(conflict) {
               return conflict;
             }
           ],
-          'conflict': ['value', 'private-from-b']
+          'conflict': [ 'value', 'private-from-b' ]
         }
       ]);
 
@@ -699,7 +699,7 @@ describe('injector', function() {
 
       const injector = new Injector([
         {
-          __exports__: ['foo'],
+          __exports__: [ 'foo' ],
           'foo': [
             'factory',
             function(bar) {
@@ -708,12 +708,12 @@ describe('injector', function() {
               };
             }
           ],
-          'bar': ['value', 'private-bar']
+          'bar': [ 'value', 'private-bar' ]
         }
       ]);
 
-      const firstChild = injector.createChild([], ['foo']);
-      const secondChild = injector.createChild([], ['foo']);
+      const firstChild = injector.createChild([], [ 'foo' ]);
+      const secondChild = injector.createChild([], [ 'foo' ]);
       const fooFromFirstChild = firstChild.get('foo');
       const fooFromSecondChild = secondChild.get('foo');
 
@@ -727,13 +727,13 @@ describe('injector', function() {
       it('should load', function() {
 
         const otherModule = /** @type ModuleDeclaration */ ({
-          'bar': ['value', 'bar-from-other-module']
+          'bar': [ 'value', 'bar-from-other-module' ]
         });
 
         const injector = new Injector([
           {
-            __exports__: ['foo'],
-            __modules__: [otherModule],
+            __exports__: [ 'foo' ],
+            __modules__: [ otherModule ],
             'foo': [
               'factory',
               function(bar) {
@@ -758,14 +758,14 @@ describe('injector', function() {
       it('should re-use', function() {
 
         const otherModule = /** @type ModuleDeclaration */ ({
-          'bar': ['value', {}]
+          'bar': [ 'value', {} ]
         });
 
         const injector = new Injector([
           otherModule,
           {
-            __exports__: ['foo'],
-            __modules__: [otherModule],
+            __exports__: [ 'foo' ],
+            __modules__: [ otherModule ],
             'foo': [
               'factory',
               function(bar) {
@@ -789,7 +789,7 @@ describe('injector', function() {
 
       const injector = new Injector([
         {
-          __exports__: ['foo', 'bar'],
+          __exports__: [ 'foo', 'bar' ],
           'foo': [
             'factory',
             function(bar) {
@@ -816,7 +816,7 @@ describe('injector', function() {
       ]);
       const foo = injector.get('foo');
       const bar = injector.get('bar');
-      const childInjector = injector.createChild([], ['foo', 'bar']);
+      const childInjector = injector.createChild([], [ 'foo', 'bar' ]);
       const fooFromChild = childInjector.get('foo');
       const barFromChild = childInjector.get('bar');
 
@@ -832,27 +832,27 @@ describe('injector', function() {
 
     return it('should force new instances per scope', function() {
       function Foo() {}
-      Foo.$scope = ['request'];
+      Foo.$scope = [ 'request' ];
 
       function createBar() {
         return {};
       }
-      createBar.$scope = ['session'];
+      createBar.$scope = [ 'session' ];
 
       const injector = new Injector([
         {
-          'foo': ['type', Foo],
-          'bar': ['factory', createBar]
+          'foo': [ 'type', Foo ],
+          'bar': [ 'factory', createBar ]
         }
       ]);
       const foo = injector.get('foo');
       const bar = injector.get('bar');
 
-      const sessionInjector = injector.createChild([], ['session']);
+      const sessionInjector = injector.createChild([], [ 'session' ]);
       expect(sessionInjector.get('foo')).to.equal(foo);
       expect(sessionInjector.get('bar')).to.not.equal(bar);
 
-      const requestInjector = injector.createChild([], ['request']);
+      const requestInjector = injector.createChild([], [ 'request' ]);
 
       expect(requestInjector.get('foo')).to.not.equal(foo);
       expect(requestInjector.get('bar')).to.equal(bar);
@@ -875,17 +875,17 @@ describe('injector', function() {
       }
 
       const base = /** @type ModuleDeclaration */ ({
-        foo: [ 'type', ['bar', 'baz', Foo] ],
-        blub: [ 'factory', ['foo', createBlub] ],
+        foo: [ 'type', [ 'bar', 'baz', Foo ] ],
+        blub: [ 'factory', [ 'foo', createBlub ] ],
         baz: [ 'value', 'baz-value' ],
         abc: [ 'value', 'abc-value' ]
       });
 
       const extension = /** @type ModuleDeclaration */ ({
-        foo: [ 'type', ['baz', 'abc', Foo] ]
+        foo: [ 'type', [ 'baz', 'abc', Foo ] ]
       });
 
-      const injector = new Injector([base, extension]);
+      const injector = new Injector([ base, extension ]);
       const expectedFoo = {
         bar: 'baz-value',
         baz: 'abc-value'
@@ -915,7 +915,7 @@ describe('injector', function() {
         bar: [ 'value', mocked ]
       });
 
-      const injector = new Injector([base, mock]);
+      const injector = new Injector([ base, mock ]);
 
       expect(injector.get('bar')).to.equal(mocked);
     });
@@ -931,12 +931,12 @@ describe('injector', function() {
       const injector = new Injector([
         {
           __init__: [ 'foo' ],
-          'foo': ['factory', function(bar) {
+          'foo': [ 'factory', function(bar) {
             bar.initialized = true;
 
             return bar;
           } ],
-          'bar': ['value', {}]
+          'bar': [ 'value', {} ]
         }
       ]);
 
@@ -956,7 +956,7 @@ describe('injector', function() {
           __init__: [ function(bar) {
             bar.initialized = true;
           } ],
-          'bar': ['value', {}]
+          'bar': [ 'value', {} ]
         }
       ]);
 
@@ -976,7 +976,7 @@ describe('injector', function() {
 
         const injector = new Injector([
           {
-            __exports__: ['publicFoo'],
+            __exports__: [ 'publicFoo' ],
             __init__: [ function(privateBar) {
               privateBar.initialized = true;
             } ],
@@ -988,7 +988,7 @@ describe('injector', function() {
                 };
               }
             ],
-            'privateBar': ['value', {} ]
+            'privateBar': [ 'value', {} ]
           }
         ]);
 

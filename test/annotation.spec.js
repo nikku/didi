@@ -21,7 +21,7 @@ describe('annotation', function() {
 
       annotate('aa', 'bb', fn);
 
-      expect(/** @type InjectAnnotated */ (fn).$inject).to.deep.equal(['aa', 'bb']);
+      expect(/** @type InjectAnnotated */ (fn).$inject).to.deep.equal([ 'aa', 'bb' ]);
     });
 
 
@@ -46,7 +46,7 @@ describe('annotation', function() {
         constructor(a, b) { }
       }
 
-      expect(annotate('aa', 'bb', Foo).$inject).to.deep.equal(['aa', 'bb']);
+      expect(annotate('aa', 'bb', Foo).$inject).to.deep.equal([ 'aa', 'bb' ]);
 
       expect(annotate('aa', 'bb', Foo)).to.equal(Foo);
     });
@@ -58,7 +58,7 @@ describe('annotation', function() {
 
     it('should parse argument names without comments', function() {
       const fn = function(one, two) {};
-      expect(parseAnnotations(fn)).to.deep.equal(['one', 'two']);
+      expect(parseAnnotations(fn)).to.deep.equal([ 'one', 'two' ]);
     });
 
 
@@ -67,7 +67,7 @@ describe('annotation', function() {
         constructor(one, two) {}
       }
 
-      expect(parseAnnotations(Foo)).to.deep.equal(['one', 'two']);
+      expect(parseAnnotations(Foo)).to.deep.equal([ 'one', 'two' ]);
     });
 
 
@@ -106,13 +106,13 @@ describe('annotation', function() {
     it('should parse comment annotation', function() {
       // eslint-disable-next-line spaced-comment
       const fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
-      expect(parseAnnotations(fn)).to.deep.equal(['one', 'two', 'three']);
+      expect(parseAnnotations(fn)).to.deep.equal([ 'one', 'two', 'three' ]);
     });
 
 
     it('should parse mixed comments with argument names', function() {
       const fn = function(/* one */ a, b,/*   three*/c) {};
-      expect(parseAnnotations(fn)).to.deep.equal(['one', 'b', 'three']);
+      expect(parseAnnotations(fn)).to.deep.equal([ 'one', 'b', 'three' ]);
     });
 
 
