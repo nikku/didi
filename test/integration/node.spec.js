@@ -7,13 +7,11 @@ describe('integration', function() {
 
     const annotate = require('../..').annotate;
     const Injector = require('../..').Injector;
-    const Module = require('../..').Module;
 
 
     it('should expose API', function() {
       expect(annotate).to.exist;
       expect(Injector).to.exist;
-      expect(Module).to.exist;
     });
 
 

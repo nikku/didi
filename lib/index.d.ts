@@ -58,17 +58,6 @@ export type ModuleDeclaration = {
   [name: string]: ServiceDeclaration<unknown> | ModuleDeclaration[] | string[];
 };
 
-// module.js
-
-export type ModuleProvider = [name: string, type: ProviderType, definition: ServiceDefinition<unknown>];
-
-export class Module {
-  factory(name: string, factory: FactoryDefinition<unknown>): Module;
-  value(name: string, value: ValueDefinition<unknown>): Module;
-  type(name: string, type: TypeDefinition<unknown>): Module;
-  forEach: (iterator: (provider: ModuleProvider) => void) => void;
-}
-
 // injector.js
 
 export type InjectionContext = unknown;
@@ -76,7 +65,7 @@ export type LocalsMap = {
   [name: string]: unknown
 };
 
-export type ModuleDefinition = ModuleDeclaration | Module;
+export type ModuleDefinition = ModuleDeclaration;
 
 export class Injector {
   constructor(modules: ModuleDefinition[], parent?: InjectorContext);
