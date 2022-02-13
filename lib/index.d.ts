@@ -63,6 +63,7 @@ export type ServiceDeclaration<T> =
 export type ModuleDeclaration = {
   [name: string]: ServiceDeclaration<unknown> | unknown;
   __init__?: Array<string|InitializerFunction>;
+  __depends__?: Array<ModuleDeclaration>;
   __exports__?: Array<string>;
   __modules__?: Array<ModuleDeclaration>;
 };

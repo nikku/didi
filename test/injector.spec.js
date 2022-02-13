@@ -1029,4 +1029,76 @@ describe('injector', function() {
 
   });
 
+
+  describe('module dependencies (__depends__)', function() {
+
+    it('should load in reverse order', function() {
+
+      const loaded = [];
+
+      // given
+      const injector = new Injector([
+        {
+          __depends__: [
+            {
+              __depends__: [
+                {
+                  __init__: [ function() { loaded.push('L2_A'); } ]
+                },
+                {
+                  __init__: [ function() { loaded.push('L2_B'); } ]
+                }
+              ],
+              __init__: [ function() { loaded.push('L1'); } ]
+            }
+          ],
+          __init__: [ function() { loaded.push('ROOT'); } ]
+        }
+      ]);
+
+      // then
+      expect(loaded).to.eql([
+        'L2_A',
+        'L2_B',
+        'L1',
+        'ROOT'
+      ]);
+    });
+
+
+    it('should de-duplicate', function() {
+
+      const loaded = [];
+
+      const duplicateModule = /** @type ModuleDeclaration */ ({
+        __init__: [ function() { loaded.push('DUP'); } ]
+      });
+
+      // given
+      const injector = new Injector([
+        {
+          __depends__: [
+            {
+              __depends__: [
+                duplicateModule,
+                duplicateModule
+              ],
+              __init__: [ function() { loaded.push('L1'); } ]
+            },
+            duplicateModule
+          ],
+          __init__: [ function() { loaded.push('ROOT'); } ]
+        }
+      ]);
+
+      // then
+      expect(loaded).to.eql([
+        'DUP',
+        'L1',
+        'ROOT'
+      ]);
+    });
+
+  });
+
 });
