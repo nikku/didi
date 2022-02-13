@@ -15,18 +15,18 @@ describe('annotation', function() {
   describe('annotate', function() {
 
     it('should set $inject property on the last argument', function() {
-      var fn = function(a, b) {
+      const fn = function(a, b) {
         return null;
       };
 
       annotate('aa', 'bb', fn);
 
-      return expect(/** @type InjectAnnotated */ (fn).$inject).to.deep.equal(['aa', 'bb']);
+      expect(/** @type InjectAnnotated */ (fn).$inject).to.deep.equal(['aa', 'bb']);
     });
 
 
     it('should return the function', function() {
-      var fn = function(a, b) {
+      const fn = function(a, b) {
         return null;
       };
       expect(annotate('aa', 'bb', fn)).to.equal(fn);
@@ -34,7 +34,7 @@ describe('annotation', function() {
 
 
     it('should inject using array args', function() {
-      var fn = function(a, b) {
+      const fn = function(a, b) {
         return null;
       };
       expect(annotate([ 'aa', 'bb', fn ])).to.equal(fn);
@@ -57,8 +57,7 @@ describe('annotation', function() {
   describe('parseAnnotations', function() {
 
     it('should parse argument names without comments', function() {
-      var fn;
-      fn = function(one, two) {};
+      const fn = function(one, two) {};
       expect(parseAnnotations(fn)).to.deep.equal(['one', 'two']);
     });
 
@@ -68,28 +67,28 @@ describe('annotation', function() {
         constructor(one, two) {}
       }
 
-      return expect(parseAnnotations(Foo)).to.deep.equal(['one', 'two']);
+      expect(parseAnnotations(Foo)).to.deep.equal(['one', 'two']);
     });
 
 
     it('should parse async function', function() {
       async function foo(a, b) {}
 
-      return expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
+      expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
     });
 
 
     it('should parse lambda', function() {
       const foo = (a, b) => {};
 
-      return expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
+      expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
     });
 
 
     it('should parse async lambda', function() {
       const foo = async (a, b) => {};
 
-      return expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
+      expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
     });
 
 
@@ -100,29 +99,26 @@ describe('annotation', function() {
         }
       }
 
-      return expect(parseAnnotations(Car)).to.deep.equal([ ]);
+      expect(parseAnnotations(Car)).to.deep.equal([ ]);
     });
 
 
     it('should parse comment annotation', function() {
-      var fn;
       // eslint-disable-next-line spaced-comment
-      fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
-      return expect(parseAnnotations(fn)).to.deep.equal(['one', 'two', 'three']);
+      const fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
+      expect(parseAnnotations(fn)).to.deep.equal(['one', 'two', 'three']);
     });
 
 
     it('should parse mixed comments with argument names', function() {
-      var fn;
-      fn = function(/* one */ a, b,/*   three*/c) {};
-      return expect(parseAnnotations(fn)).to.deep.equal(['one', 'b', 'three']);
+      const fn = function(/* one */ a, b,/*   three*/c) {};
+      expect(parseAnnotations(fn)).to.deep.equal(['one', 'b', 'three']);
     });
 
 
     it('should parse empty arguments', function() {
-      var fn;
-      fn = function() {};
-      return expect(parseAnnotations(fn)).to.deep.equal([]);
+      const fn = function() {};
+      expect(parseAnnotations(fn)).to.deep.equal([]);
     });
 
 
