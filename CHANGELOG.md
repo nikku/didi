@@ -9,8 +9,8 @@ ___Note:__ Yet to be released changes appear here._
 ## 7.0.0
 
 * `FEAT`: add support for module dependencies and intialization ([#13](https://github.com/nikku/didi/pull/13))
-* `FEAT`: retain stack traces when throwing errors ([`https://github.com/nikku/didi/commit/999b821b2f630a8d74fade566281875ef628a6d3`](https://github.com/nikku/didi/commit/999b821b2f630a8d74fade566281875ef628a6d3))
-* `FIX`: parse single arg lambda shorthand ([`https://github.com/nikku/didi/commit/d53f631023daa547ae9eb17dbbd5abae08573051`](https://github.com/nikku/didi/commit/d53f631023daa547ae9eb17dbbd5abae08573051))
+* `FEAT`: retain stack traces when throwing errors ([`999b821b`](https://github.com/nikku/didi/commit/999b821b2f630a8d74fade566281875ef628a6d3))
+* `FIX`: parse single arg lambda shorthand ([`d53f6310`](https://github.com/nikku/didi/commit/d53f631023daa547ae9eb17dbbd5abae08573051))
 * `CHORE`: remove `Module` from public API
 * `CHORE`: drop `Node@10` support
 
