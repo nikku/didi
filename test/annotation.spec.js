@@ -89,6 +89,16 @@ describe('annotation', function() {
         ).to.eql([ 'a', 'b' ]);
 
         expect(
+          parseAnnotations(a => a + 1)
+        ).to.eql([ 'a' ]);
+
+        expect(
+          parseAnnotations(a => {
+            return a + 1;
+          })
+        ).to.eql([ 'a' ]);
+
+        expect(
           parseAnnotations(() => 1)
         ).to.eql([ ]);
       });
@@ -102,6 +112,16 @@ describe('annotation', function() {
         expect(
           parseAnnotations(async (a, b) => a + b)
         ).to.eql([ 'a', 'b' ]);
+
+        expect(
+          parseAnnotations(async a => a + 1)
+        ).to.eql([ 'a' ]);
+
+        expect(
+          parseAnnotations(async a => {
+            return a + 1;
+          })
+        ).to.eql([ 'a' ]);
 
         expect(
           parseAnnotations(async () => 1)
