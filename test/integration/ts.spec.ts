@@ -125,4 +125,50 @@ describe('typed', function() {
     expect(injector).to.exist;
   });
 
+
+  it('should initialize', function() {
+
+    // given
+    const loaded : string[] = [];
+
+    new Injector([
+      {
+        __init__: [ () => loaded.push('first') ]
+      },
+      {
+        __init__: [ () => loaded.push('second') ]
+      }
+    ]);
+
+    // then
+    expect(loaded).to.eql([
+      'first',
+      'second'
+    ]);
+  });
+
+
+  it('should load dependent modules', function() {
+
+    // given
+    const loaded : string[] = [];
+
+    new Injector([
+      {
+        __depends__: [
+          {
+            __init__: [ () => loaded.push('dep') ]
+          }
+        ],
+        __init__: [ () => loaded.push('module') ]
+      }
+    ]);
+
+    // then
+    expect(loaded).to.eql([
+      'dep',
+      'module'
+    ]);
+  });
+
 });
