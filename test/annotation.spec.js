@@ -21,7 +21,7 @@ describe('annotation', function() {
 
       annotate('aa', 'bb', fn);
 
-      expect(/** @type InjectAnnotated */ (fn).$inject).to.deep.equal([ 'aa', 'bb' ]);
+      expect(/** @type InjectAnnotated */ (fn).$inject).to.eql([ 'aa', 'bb' ]);
     });
 
 
@@ -46,9 +46,19 @@ describe('annotation', function() {
         constructor(a, b) { }
       }
 
-      expect(annotate('aa', 'bb', Foo).$inject).to.deep.equal([ 'aa', 'bb' ]);
+      expect(annotate('aa', 'bb', Foo).$inject).to.eql([ 'aa', 'bb' ]);
 
       expect(annotate('aa', 'bb', Foo)).to.equal(Foo);
+    });
+
+
+    it('should annotate arrow function', function() {
+
+      const fn = (a, b) => a + b;
+
+      expect(annotate('aa', 'bb', fn).$inject).to.eql([ 'aa', 'bb' ]);
+
+      expect(annotate('aa', 'bb', fn)).to.equal(fn);
     });
 
   });
@@ -56,69 +66,118 @@ describe('annotation', function() {
 
   describe('parseAnnotations', function() {
 
-    it('should parse argument names without comments', function() {
-      const fn = function(one, two) {};
-      expect(parseAnnotations(fn)).to.deep.equal([ 'one', 'two' ]);
+    it('should parse function', function() {
+      expect(
+        parseAnnotations(function(one, two) {})
+      ).to.eql([ 'one', 'two' ]);
+
+      expect(
+        parseAnnotations(function(one, two) {})
+      ).to.eql([ 'one', 'two' ]);
     });
 
 
-    it('should parse constructor argument names without comments', function() {
-      class Foo {
-        constructor(one, two) {}
-      }
+    describe('should parse lambda', function() {
 
-      expect(parseAnnotations(Foo)).to.deep.equal([ 'one', 'two' ]);
+      it('default', function() {
+        expect(
+          parseAnnotations((a, b) => {})
+        ).to.eql([ 'a', 'b' ]);
+
+        expect(
+          parseAnnotations((a, b) => a + b)
+        ).to.eql([ 'a', 'b' ]);
+
+        expect(
+          parseAnnotations(() => 1)
+        ).to.eql([ ]);
+      });
+
+
+      it('async', function() {
+        expect(
+          parseAnnotations(async (a, b) => {})
+        ).to.eql([ 'a', 'b' ]);
+
+        expect(
+          parseAnnotations(async (a, b) => a + b)
+        ).to.eql([ 'a', 'b' ]);
+
+        expect(
+          parseAnnotations(async () => 1)
+        ).to.eql([ ]);
+
+        expect(
+          parseAnnotations(async () => {})
+        ).to.eql([ ]);
+      });
+
     });
 
 
-    it('should parse async function', function() {
-      async function foo(a, b) {}
+    describe('should parse class', function() {
 
-      expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
-    });
-
-
-    it('should parse lambda', function() {
-      const foo = (a, b) => {};
-
-      expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
-    });
-
-
-    it('should parse async lambda', function() {
-      const foo = async (a, b) => {};
-
-      expect(parseAnnotations(foo)).to.deep.equal([ 'a', 'b' ]);
-    });
-
-
-    it('should parse non-constructor class', function() {
-      class Car {
-        start() {
-          this.started = true;
+      it('with constructor', function() {
+        class Foo {
+          constructor(one, two) {}
         }
-      }
 
-      expect(parseAnnotations(Car)).to.deep.equal([ ]);
+        expect(parseAnnotations(Foo)).to.eql([ 'one', 'two' ]);
+      });
+
+
+      it('without constructor', function() {
+        class Car {
+          start() {
+            this.started = true;
+          }
+        }
+
+        expect(parseAnnotations(Car)).to.eql([ ]);
+      });
+
     });
 
 
-    it('should parse comment annotation', function() {
-      // eslint-disable-next-line spaced-comment
-      const fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
-      expect(parseAnnotations(fn)).to.deep.equal([ 'one', 'two', 'three' ]);
+    describe('should parse comment annotation', function() {
+
+      /* eslint-disable spaced-comment */
+
+      it('function', function() {
+
+        // when
+        const fn = function(/* one */ a, /*two*/ b,/*   three*/c) {};
+
+        // then
+        expect(parseAnnotations(fn)).to.eql([ 'one', 'two', 'three' ]);
+      });
+
+
+      it('lambda', function() {
+
+        // when
+        const arrowFn = (/* one */ a, /*two*/ b,/*   three*/c) => {};
+
+        // then
+        expect(parseAnnotations(arrowFn)).to.eql([ 'one', 'two', 'three' ]);
+      });
+
+
+      it('class', function() {
+        class Foo {
+          constructor(/*one*/ a, /*  two*/ b) {}
+        }
+
+        expect(parseAnnotations(Foo)).to.eql([ 'one', 'two' ]);
+      });
+
     });
 
 
     it('should parse mixed comments with argument names', function() {
       const fn = function(/* one */ a, b,/*   three*/c) {};
-      expect(parseAnnotations(fn)).to.deep.equal([ 'one', 'b', 'three' ]);
-    });
 
-
-    it('should parse empty arguments', function() {
-      const fn = function() {};
-      expect(parseAnnotations(fn)).to.deep.equal([]);
+      expect(parseAnnotations(fn)).to.eql([ 'one', 'b', 'three' ]);
     });
 
 
