@@ -785,6 +785,43 @@ describe('injector', function() {
     });
 
 
+    it('should initialize', function() {
+
+      // given
+      const loaded = [];
+
+      // when
+      const injector = new Injector([
+        {
+          __exports__: [ 'foo' ],
+          __modules__: [
+            {
+              __init__: [ () => loaded.push('nested') ],
+              bar: [ 'value', 10 ]
+            }
+          ],
+          __init__: [ (bar) => loaded.push('module' + bar) ],
+          'foo': [
+            'factory',
+            function(bar) {
+              return bar;
+            }
+          ]
+        }
+      ]);
+
+      // then
+      expect(loaded).to.eql([
+        'nested',
+        'module10'
+      ]);
+
+      expect(function() {
+        injector.get('bar');
+      }).to.throw(/No provider for "bar"/);
+    });
+
+
     it('should only create one private child injector', function() {
 
       const injector = new Injector([
