@@ -159,23 +159,12 @@ const engineModule = {
 This library is built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification save array notation and other features.
 
 
-## Differences to...
-
-#### [node-di][node-di]
+## Differences to [node-di][node-di]
 
 - supports array notation
 - supports [ES2015](http://babeljs.io/learn-es2015/)
 - bundles type definitions
-
-#### Angular DI
-
-- no config/runtime phases (configuration happens by injecting a config object)
-- no global module register
-- comment annotation
-- no decorators
-- service -> type
-- child injectors
-- private modules
+- module initialization + module dependencies
 
 
 ## License
