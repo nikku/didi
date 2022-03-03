@@ -6,6 +6,20 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 7.0.0
+
+* `FEAT`: add support for module dependencies and intialization ([#13](https://github.com/nikku/didi/pull/13))
+* `FEAT`: retain stack traces when throwing errors ([`https://github.com/nikku/didi/commit/999b821b2f630a8d74fade566281875ef628a6d3`](https://github.com/nikku/didi/commit/999b821b2f630a8d74fade566281875ef628a6d3))
+* `FIX`: parse single arg lambda shorthand ([`https://github.com/nikku/didi/commit/d53f631023daa547ae9eb17dbbd5abae08573051`](https://github.com/nikku/didi/commit/d53f631023daa547ae9eb17dbbd5abae08573051))
+* `CHORE`: remove `Module` from public API
+* `CHORE`: drop `Node@10` support
+
+### Breaking Changes
+
+* Removed `Module` export. Use documented `ModuleDeclaration` to define a didi module
+* Improved `ModuleDeclaration` typings to clearly reflect API used
+* `__init__` and `__depends__` are now part of the built-in module exports accounted for ([#13](https://github.com/nikku/didi/pull/13))
+
 ## 6.1.0
 
 * `FEAT`: move to pre-built type definitions
