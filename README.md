@@ -20,6 +20,8 @@ Following this pattern without a framework, you typically end up with some nasty
 ## Example
 
 ```js
+import { Injector } from 'didi';
+
 function Car(engine) {
   this.start = function() {
     engine.start();
@@ -45,7 +47,6 @@ const carModule = {
   'power': ['value', 1184] // probably Bugatti Veyron
 };
 
-const { Injector } = require('didi');
 const injector = new Injector([
   carModule
 ]);
@@ -91,6 +92,7 @@ injector.invoke(['car', function(car) {
 #### `type(token, Constructor)`
 
 To produce the instance, `Constructor` will be called with `new` operator.
+
 ```js
 const module = {
   'engine': ['type', DieselEngine]
@@ -129,6 +131,7 @@ function Car(engine, license) {
 ```
 
 You can also use comments:
+
 ```js
 function Car(/* engine */ e, /* x._weird */ x) {
   // will inject objects bound to 'engine' and 'x._weird' tokens
@@ -136,6 +139,7 @@ function Car(/* engine */ e, /* x._weird */ x) {
 ```
 
 You can also the minification save array notation known from [AngularJS][AngularJS]:
+
 ```js
 const Car = [ 'engine', 'trunk', function(e, t) {
   // will inject objects bound to 'engine' and 'trunk'
@@ -143,6 +147,7 @@ const Car = [ 'engine', 'trunk', function(e, t) {
 ```
 
 Sometimes it is helpful to inject only a specific property of some object:
+
 ```js
 function Engine(/* config.engine.power */ power) {
   // will inject 1184 (config.engine.power),
@@ -153,6 +158,37 @@ const engineModule = {
   'config': ['value', {engine: {power: 1184}, other : {}}]
 };
 ```
+
+
+### Component Initialization
+
+The injector allows modules to declare initializers. These are components
+that shall be loaded or functions to be invoked on init, i.e. to trigger
+side-effects.
+
+```javascript
+import { Injector } from 'didi';
+
+function HifiModule(events) {
+  events.on('toggleHifi', this.toggle.bind(this));
+
+  this.toggle = function(mode) {
+    console.log(`Toggled Hifi ${mode ? 'ON' : 'OFF'}`);
+  };
+}
+
+const injector = new Injector([
+  {
+    __init__: [ 'hifiModule' ],
+    hifiModule: [ 'type', HifiModule ]
+  },
+  ...
+]);
+
+// initializes all modules as defined
+injector.init();
+```
+
 
 ## Credits
 
