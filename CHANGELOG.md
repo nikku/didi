@@ -6,6 +6,14 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 8.0.0
+
+* `FEAT`: separate bootstrapping and initialization
+
+### Breaking Changes
+
+* Injector must be manually initialized via `Injector#init()`
+
 ## 7.0.1
 
 * `FIX`: make core `ES5`, again
