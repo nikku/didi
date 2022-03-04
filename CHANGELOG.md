@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 7.0.1
+
+* `FIX`: make core `ES5`, again
+
 ## 7.0.0
 
 * `FEAT`: add support for module dependencies and intialization ([#13](https://github.com/nikku/didi/pull/13))
