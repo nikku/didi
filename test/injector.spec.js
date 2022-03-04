@@ -790,7 +790,6 @@ describe('injector', function() {
       // given
       const loaded = [];
 
-      // when
       const injector = new Injector([
         {
           __exports__: [ 'foo' ],
@@ -801,7 +800,7 @@ describe('injector', function() {
             }
           ],
           __init__: [ (bar) => loaded.push('module' + bar) ],
-          'foo': [
+          foo: [
             'factory',
             function(bar) {
               return bar;
@@ -809,6 +808,9 @@ describe('injector', function() {
           ]
         }
       ]);
+
+      // when
+      injector.init();
 
       // then
       expect(loaded).to.eql([
@@ -978,6 +980,8 @@ describe('injector', function() {
       ]);
 
       // when
+      injector.init();
+
       const bar = injector.get('bar');
 
       // then
@@ -997,8 +1001,13 @@ describe('injector', function() {
         }
       ]);
 
-      // when
       const bar = injector.get('bar');
+
+      // assume
+      expect(bar.initialized).not.to.exist;
+
+      // when
+      injector.init();
 
       // then
       expect(bar.initialized).to.be.true;
@@ -1009,6 +1018,7 @@ describe('injector', function() {
 
       it('should init with child injector', function() {
 
+        // given
         const privateBar = {};
 
         const injector = new Injector([
@@ -1029,6 +1039,9 @@ describe('injector', function() {
           }
         ]);
 
+        // when
+        injector.init();
+
         const publicFoo = injector.get('publicFoo');
 
         expect(publicFoo.privateBar.initialized).to.be.true;
@@ -1040,25 +1053,35 @@ describe('injector', function() {
     describe('error handling', function() {
 
       it('should indicate missing dependency', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            __init__: [ 'foo' ]
+          }
+        ]);
+
+        // then
         expect(function() {
-          new Injector([
-            {
-              __init__: [ 'foo' ]
-            }
-          ]);
+          injector.init();
         }).to.throw(/Failed to initialize!/);
       });
 
 
       it('should indicate initialization error', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            __init__: [ function() {
+              throw new Error('INIT ERROR');
+            } ]
+          }
+        ]);
+
+        // then
         expect(function() {
-          new Injector([
-            {
-              __init__: [ function() {
-                throw new Error('INIT ERROR');
-              } ]
-            }
-          ]);
+          injector.init();
         }).to.throw(/Failed to initialize!/);
       });
 
@@ -1092,6 +1115,9 @@ describe('injector', function() {
           __init__: [ function() { loaded.push('ROOT'); } ]
         }
       ]);
+
+      // when
+      injector.init();
 
       // then
       expect(loaded).to.eql([
@@ -1127,6 +1153,9 @@ describe('injector', function() {
           __init__: [ function() { loaded.push('ROOT'); } ]
         }
       ]);
+
+      // when
+      injector.init();
 
       // then
       expect(loaded).to.eql([

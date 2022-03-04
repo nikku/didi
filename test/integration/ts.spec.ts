@@ -131,7 +131,7 @@ describe('typed', function() {
     // given
     const loaded : string[] = [];
 
-    new Injector([
+    const injector = new Injector([
       {
         __init__: [ () => loaded.push('first') ]
       },
@@ -139,6 +139,9 @@ describe('typed', function() {
         __init__: [ () => loaded.push('second') ]
       }
     ]);
+
+    // when
+    injector.init();
 
     // then
     expect(loaded).to.eql([
@@ -153,7 +156,7 @@ describe('typed', function() {
     // given
     const loaded : string[] = [];
 
-    new Injector([
+    const injector = new Injector([
       {
         __depends__: [
           {
@@ -163,6 +166,9 @@ describe('typed', function() {
         __init__: [ () => loaded.push('module') ]
       }
     ]);
+
+    // when
+    injector.init();
 
     // then
     expect(loaded).to.eql([

@@ -83,6 +83,7 @@ export class Injector {
   invoke<T>(func: (...args: unknown[]) => T, context: InjectionContext, locals: LocalsMap): T;
   instantiate<T>(Type: T): T;
   createChild(modules: ModuleDefinition[], forceNewInstances?: string[]): Injector;
+  init(): void;
 
   /**
    * @internal
