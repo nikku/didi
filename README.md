@@ -89,7 +89,7 @@ injector.invoke(['car', function(car) {
 
 ### Registering Stuff in the Module 
 Services, providers, value objects, config objects, etc... There are many names used in the world of DI and IOC. 
-This project uses 3 flavors to make it happen. 
+This project calls them components and there are 3 flavors; `type`, `factory`, `value`. 
 
 #### `type(token, Constructor)`
 
@@ -235,12 +235,12 @@ function Engine({ 'config.engine.power': power }) { ... }
 
 ### Destructured Function Parameters
 
-Kitchen Sink example that will work with minification
+Kitchen Sink example that will work with minification (tested with vite's esbuild minifier)
 
 ```javascript
 function makeEngine({ power: p, 'kinds.v8': kind, block: b = 'alum', fuel: f = 'diesel' }) {
   return { 
-    getPower: ()=> p,
+    getPower: () => p,
     powerDesc: `${p}hp`,
     kind,
     blockType: b,
@@ -262,6 +262,9 @@ console.log(`${getPower()} , ${powerDesc} , ${kind} , ${blockType} , ${fuelType}
 // output:  400 , 400hp , 8 cylinder , steel , diesel
 
 ```
+> 📝 **Note:**  
+> The [injector tests]( test/injector.spec.js ) are a great place to look for examples. 
+> You will find one that uses the 'type' and a Class with destructured object injection
 
 ### Injecting the injector
 

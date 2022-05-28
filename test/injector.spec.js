@@ -1271,8 +1271,8 @@ describe('injector', function() {
       const module = ({
         engine: [ 'factory', makeEngine ],
         power: [ 'value', 400 ],
-        kinds: [ 'value', { v8: '8 cylinder', v6: '6 cylinder' } ],
-        block: [ 'factory', ({power}) => power > 300 ? 'steel' : 'alum' ]
+        kinds: [ 'value', { v8: '8 cylinder', v6: '6' } ],
+        block: [ 'factory', ({ power }) => power > 300 ? 'steel' : 'alum' ]
       });
 
       const injector = new Injector([ module ]);
@@ -1286,6 +1286,11 @@ describe('injector', function() {
       expect(kind).to.equal('8 cylinder');
       expect(blockType).to.equal('steel');
       expect(fuelType).to.equal('diesel');
+
+      // make sure invoke works
+      const fn = ({ power:p, 'kinds.v6': k, foo = 'bar' }) => `${p}:${k}:${foo}`;
+      expect(injector.invoke(fn)).to.equal('400:6:bar');
+      expect(injector.invoke(fn, null, {foo: 'buzz'})).to.equal('400:6:buzz');
     });
 
   });
