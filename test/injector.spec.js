@@ -159,12 +159,13 @@ describe('injector', function() {
 
     it('should resolve dependencies', function() {
       class Foo {
-        constructor(bar1, baz1) {
+        constructor(/* bar */ bar1, /* baz */ baz1) {
           this.bar = bar1;
           this.baz = baz1;
         }
       }
-      Foo.$inject = [ 'bar', 'baz' ];
+
+      // Foo.$inject = [ '...', 'bar', 'baz' ];
 
       function bar(baz, abc) {
         return {
@@ -183,10 +184,70 @@ describe('injector', function() {
 
       const injector = new Injector([ module ]);
       const fooInstance = injector.get('foo');
+      const barInstance = injector.get('bar');
 
       expect(fooInstance.bar).to.deep.equal({
         baz: 'baz-value',
         abc: 'abc-value'
+      });
+
+      expect(barInstance).to.deep.equal({
+        baz: 'baz-value',
+        abc: 'abc-value'
+      });
+
+      expect(fooInstance.baz).to.equal('baz-value');
+    });
+
+    it('inject injector', function() {
+      class Foo {
+        constructor(bar1, baz1) {
+          this.bar = bar1;
+          this.baz = baz1;
+        }
+      }
+      Foo.$inject = [ 'bar', 'baz' ];
+
+      const bar = (baz, injector) => {
+        return {
+          baz: baz,
+          abc: injector.get('abc')
+        };
+      };
+
+      const barFn = (injector) => (x) => {
+        return {
+          abc: injector.get('abc') + x
+        };
+      };
+
+      // bar.$inject = [ 'baz', 'injector' ];
+
+      const module = /** @type ModuleDeclaration */ ({
+        foo: [ 'type', Foo ],
+        bar: [ 'factory', bar ],
+        barFn: [ 'factory', barFn ],
+        baz: [ 'value', 'baz-value' ],
+        abc: [ 'value', 'abc-value' ]
+      });
+
+      const injector = new Injector([ module ]);
+      const fooInstance = injector.get('foo');
+      const barInstance = injector.get('bar');
+      const barFnRef = injector.get('barFn');
+
+      expect(fooInstance.bar).to.deep.equal({
+        baz: 'baz-value',
+        abc: 'abc-value'
+      });
+
+      expect(barInstance).to.deep.equal({
+        baz: 'baz-value',
+        abc: 'abc-value'
+      });
+
+      expect(barFnRef('-go')).to.deep.equal({
+        abc: 'abc-value-go'
       });
 
       expect(fooInstance.baz).to.equal('baz-value');
