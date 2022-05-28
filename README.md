@@ -87,7 +87,9 @@ injector.invoke(['car', function(car) {
 ```
 
 
-### Registering Stuff
+### Registering Stuff in the Module 
+Services, providers, value objects, config objects, etc... There are many names used in the world of DI and IOC. 
+This project uses 3 flavors to make it happen. 
 
 #### `type(token, Constructor)`
 
@@ -119,8 +121,74 @@ const module = {
 };
 ```
 
+## Function Annotations
 
-### Annotation
+The following are all valid ways of annotating function with injection arguments and are equivalent.
+
+### Option 1: Inferred
+
+```js
+// inferred (only works if code not minified/obfuscated) unless its specified in line, 
+//will inject the power config
+function createEngine(power){
+  ...use power.horses
+}
+
+//then in module config would specify the inline args in most cases because of minification
+const carModule = {
+  engine: ['factory', [ 'power', createEngine ]],
+  power:  ['value', {horses: 400}]
+};
+
+```
+
+### Option 2: $inject annotated
+
+```js
+// annotated
+function createEngine(power) { ... }
+
+createEngine.$inject = ['power'];
+
+//then in module config array notation is not needed
+const carModule = {
+  engine: ['factory', createEngine ],
+  power:  ['value', { horses: 400 }]
+};
+```
+
+### Option 3: Unpacking or Destructured Parameters
+
+This works with minification(in vite) and does not require babel.  
+
+```js
+// destructured object parameter
+function createEngine({power}) { ... }
+
+//then in module config can take the simple route as well since function params are parsed and $inject is automatically added
+const carModule = {
+  engine: ['factory', createEngine ],
+  power:  ['value', { horses: 400 }]
+};
+```
+
+### Option 4: Babel Annotations/Comments
+
+```js
+// @inject
+function createEngine({powerService}){
+  ...use powerService
+}
+
+...module
+
+```
+
+### Annotations With Comments
+
+In order for these to work with minification the `#__PURE__` will need to be configured. 
+There are various options that may work using these [Babel annotations](https://babeljs.io/docs/en/babel-helper-annotate-as-pure)
+or plugins such as [babel-plugin-inject-args](https://github.com/hypothesis/babel-plugin-inject-args), depending on choice of usage. Its left to the user to investigate (but please do submit PR with successful options that can be outlined here)
 
 The injector looks up tokens based on argument names:
 
@@ -159,6 +227,22 @@ const engineModule = {
 };
 ```
 
+### Injecting the injector
+
+In cases where you need the injector it can also be injected
+
+```javascript
+
+//can use a function or lambda
+const getEnginePower = ({injector}) => injector.get('engine').power
+
+const carModule = {
+  engine: ['factory', createEngine ],
+  enginePower:  ['factory', getEnginePower ]
+};
+
+let power = injector.get('enginePower')
+```
 
 ### Component Initialization
 

@@ -231,4 +231,10 @@ describe('annotation', function() {
 
   });
 
+  it('should parse destructured object args', function() {
+    const fn = function({ a, b, c }) {};
+
+    expect(parseAnnotations(fn)).to.eql([ 'a', 'b', 'c' ]);
+  });
+
 });
