@@ -1233,13 +1233,13 @@ describe('injector', function() {
     it('destructered with default', function() {
 
       function makeEngine({ power, foo = 'bar', block = 'alum' }) {
-        return { 
+        return {
           getPower() { return `${power}hp`; },
           foo,
           block
         };
       }
-      
+
       const module = ({
         engine: [ 'factory', makeEngine ],
         power: [ 'value', 400 ],
@@ -1259,7 +1259,7 @@ describe('injector', function() {
     it('with renaming, key and defaults', function() {
 
       function makeEngine({ power: p, 'kinds.v8': kind, block: b = 'alum', fuel: f = 'diesel' }) {
-        return { 
+        return {
           getPower: ()=> p,
           powerDesc: `${p}hp`,
           kind,
@@ -1276,10 +1276,10 @@ describe('injector', function() {
       });
 
       const injector = new Injector([ module ]);
-      const {getPower, powerDesc, kind, blockType, fuelType} = injector.get('engine');
+      const { getPower, powerDesc, kind, blockType, fuelType } = injector.get('engine');
 
-      expect( injector.get('power') ).to.equal(400);
-      expect( injector.get('kinds.v8') ).to.equal('8 cylinder');
+      expect(injector.get('power')).to.equal(400);
+      expect(injector.get('kinds.v8')).to.equal('8 cylinder');
 
       expect(getPower()).to.equal(400);
       expect(powerDesc).to.equal('400hp');
@@ -1290,7 +1290,7 @@ describe('injector', function() {
       // make sure invoke works
       const fn = ({ power:p, 'kinds.v6': k, foo = 'bar' }) => `${p}:${k}:${foo}`;
       expect(injector.invoke(fn)).to.equal('400:6:bar');
-      expect(injector.invoke(fn, null, {foo: 'buzz'})).to.equal('400:6:buzz');
+      expect(injector.invoke(fn, null, { foo: 'buzz' })).to.equal('400:6:buzz');
     });
 
   });

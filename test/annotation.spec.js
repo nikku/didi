@@ -234,14 +234,14 @@ describe('annotation', function() {
   describe('object destructure', function() {
 
     it('should parse simple destructured object args', function() {
-      const fn = function({ a, b = 1, c=2 }) {};
+      const fn = function({ a, b = 1, c = 2 }) {};
 
       expect(parseAnnotations(fn)).to.eql([ '...', 'a', 'b', 'c' ]);
     });
 
     //minification will normally rename the unpacked object param
     it('should parse assignments destructured object args', function() {
-      const fn = function({ foo:a, bar: b, 'foo.baz': c = 3, x}) {};
+      const fn = function({ foo:a, bar: b, 'foo.baz': c = 3, x }) {};
 
       expect(parseAnnotations(fn)).to.eql([ '...', 'foo', 'bar', 'foo.baz', 'x' ]);
     });
