@@ -241,7 +241,13 @@ describe('annotation', function() {
 
     //minification will normally rename the unpacked object param
     it('should parse assignments destructured object args', function() {
-      const fn = function({ foo:a, bar: b, 'foo.baz': c = 3, x }) {};
+      // TODO changing below to bar:{a:1, b:2} will fail during splitting beacuase it doesnt look up the comma
+      const fn = function({
+        foo:a,
+        bar: { a: b }, // comments will work as long as it doesnt have a comma
+        'foo.baz': c = 3,
+        x
+      }) {};
 
       expect(parseAnnotations(fn)).to.eql([ '...', 'foo', 'bar', 'foo.baz', 'x' ]);
     });

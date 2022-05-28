@@ -18,6 +18,8 @@
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
     "test": "nyc --reporter=lcov mocha -r esm test/*.spec.js",
     "test:ann": "nyc --reporter=lcov mocha -r esm test/annotation.spec.js",
+    "test:objs": "nyc --reporter=lcov mocha -r esm test/*.spec.js -g 'destructered object params'",
+    "test:obj-ann": "nyc --reporter=lcov mocha -r esm test/annotation.spec.js -g 'object destructure'",
     "integration-test": "(cd test/integration && mocha -r ts-node/register *.spec.{js,ts})",
     "prepare": "run-s bundle"
   },
