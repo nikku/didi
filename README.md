@@ -157,19 +157,20 @@ const carModule = {
 };
 ```
 
-### Option 3: Unpacking or Destructured Parameters
+### Option 3: Unpacking/Destructured Parameters
 
 This works with minification(in vite) and does not require babel.  
 
-```js
+```javascript
 // destructured object parameter
-function createEngine({power}) { ... }
+function createEngine({ power }) { ... }
 
 //then in module config can take the simple route as well since function params are parsed and $inject is automatically added
 const carModule = {
   engine: ['factory', createEngine ],
   power:  ['value', { horses: 400 }]
 };
+
 ```
 
 ### Option 4: Babel Annotations/Comments
@@ -222,9 +223,44 @@ function Engine(/* config.engine.power */ power) {
   // assuming there is no direct binding for 'config.engine.power' token
 }
 
+
 const engineModule = {
   'config': ['value', {engine: {power: 1184}, other : {}}]
 };
+
+//with object destructureing it can be done like this
+function Engine({ 'config.engine.power': power }) { ... }
+
+```
+
+### Destructured Function Parameters
+
+Kitchen Sink example that will work with minification
+
+```javascript
+function makeEngine({ power: p, 'kinds.v8': kind, block: b = 'alum', fuel: f = 'diesel' }) {
+  return { 
+    getPower: ()=> p,
+    powerDesc: `${p}hp`,
+    kind,
+    blockType: b,
+    fuelType: f
+  };
+}
+
+const module = ({
+  engine: [ 'factory', makeEngine ],
+  block: [ 'factory', ({ power }) => power > 300 ? 'steel' : 'alum' ]
+  power: [ 'value', 400 ],
+  kinds: [ 'value', { v8: '8 cylinder', v6: '6 cylinder' } ],
+});
+
+const injector = new Injector([ module ]);
+const {getPower, powerDesc, kind, blockType, fuelType}  = injector.get('engine');
+
+console.log(`${getPower()} , ${powerDesc} , ${kind} , ${blockType} , ${fuelType})
+// output:  400 , 400hp , 8 cylinder , steel , diesel
+
 ```
 
 ### Injecting the injector

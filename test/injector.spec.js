@@ -1228,4 +1228,65 @@ describe('injector', function() {
 
   });
 
+  describe('destructered object params', function() {
+
+    it('destructered with default', function() {
+
+      function makeEngine({ power, foo = 'bar', block = 'alum' }) {
+        return { 
+          getPower() { return `${power}hp`; },
+          foo,
+          block
+        };
+      }
+      
+      const module = ({
+        engine: [ 'factory', makeEngine ],
+        power: [ 'value', 400 ],
+        foo: [ 'value', false ] // override default
+      });
+
+      const injector = new Injector([ module ]);
+      const _engine = injector.get('engine');
+      const _power = injector.get('power');
+
+      expect(_power).to.equal(400);
+      expect(_engine.getPower()).to.equal('400hp');
+      expect(_engine.block).to.equal('alum');
+      expect(_engine.foo).to.equal(false); // shoudl override the default
+    });
+
+    it('with renaming, key and defaults', function() {
+
+      function makeEngine({ power: p, 'kinds.v8': kind, block: b = 'alum', fuel: f = 'diesel' }) {
+        return { 
+          getPower: ()=> p,
+          powerDesc: `${p}hp`,
+          kind,
+          blockType: b,
+          fuelType: f
+        };
+      }
+
+      const module = ({
+        engine: [ 'factory', makeEngine ],
+        power: [ 'value', 400 ],
+        kinds: [ 'value', { v8: '8 cylinder', v6: '6 cylinder' } ],
+        block: [ 'factory', ({power}) => power > 300 ? 'steel' : 'alum' ]
+      });
+
+      const injector = new Injector([ module ]);
+      const {getPower, powerDesc, kind, blockType, fuelType} = injector.get('engine');
+
+      expect( injector.get('power') ).to.equal(400);
+      expect( injector.get('kinds.v8') ).to.equal('8 cylinder');
+
+      expect(getPower()).to.equal(400);
+      expect(powerDesc).to.equal('400hp');
+      expect(kind).to.equal('8 cylinder');
+      expect(blockType).to.equal('steel');
+      expect(fuelType).to.equal('diesel');
+    });
+
+  });
 });
