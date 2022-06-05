@@ -7,7 +7,7 @@ A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection
 
 ## About
 
-[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) allows you to decouple component declaration from instantiation. Once you declared available components `didi` instantiates them as needed, transitively resolves all their dependencies, and caches instances for re-use.
+[`didi`](https://github.com/nikku/didi) allows you to decouple component declaration from instantiation. Once you declared available components `didi` instantiates them as needed, transitively resolves all their dependencies, and caches instances for re-use.
 
 
 ## Example
