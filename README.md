@@ -129,7 +129,7 @@ You can use a static `$inject` annotation to declare dependencies in a minificat
 
 ```js
 function Car(e, license) {
-  // will inject objects bound to 'engine' and 'license' tokens
+  // will inject objects bound to 'engine' and 'license'
 }
 ```
 
