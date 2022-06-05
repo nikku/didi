@@ -4,17 +4,10 @@
 
 A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) container for JavaScript.
 
+
 ## About
 
-[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) decouples component and component dependency instantiation from component behavior. That benefits your applications in the following ways:
-
-- **explicit dependencies** - all dependencies are passed in as constructor arguments, which makes it easy to understand how particular object depends on the rest of the environment
-- **code reuse** - such a component is much easier to reuse in other environments because it is not coupled to a specific implementation of its dependencies
-- **much easier to test** - component dependencies can be mocked trivially / overridden for testing
-
-Following this pattern without a framework, you typically end up with some nasty `main()` method, where you instantiate all the objects and wire them together.
-
-`didi` is a dependency injection container that saves you from this boilerplate. **It makes wiring the application declarative rather than imperative.** Each component declares its dependencies, and the framework does transitively resolve these dependencies.
+[Dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) allows you to decouple component declaration from instantiation. Once you declared available components `didi` instantiates them as needed, transitively resolves all their dependencies, and caches instances for re-use.
 
 
 ## Example
@@ -36,58 +29,44 @@ function createPetrolEngine(power) {
   };
 }
 
-// a module is just a plain JavaScript object
-// it is a recipe for the injector, how to instantiate stuff
+// a (didi) module is an object that declares available components
+// by name and specifies how these are provided
 const carModule = {
-  // if an object asks for 'car', the injector will call new Car(...) to produce it
+  // asked for 'car', the injector will call new Car(...) to produce it
   'car': ['type', Car],
-  // if an object asks for 'engine', the injector will call createPetrolEngine(...) to produce it
+  // asked for 'engine', the injector will call createPetrolEngine(...) to produce it
   'engine': ['factory', createPetrolEngine],
-  // if an object asks for 'power', the injector will give it number 1184
+  // asked for 'power', the injector will give it number 1184
   'power': ['value', 1184] // probably Bugatti Veyron
 };
 
+// the injector is created using a set of modules
 const injector = new Injector([
   carModule
 ]);
 
+// using the injector API components can be retrieved
+injector.get('car').start();
+
+// ...and otherwise interacted with
 injector.invoke(function(car) {
-  car.start();
+  console.log('started', car);
 });
 ```
 
-For more examples, check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js).
+For real world examples check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at its core.
 
-You can also check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at its core.
+You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
 
 
 ## Usage
 
-### On the Web
-
-Use the minification save array notation to declare types or factories and their respective dependencies:
-
-```javascript
-const carModule = {
-  'car': ['type', [ 'engine', Car ]],
-  ...
-};
-
-const {
-  Injector
-} = require('didi');
-
-const injector = new Injector([
-  carModule
-])
-
-injector.invoke(['car', function(car) {
-  car.start();
-}]);
-```
+Learn how to [declare](#declaring-components), [inject](#injecting-components) and [initialize](#initializing-components) your components.
 
 
-### Registering Stuff
+### Declaring Components
+
+By declaring a component as part of a `didi` module you make it available for consuption by other components.
 
 #### `type(token, Constructor)`
 
@@ -111,7 +90,7 @@ const module = {
 
 #### `value(token, value)`
 
-Register the final value.
+Register a static value.
 
 ```js
 const module = {
@@ -120,23 +99,41 @@ const module = {
 ```
 
 
-### Annotation
+### Injecting Components
 
-The injector looks up tokens based on argument names:
+The injector looks up dependencies based on explicit annotations, comments or function argument names.
+
+#### Argument Names
+
+If no further details are provided the injector parses dependency names from function arguments:
 
 ```js
 function Car(engine, license) {
+  // will inject objects bound to 'engine' and 'license'
+}
+```
+
+#### Explicit Comments
+
+You can use comments to encode names:
+
+```js
+function Car(/* engine */ e, /* x._weird */ x) {
+  // will inject objects bound to 'engine' and 'x._weird'
+}
+```
+
+#### Explicit `$inject` Annotation
+
+You can use a static `$inject` annotation to declare dependencies in a minification safe manner:
+
+```js
+function Car(e, license) {
   // will inject objects bound to 'engine' and 'license' tokens
 }
 ```
 
-You can also use comments:
-
-```js
-function Car(/* engine */ e, /* x._weird */ x) {
-  // will inject objects bound to 'engine' and 'x._weird' tokens
-}
-```
+#### Array Notation
 
 You can also the minification save array notation known from [AngularJS][AngularJS]:
 
@@ -145,6 +142,8 @@ const Car = [ 'engine', 'trunk', function(e, t) {
   // will inject objects bound to 'engine' and 'trunk'
 }];
 ```
+
+#### Partial Injection
 
 Sometimes it is helpful to inject only a specific property of some object:
 
@@ -160,16 +159,14 @@ const engineModule = {
 ```
 
 
-### Component Initialization
+### Initializing Components
 
-The injector allows modules to declare initializers. These are components
-that shall be loaded or functions to be invoked on init, i.e. to trigger
-side-effects.
+Modules can use an `__init__` hook to declare components that shall be eagerly loaded or functions to eagerly be invoked, i.e. to trigger side-effects during intialization.
 
 ```javascript
 import { Injector } from 'didi';
 
-function HifiModule(events) {
+function HifiComponent(events) {
   events.on('toggleHifi', this.toggle.bind(this));
 
   this.toggle = function(mode) {
@@ -179,14 +176,34 @@ function HifiModule(events) {
 
 const injector = new Injector([
   {
-    __init__: [ 'hifiModule' ],
-    hifiModule: [ 'type', HifiModule ]
+    __init__: [ 'hifiComponent' ],
+    hifiComponent: [ 'type', HifiComponent ]
   },
   ...
 ]);
 
 // initializes all modules as defined
 injector.init();
+```
+
+
+### Overriding Components
+
+Components can be overriden by name. This can be beneficial for testing, but also customizing:
+
+```js
+import { Injector } from 'didi';
+
+import coreModule from './core';
+import HttpBackend from './test/mocks';
+
+const injector = new Injector([
+  coreModule,
+  {
+    // overrides already declared `httpBackend`
+    httpBackend: [ 'type', HttpBackend ]
+  }
+]);
 ```
 
 
