@@ -66,7 +66,7 @@ Learn how to [declare](#declaring-components), [inject](#injecting-components) a
 
 ### Declaring Components
 
-By declaring a component as part of a `didi` module you make it available for consuption by other components.
+By declaring a component as part of a `didi` module you make it available to other components.
 
 #### `type(token, Constructor)`
 
