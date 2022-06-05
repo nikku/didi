@@ -7,7 +7,7 @@ A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection
 
 ## About
 
-With [`didi`](https://github.com/nikku/didi) you decouple component declaration from instantiation. Once declared `didi` instantiates components as needed, transitively resolves their dependencies, and caches instances for re-use.
+With [`didi`](https://github.com/nikku/didi), you decouple component declaration from instantiation. Once declared, `didi` instantiates components as needed, transitively resolves their dependencies, and caches instances for re-use.
 
 
 ## Example
@@ -40,7 +40,7 @@ const carModule = {
   'power': ['value', 1184] // probably Bugatti Veyron
 };
 
-// the injector is created using a set of modules
+// you create the injector with a set of modules
 const injector = new Injector([
   carModule
 ]);
@@ -54,7 +54,7 @@ injector.invoke(function(car) {
 });
 ```
 
-For real world examples check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at its core.
+For real-world examples, check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at their core.
 
 You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
 
@@ -66,11 +66,11 @@ Learn how to [declare](#declaring-components), [inject](#injecting-components) a
 
 ### Declaring Components
 
-By declaring a component as part of a `didi` module you make it available to other components.
+By declaring a component as part of a `didi` module, you make it available to other components.
 
 #### `type(token, Constructor)`
 
-To produce the instance, `Constructor` will be called with `new` operator.
+`Constructor` will be called with `new` operator to produce the instance.
 
 ```js
 const module = {
@@ -80,7 +80,7 @@ const module = {
 
 #### `factory(token, factoryFn)`
 
-To produce the instance, `factoryFn` is called without any context. The factories return value will be used.
+The injector produces the instance by calling `factoryFn` without any context. It uses the factory's return value.
 
 ```js
 const module = {
@@ -101,7 +101,7 @@ const module = {
 
 ### Injecting Components
 
-The injector looks up dependencies based on explicit annotations, comments or function argument names.
+The injector looks up dependencies based on explicit annotations, comments, or function argument names.
 
 #### Argument Names
 
@@ -161,7 +161,7 @@ const engineModule = {
 
 ### Initializing Components
 
-Modules can use an `__init__` hook to declare components that shall be eagerly loaded or functions to eagerly be invoked, i.e. to trigger side-effects during intialization.
+Modules can use an `__init__` hook to declare components that shall eagerly load or functions to be invoked, i.e., trigger side effects during initialization.
 
 ```javascript
 import { Injector } from 'didi';
@@ -189,7 +189,7 @@ injector.init();
 
 ### Overriding Components
 
-Components can be overriden by name. This can be beneficial for testing, but also customizing:
+You can override components by name. That can be beneficial for testing but also for customizing:
 
 ```js
 import { Injector } from 'didi';
@@ -209,7 +209,7 @@ const injector = new Injector([
 
 ## Credits
 
-This library is built on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification save array notation and other features.
+This library builds on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification safe array notation, and other features.
 
 
 ## Differences to [node-di][node-di]
