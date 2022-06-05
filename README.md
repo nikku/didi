@@ -109,7 +109,7 @@ If no further details are provided the injector parses dependency names from fun
 
 ```js
 function Car(engine, license) {
-  // will inject objects bound to 'engine' and 'license'
+  // will inject components bound to 'engine' and 'license'
 }
 ```
 
@@ -119,7 +119,7 @@ You can use comments to encode names:
 
 ```js
 function Car(/* engine */ e, /* x._weird */ x) {
-  // will inject objects bound to 'engine' and 'x._weird'
+  // will inject components bound to 'engine' and 'x._weird'
 }
 ```
 
@@ -129,7 +129,7 @@ You can use a static `$inject` annotation to declare dependencies in a minificat
 
 ```js
 function Car(e, license) {
-  // will inject objects bound to 'engine' and 'license'
+  // will inject components bound to 'engine' and 'license'
 }
 ```
 
@@ -139,7 +139,7 @@ You can also the minification save array notation known from [AngularJS][Angular
 
 ```js
 const Car = [ 'engine', 'trunk', function(e, t) {
-  // will inject objects bound to 'engine' and 'trunk'
+  // will inject components bound to 'engine' and 'trunk'
 }];
 ```
 
