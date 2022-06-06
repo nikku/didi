@@ -2,12 +2,12 @@
 
 [![CI](https://github.com/nikku/didi/actions/workflows/CI.yml/badge.svg)](https://github.com/nikku/didi/actions/workflows/CI.yml)
 
-A tiny [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) container for JavaScript.
+A tiny [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) container for JavaScript.
 
 
 ## About
 
-With [`didi`](https://github.com/nikku/didi), you decouple component declaration from instantiation. Once declared, `didi` instantiates components as needed, transitively resolves their dependencies, and caches instances for re-use.
+Using [`didi`](https://github.com/nikku/didi) you follow the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) pattern, decoupling component declaration from instantiation. Once declared, `didi` instantiates components as needed, transitively resolves their dependencies, and caches instances for re-use.
 
 
 ## Example
@@ -29,8 +29,8 @@ function createPetrolEngine(power) {
   };
 }
 
-// a (didi) module is an object that declares available components
-// by name and specifies how these are provided
+// define a (didi) module
+// it declares available components by name and specifies how these are provided
 const carModule = {
   // asked for 'car', the injector will call new Car(...) to produce it
   'car': ['type', Car],
@@ -40,15 +40,15 @@ const carModule = {
   'power': ['value', 1184] // probably Bugatti Veyron
 };
 
-// you create the injector with a set of modules
+// instantiate an injector with a set of (didi) modules
 const injector = new Injector([
   carModule
 ]);
 
-// using the injector API components can be retrieved
+// use the injector API to retrieve components
 injector.get('car').start();
 
-// ...and otherwise interacted with
+// ...or invoke a function, injecting the arguments
 injector.invoke(function(car) {
   console.log('started', car);
 });
@@ -68,7 +68,7 @@ By declaring a component as part of a `didi` module, you make it available to ot
 
 #### `type(token, Constructor)`
 
-`Constructor` will be called with `new` operator to produce the instance.
+`Constructor` will be called with `new` operator to produce the instance:
 
 ```js
 const module = {
@@ -78,7 +78,7 @@ const module = {
 
 #### `factory(token, factoryFn)`
 
-The injector produces the instance by calling `factoryFn` without any context. It uses the factory's return value.
+The injector produces the instance by calling `factoryFn` without any context. It uses the factory's return value:
 
 ```js
 const module = {
@@ -88,7 +88,7 @@ const module = {
 
 #### `value(token, value)`
 
-Register a static value.
+Register a static value:
 
 ```js
 const module = {
@@ -111,7 +111,7 @@ function Car(engine, license) {
 }
 ```
 
-#### Explicit Comments
+#### Function Comments
 
 You can use comments to encode names:
 
@@ -121,7 +121,7 @@ function Car(/* engine */ e, /* x._weird */ x) {
 }
 ```
 
-#### Explicit `$inject` Annotation
+#### `$inject` Annotation
 
 You can use a static `$inject` annotation to declare dependencies in a minification safe manner:
 
@@ -159,7 +159,7 @@ const engineModule = {
 
 ### Initializing Components
 
-Modules can use an `__init__` hook to declare components that shall eagerly load or functions to be invoked, i.e., trigger side effects during initialization.
+Modules can use an `__init__` hook to declare components that shall eagerly load or functions to be invoked, i.e., trigger side-effects during initialization:
 
 ```javascript
 import { Injector } from 'didi';
