@@ -129,6 +129,8 @@ You can use a static `$inject` annotation to declare dependencies in a minificat
 function Car(e, license) {
   // will inject components bound to 'engine' and 'license'
 }
+
+Car.$inject = [ 'engine', 'license' ];
 ```
 
 #### Array Notation
