@@ -6,6 +6,11 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 8.0.1
+
+* `CHORE`: simplify initialization logic
+* `FIX`: drop usage of `AggregateError` due to poor inspection support
+
 ## 8.0.0
 
 * `FEAT`: separate bootstrapping and initialization
