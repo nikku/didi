@@ -1064,7 +1064,7 @@ describe('injector', function() {
         // then
         expect(function() {
           injector.init();
-        }).to.throw(/Failed to initialize!/);
+        }).to.throw(/No provider for "foo"!/);
       });
 
 
@@ -1082,7 +1082,7 @@ describe('injector', function() {
         // then
         expect(function() {
           injector.init();
-        }).to.throw(/Failed to initialize!/);
+        }).to.throw(/INIT ERROR/);
       });
 
     });
