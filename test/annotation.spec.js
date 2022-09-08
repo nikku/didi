@@ -156,6 +156,14 @@ describe('annotation', function() {
         expect(parseAnnotations(Car)).to.eql([ ]);
       });
 
+
+      it('without class name', function() {
+
+        // Disable keyword-spacing to reproduce #17
+        // eslint-disable-next-line keyword-spacing
+        expect(parseAnnotations(class{})).to.eql([ ]);
+      });
+
     });
 
 
