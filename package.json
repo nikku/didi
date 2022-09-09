@@ -1,6 +1,6 @@
 {
   "name": "didi",
-  "version": "8.0.1",
+  "version": "8.0.2",
   "description": "Dependency Injection for JavaScript",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
