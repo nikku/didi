@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 8.0.2
+
+* `FIX`: correct dependency detection for annonymous classes ([#17](https://github.com/nikku/didi/issues/17))
+
 ## 8.0.1
 
 * `CHORE`: simplify initialization logic
