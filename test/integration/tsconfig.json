@@ -2,7 +2,7 @@
   "compilerOptions": {
     "rootDir": ".",
     "strict": true,
-    "target": "es5",
+    "target": "ES2018",
     "module": "commonjs",
     "moduleResolution": "node"
   },
