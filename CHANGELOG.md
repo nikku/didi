@@ -6,6 +6,12 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 9.0.0
+
+* `FIX`: do not alter input in `annotate`
+* `CHORE`: migrate codebase to ES2018
+* `CHORE`: drop `UMD` prebuilt distribution
+
 ## 8.0.2
 
 * `FIX`: correct dependency detection for annonymous classes ([#17](https://github.com/nikku/didi/issues/17))
