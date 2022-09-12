@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "lib/index.d.ts",
-  "umd:main": "dist/didi.umd.js",
   "source": "lib/index.js",
   "scripts": {
     "all": "run-s lint test bundle check-types integration-test",
@@ -45,7 +44,6 @@
     "npm-run-all": "^4.1.2",
     "nyc": "^15.1.0",
     "rollup": "^2.75.7",
-    "rollup-plugin-terser": "^7.0.2",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.4"
   },
