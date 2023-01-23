@@ -8,6 +8,8 @@ ___Note:__ Yet to be released changes appear here._
 
 ## 9.0.0
 
+_Migrates the code base to ES2018._
+
 * `FIX`: do not alter input in `annotate`
 * `CHORE`: migrate codebase to ES2018
 * `CHORE`: drop `UMD` prebuilt distribution
