@@ -22,159 +22,171 @@ describe('typed', function() {
   }
 
 
-  it('should instantiate', function() {
+  describe('Injector', function() {
 
-    // when
-    const injector = new Injector([
-      {
-        foo: [
-          'factory',
-          function() {
-            return 'foo-value';
-          }
-        ],
-        bar: [ 'value', 'bar' ],
-        baz: [ 'type', BazType ],
-        bub: [ 'type', BubType ]
-      }
-    ]);
+    it('should instantiate', function() {
 
-    // then
-    expect(injector).to.exist;
+      // when
+      const injector = new Injector([
+        {
+          foo: [
+            'factory',
+            function() {
+              return 'foo-value';
+            }
+          ],
+          bar: [ 'value', 'bar' ],
+          baz: [ 'type', BazType ],
+          bub: [ 'type', BubType ]
+        }
+      ]);
+
+      // then
+      expect(injector).to.exist;
+    });
+
+
+    it('should ignore extension', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          __wooop__: [ 'bub' ]
+        }
+      ]);
+
+      // then
+      expect(injector).to.exist;
+    });
+
   });
 
 
-  it('should get', function() {
+  describe('#get', function() {
 
-    // given
-    const injector = new Injector([
-      {
-        foo: [
-          'factory',
-          function() {
-            return 'foo-value';
-          }
-        ],
-        bar: [ 'value', 'bar-value' ],
-        foop: [
-          'factory',
-          function(bar: string) {
-            return bar;
-          }
-        ],
-        baz: [ 'type', BazType ],
-        bub: [ 'type', BubType ]
-      }
-    ]);
+    it('should get', function() {
 
-    // when
-    const foo = injector.get('foo') as string;
-    const bar = injector.get('bar') as string;
-    const foop = injector.get('foop') as string;
-    const bub = injector.get<BubType>('bub');
-    const baz = injector.get('baz') as BazType;
+      // given
+      const injector = new Injector([
+        {
+          foo: [
+            'factory',
+            function() {
+              return 'foo-value';
+            }
+          ],
+          bar: [ 'value', 'bar-value' ],
+          foop: [
+            'factory',
+            function(bar: string) {
+              return bar;
+            }
+          ],
+          baz: [ 'type', BazType ],
+          bub: [ 'type', BubType ]
+        }
+      ]);
 
-    // then
-    expect(foo).to.eql('foo-value');
-    expect(bar).to.eql('bar-value');
-    expect(foop).to.eql('bar-value');
+      // when
+      const foo = injector.get('foo') as string;
+      const bar = injector.get('bar') as string;
+      const foop = injector.get('foop') as string;
+      const bub = injector.get<BubType>('bub');
+      const baz = injector.get('baz') as BazType;
 
-    expect(bub).to.be.an.instanceof(BubType);
-    expect(bub.bar).to.eql('bar-value');
+      // then
+      expect(foo).to.eql('foo-value');
+      expect(bar).to.eql('bar-value');
+      expect(foop).to.eql('bar-value');
 
-    expect(baz).to.be.an.instanceof(BazType);
-    expect(baz.name).to.eql('baz');
+      expect(bub).to.be.an.instanceof(BubType);
+      expect(bub.bar).to.eql('bar-value');
+
+      expect(baz).to.be.an.instanceof(BazType);
+      expect(baz.name).to.eql('baz');
+    });
+
+
+    it('should get nested', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          __exports__: [ 'bub' ],
+          __modules__: [
+            {
+              bar: [ 'value', 'bar-value' ]
+            }
+          ],
+          bub: [ 'type', BubType ]
+        }
+      ]);
+
+      // when
+      const bub = injector.get<BubType>('bub');
+      const bar = injector.get('bar', false);
+
+      // then
+      expect(bar).not.to.exist;
+      expect(bub.bar).to.eql('bar-value');
+    });
+
   });
 
 
-  it('should get nested', function() {
+  describe('#init', function() {
 
-    // given
-    const injector = new Injector([
-      {
-        __exports__: [ 'bub' ],
-        __modules__: [
-          {
-            bar: [ 'value', 'bar-value' ]
-          }
-        ],
-        bub: [ 'type', BubType ]
-      }
-    ]);
+    it('should initialize', function() {
 
-    // when
-    const bub = injector.get<BubType>('bub');
-    const bar = injector.get('bar', false);
+      // given
+      const loaded : string[] = [];
 
-    // then
-    expect(bar).not.to.exist;
-    expect(bub.bar).to.eql('bar-value');
-  });
+      const injector = new Injector([
+        {
+          __init__: [ () => loaded.push('first') ]
+        },
+        {
+          __init__: [ () => loaded.push('second') ]
+        }
+      ]);
 
+      // when
+      injector.init();
 
-  it('should ignore extension', function() {
-
-    // given
-    const injector = new Injector([
-      {
-        __wooop__: [ 'bub' ]
-      }
-    ]);
-
-    // then
-    expect(injector).to.exist;
-  });
+      // then
+      expect(loaded).to.eql([
+        'first',
+        'second'
+      ]);
+    });
 
 
-  it('should initialize', function() {
+    it('should load dependent modules', function() {
 
-    // given
-    const loaded : string[] = [];
+      // given
+      const loaded : string[] = [];
 
-    const injector = new Injector([
-      {
-        __init__: [ () => loaded.push('first') ]
-      },
-      {
-        __init__: [ () => loaded.push('second') ]
-      }
-    ]);
+      const injector = new Injector([
+        {
+          __depends__: [
+            {
+              __init__: [ () => loaded.push('dep') ]
+            }
+          ],
+          __init__: [ () => loaded.push('module') ]
+        }
+      ]);
 
-    // when
-    injector.init();
+      // when
+      injector.init();
 
-    // then
-    expect(loaded).to.eql([
-      'first',
-      'second'
-    ]);
-  });
+      // then
+      expect(loaded).to.eql([
+        'dep',
+        'module'
+      ]);
+    });
 
-
-  it('should load dependent modules', function() {
-
-    // given
-    const loaded : string[] = [];
-
-    const injector = new Injector([
-      {
-        __depends__: [
-          {
-            __init__: [ () => loaded.push('dep') ]
-          }
-        ],
-        __init__: [ () => loaded.push('module') ]
-      }
-    ]);
-
-    // when
-    injector.init();
-
-    // then
-    expect(loaded).to.eql([
-      'dep',
-      'module'
-    ]);
   });
 
 });
