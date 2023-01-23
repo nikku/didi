@@ -189,4 +189,53 @@ describe('typed', function() {
 
   });
 
+
+  describe('#invoke', function() {
+
+    it('should invoke', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          one: [ 'value', 1 ],
+          two: [ 'value', 2 ]
+        }
+      ]);
+
+      type Four = {
+        four: number;
+      };
+
+      type Five = {
+        five: number;
+      };
+
+      // when
+      // then
+      expect(injector.invoke((one, two) => {
+        return one + two;
+      })).to.eql(3);
+
+      expect(injector.invoke((one, two, three) => {
+        return one + two + three;
+      }, null, { three: 3 })).to.eql(6);
+
+      expect(injector.invoke(function(this: Four, one, two, three) {
+        return one + two + three + this.four;
+      }, { four: 4 }, { three: 3 })).to.eql(10);
+
+      const result = injector.invoke(function() : Five {
+
+        const five : Five = {
+          five: 5
+        };
+
+        return five;
+      });
+
+      expect(result.five).to.eql(5);
+    });
+
+  });
+
 });
