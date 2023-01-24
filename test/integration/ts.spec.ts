@@ -238,4 +238,34 @@ describe('typed', function() {
 
   });
 
+
+  describe('#instantiate', function() {
+
+    it('should instantiate Class', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          one: [ 'value', 1 ],
+          two: [ 'value', 2 ]
+        }
+      ]);
+
+      class Foo {
+        one: number;
+
+        constructor(one: number) {
+          this.one = one;
+        }
+      }
+
+      // when
+      const fooInstance = injector.instantiate(Foo);
+
+      // then
+      expect(fooInstance.one).to.eql(1);
+    });
+
+  });
+
 });

@@ -81,7 +81,7 @@ export class Injector {
   constructor(modules: ModuleDefinition[], parent?: InjectorContext);
   get<T>(name: string, strict?: boolean): T;
   invoke<T>(func: (...args: any[]) => T, context?: InjectionContext, locals?: LocalsMap): T;
-  instantiate<T>(Type: T): T;
+  instantiate<T>(constructor: { new (...args: any[]) : T }): T;
   createChild(modules: ModuleDefinition[], forceNewInstances?: string[]): Injector;
   init(): void;
 
