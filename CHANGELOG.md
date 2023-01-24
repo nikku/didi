@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 9.0.2
+
+* `FIX`: correct `Injector#instantiate` type definitions
+
 ## 9.0.1
 
 * `FIX`: correct `Injector#invoke` type definitions ([#20](https://github.com/nikku/didi/issues/20))
