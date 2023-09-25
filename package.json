@@ -17,7 +17,7 @@
     "check-types:test": "tsc --project test --pretty --noEmit",
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
     "test": "nyc --reporter=lcov mocha test/*.spec.js",
-    "integration-test": "(cd test/integration && mocha -r ts-node/register *.spec.{cjs,ts})",
+    "integration-test": "(cd test/integration && mocha --loader=ts-node/esm *.spec.{cjs,ts})",
     "prepare": "run-s bundle"
   },
   "repository": {
@@ -32,17 +32,16 @@
     "injector"
   ],
   "devDependencies": {
-    "@types/chai": "^4.3.0",
-    "@types/mocha": "^8.2.3",
+    "@types/chai": "^4.3.6",
+    "@types/mocha": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
-    "chai": "^4.3.6",
+    "chai": "^4.3.8",
     "cross-env": "^7.0.3",
     "didi": "file:",
     "eslint": "^8.23.1",
     "eslint-plugin-bpmn-io": "^0.14.1",
-    "esm": "^3.2.25",
-    "mocha": "^8.4.0",
+    "mocha": "^10.2.0",
     "npm-run-all": "^4.1.2",
     "nyc": "^15.1.0",
     "rollup": "^2.75.7",
