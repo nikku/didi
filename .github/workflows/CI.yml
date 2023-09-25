@@ -6,29 +6,20 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x]
+        node-version: [14, 16, 20]
 
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
     - name: Use Node.js ${{matrix.node-version}}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v3
       with:
         node-version: ${{matrix.node-version}}
-    - name: Cache Node.js modules
-      uses: actions/cache@v2
-      with:
-        # npm cache files are stored in `~/.npm` on Linux/macOS
-        path: ~/.npm
-        key: ${{ runner.OS }}-node-${{matrix.node-version}}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.OS }}-node-${{matrix.node-version}}-
-          ${{ runner.OS }}-node-
-          ${{ runner.OS }}-
+        cache: 'npm'
     - name: Install dependencies
       run: npm ci
     - name: Build
       run: npm run all
     - name: Upload Coverage
-      if: matrix.node-version == '16.x'
-      uses: codecov/codecov-action@v2
+      if: matrix.node-version == 20
+      uses: codecov/codecov-action@v3
