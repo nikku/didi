@@ -5,8 +5,10 @@ describe('integration', function() {
 
   describe('node bundle', function() {
 
-    const annotate = require('../..').annotate;
-    const Injector = require('../..').Injector;
+    const {
+      annotate,
+      Injector
+    } = require('didi');
 
 
     it('should expose API', function() {
@@ -55,5 +57,22 @@ describe('integration', function() {
 
   });
 
+
+  describe('esm bundle', function() {
+
+    it('should expose API', async function() {
+
+      // when
+      const {
+        annotate,
+        Injector
+      } = await import('didi');
+
+      // then
+      expect(annotate).to.exist;
+      expect(Injector).to.exist;
+    });
+
+  });
 
 });

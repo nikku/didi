@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import Injector from '../lib/injector';
+import { Injector } from 'didi';
 
 /**
- * @typedef {import('..').ModuleDeclaration} ModuleDeclaration
+ * @typedef {import('didi').ModuleDeclaration} ModuleDeclaration
  */
 
 
@@ -152,7 +152,10 @@ describe('injector', function() {
       }
       const annotatedFn = [ 'foo', 'bar', fn ];
 
+      // @ts-expect-error
       injector.invoke(annotatedFn);
+
+      // @ts-expect-error
       injector.invoke(annotatedFn);
     });
 
@@ -358,7 +361,10 @@ describe('injector', function() {
 
       const injector = new Injector([ module ]);
 
-      expect(injector.invoke([ 'baz', 'abc', bar ])).to.deep.equal({
+      // @ts-expect-error
+      const result = injector.invoke([ 'baz', 'abc', bar ]);
+
+      expect(result).to.deep.equal({
         baz: 'baz-value',
         abc: 'abc-value'
       });
@@ -379,10 +385,14 @@ describe('injector', function() {
       const injector = new Injector([]);
 
       expect(function() {
+
+        // @ts-expect-error
         return injector.invoke(123);
       }).to.throw('Cannot invoke "123". Expected a function!');
 
       expect(function() {
+
+        // @ts-expect-error
         return injector.invoke('abc');
       }).to.throw('Cannot invoke "abc". Expected a function!');
 
@@ -395,6 +405,8 @@ describe('injector', function() {
       }).to.throw('Cannot invoke "undefined". ' + 'Expected a function!');
 
       expect(function() {
+
+        // @ts-expect-error
         return injector.invoke({});
       }).to.throw('Cannot invoke "[object Object]". ' + 'Expected a function!');
     });
@@ -437,6 +449,7 @@ describe('injector', function() {
         expect(bar).to.equal(undefined);
       } ];
 
+      // @ts-expect-error
       injector.invoke(annotatedFn, null, { foo: 'FOO', bar: undefined });
     });
 
@@ -471,6 +484,7 @@ describe('injector', function() {
 
       const injector = new Injector([]);
       const returnedObj = {};
+
       function ObjCls() {
         return returnedObj;
       }
@@ -481,8 +495,13 @@ describe('injector', function() {
         return 123;
       }
 
+      // @ts-expect-error
       expect(injector.instantiate(ObjCls)).to.equal(returnedObj);
+
+      // @ts-expect-error
       expect(injector.instantiate(StringCls)).to.be.an.instanceof(StringCls);
+
+      // @ts-expect-error
       expect(injector.instantiate(NumberCls)).to.be.an.instanceof(NumberCls);
     });
 

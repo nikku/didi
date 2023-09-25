@@ -3,10 +3,10 @@ import { expect } from 'chai';
 import {
   annotate,
   parseAnnotations
-} from '../lib/annotation';
+} from 'didi';
 
 /**
- * @typedef {import('..').InjectAnnotated } InjectAnnotated
+ * @typedef {import('didi').InjectAnnotated } InjectAnnotated
  */
 
 

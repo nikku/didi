@@ -1,4 +1,4 @@
-import { Injector } from '../..';
+import { Injector } from 'didi';
 
 import { expect } from 'chai';
 

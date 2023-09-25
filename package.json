@@ -2,10 +2,11 @@
   "name": "didi",
   "version": "9.0.2",
   "description": "Dependency Injection for JavaScript",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "module": "dist/index.esm.js",
   "types": "lib/index.d.ts",
   "source": "lib/index.js",
+  "type": "module",
   "scripts": {
     "all": "run-s lint test bundle check-types integration-test",
     "bundle": "cross-env NODE_ENV=production rollup -c",
@@ -15,8 +16,8 @@
     "check-types": "run-s check-types:*",
     "check-types:test": "tsc --project test --pretty --noEmit",
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
-    "test": "nyc --reporter=lcov mocha -r esm test/*.spec.js",
-    "integration-test": "(cd test/integration && mocha -r ts-node/register *.spec.{js,ts})",
+    "test": "nyc --reporter=lcov mocha test/*.spec.js",
+    "integration-test": "(cd test/integration && mocha -r ts-node/register *.spec.{cjs,ts})",
     "prepare": "run-s bundle"
   },
   "repository": {
@@ -37,6 +38,7 @@
     "@typescript-eslint/parser": "^5.36.2",
     "chai": "^4.3.6",
     "cross-env": "^7.0.3",
+    "didi": "file:",
     "eslint": "^8.23.1",
     "eslint-plugin-bpmn-io": "^0.14.1",
     "esm": "^3.2.25",

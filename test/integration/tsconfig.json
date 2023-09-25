@@ -7,7 +7,7 @@
     "moduleResolution": "node"
   },
   "include": [
-    "node.spec.js",
+    "node.spec.cjs",
     "ts.spec.ts"
   ]
 }
