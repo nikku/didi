@@ -5,7 +5,7 @@
     "@typescript-eslint"
   ],
   "extends": [
-    "plugin:bpmn-io/es6",
+    "plugin:bpmn-io/recommended",
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
