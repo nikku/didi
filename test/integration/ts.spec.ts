@@ -124,6 +124,11 @@ describe('typed', function() {
 
       // when
       const bub = injector.get<BubType>('bub');
+
+      expect(() => {
+        injector.get('bar', true);
+      }).to.throw(/No provider for "bar"!/);
+
       const bar = injector.get('bar', false);
 
       // then
