@@ -6,6 +6,12 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 10.0.0
+
+* `FEAT`: turn into module
+* `CHORE`: require `Node >= 16`
+* `DOCS`: significantly improve typescript documentation
+
 ## 9.0.2
 
 * `FIX`: correct `Injector#instantiate` type definitions
