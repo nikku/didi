@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "all": "run-s lint test bundle check-types integration-test",
-    "bundle": "cross-env NODE_ENV=production rollup -c",
+    "bundle": "cross-env NODE_ENV=production rollup -c --bundleConfigAsCjs",
     "lint": "run-s lint:*",
     "lint:eslint": "eslint --ext ts,js,cjs .",
     "lint:tsc": "tsc --pretty --noEmit",
@@ -48,7 +48,7 @@
     "mocha": "^10.2.0",
     "npm-run-all": "^4.1.2",
     "nyc": "^15.1.0",
-    "rollup": "^2.75.7",
+    "rollup": "^4.5.1",
     "ts-node": "^10.9.1",
     "typescript": "~5.2"
   },
