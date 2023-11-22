@@ -11,7 +11,7 @@
     "all": "run-s lint test bundle check-types integration-test",
     "bundle": "cross-env NODE_ENV=production rollup -c",
     "lint": "run-s lint:*",
-    "lint:eslint": "eslint --ext .ts --ext .js .",
+    "lint:eslint": "eslint --ext ts,js,cjs .",
     "lint:tsc": "tsc --pretty --noEmit",
     "check-types": "run-s check-types:*",
     "check-types:test": "tsc --project test --pretty --noEmit",
