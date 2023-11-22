@@ -78,11 +78,52 @@ export type LocalsMap = {
 export type ModuleDefinition = ModuleDeclaration;
 
 export class Injector {
+
+  /**
+   * Create an injector from a set of modules.
+   *
+   * @param modules
+   * @param [parent]
+   */
   constructor(modules: ModuleDefinition[], parent?: InjectorContext);
-  get<T>(name: string, strict?: boolean): T;
+
+  /**
+   * Return a named service, and throws if it is not found.
+   *
+   * @param name
+   *
+   * @returns named service
+   */
+  get<T>(name: string): T;
+
+  /**
+   * Return a named service.
+   *
+   * @param name
+   * @param strict
+   *
+   * @returns named service
+   */
+  get<T>(name: string, strict: true): T;
+
+  /**
+   * Return a named service or `null`.
+   *
+   * @param name
+   * @param strict
+   *
+   * @returns named service
+   */
+  get<T>(name: string, strict: false): T | null;
+
   invoke<T>(func: (...args: any[]) => T, context?: InjectionContext, locals?: LocalsMap): T;
   instantiate<T>(constructor: { new (...args: any[]) : T }): T;
   createChild(modules: ModuleDefinition[], forceNewInstances?: string[]): Injector;
+
+  /**
+   * Initializes the injector once, calling `__init__`
+   * hooks on registered injector modules.
+   */
   init(): void;
 
   /**
