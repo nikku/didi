@@ -150,13 +150,10 @@ describe('injector', function() {
         expect(foo).to.equal(injector.get('foo'));
         expect(bar).to.equal(injector.get('bar'));
       }
-      const annotatedFn = [ 'foo', 'bar', fn ];
 
-      // @ts-expect-error
-      injector.invoke(annotatedFn);
+      injector.invoke([ 'foo', 'bar', fn ]);
 
-      // @ts-expect-error
-      injector.invoke(annotatedFn);
+      injector.invoke([ 'foo', 'bar', fn ]);
     });
 
 
@@ -361,7 +358,6 @@ describe('injector', function() {
 
       const injector = new Injector([ module ]);
 
-      // @ts-expect-error
       const result = injector.invoke([ 'baz', 'abc', bar ]);
 
       expect(result).to.deep.equal({
@@ -444,13 +440,10 @@ describe('injector', function() {
         }
       ]);
 
-      const annotatedFn = [ 'foo', 'bar', function(foo, bar) {
+      injector.invoke([ 'foo', 'bar', function(foo, bar) {
         expect(foo).to.eql('FOO');
         expect(bar).to.equal(undefined);
-      } ];
-
-      // @ts-expect-error
-      injector.invoke(annotatedFn, null, { foo: 'FOO', bar: undefined });
+      } ], null, { foo: 'FOO', bar: undefined });
     });
 
   });
@@ -480,6 +473,7 @@ describe('injector', function() {
       });
     });
 
+
     it('should return returned value from constructor if an object returned', function() {
 
       const injector = new Injector([]);
@@ -495,14 +489,13 @@ describe('injector', function() {
         return 123;
       }
 
-      // @ts-expect-error
       expect(injector.instantiate(ObjCls)).to.equal(returnedObj);
 
-      // @ts-expect-error
       expect(injector.instantiate(StringCls)).to.be.an.instanceof(StringCls);
 
-      // @ts-expect-error
       expect(injector.instantiate(NumberCls)).to.be.an.instanceof(NumberCls);
+
+      expect(injector.instantiate([ 'injector', NumberCls ])).to.be.an.instanceof(NumberCls);
     });
 
   });
