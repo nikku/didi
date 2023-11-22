@@ -27,17 +27,11 @@ export type FactoryFunction<T> = {
   (...args: any[]): T;
 } & Annotated;
 
-export type ArrayArgs<T> =
-  [ T ] |
-  [ string, T ] |
-  [ string, string, T ] |
-  [ string, string, string, T ] |
-  [ string, string, string, string, T ] |
-  [ string, string, string, string, string, T ] |
-  [ string, string, string, string, string, string, T ] |
-  [ string, string, string, string, string, string, string, T ] |
-  [ string, string, string, string, string, string, string, string, T ] |
-  [ string, string, string, string, string, string, string, string, string, T ];
+export type ArrayArgs<T> = [ ...string[], T ];
+
+export type ArrayFunc<T> = [ ...string[], FactoryFunction<T> ];
+
+export type ArrayConstructor<T> = [ ...string[], Constructor<T> ];
 
 export type ServiceProvider<T> = {
   (name: string): T;
@@ -81,43 +75,76 @@ export class Injector {
 
   /**
    * Create an injector from a set of modules.
-   *
-   * @param modules
-   * @param [parent]
    */
   constructor(modules: ModuleDefinition[], parent?: InjectorContext);
 
   /**
    * Return a named service, and throws if it is not found.
-   *
-   * @param name
-   *
-   * @returns named service
    */
   get<T>(name: string): T;
 
   /**
    * Return a named service.
-   *
-   * @param name
-   * @param strict
-   *
-   * @returns named service
    */
   get<T>(name: string, strict: true): T;
 
   /**
    * Return a named service or `null`.
-   *
-   * @param name
-   * @param strict
-   *
-   * @returns named service
    */
   get<T>(name: string, strict: false): T | null;
 
-  invoke<T>(func: (...args: any[]) => T, context?: InjectionContext, locals?: LocalsMap): T;
-  instantiate<T>(constructor: { new (...args: any[]) : T }): T;
+  /**
+   * Invoke the given function, injecting dependencies. Return the result.
+   *
+   * @example
+   *
+   * ```javascript
+   * injector.invoke(function(car) {
+   *   console.log(car.started);
+   * });
+   * ```
+   */
+  invoke<T>(func: FactoryFunction<T>, context?: InjectionContext, locals?: LocalsMap): T;
+
+  /**
+   * Invoke the given function, injecting dependencies provided in
+   * array notation. Return the result.
+   *
+   * @example
+   *
+   * ```javascript
+   * injector.invoke([ 'car', function(car) {
+   *   console.log(car.started);
+   * } ]);
+   * ```
+   */
+  invoke<T>(func: ArrayFunc<T>, context?: InjectionContext, locals?: LocalsMap): T;
+
+  /**
+   * Instantiate the given type, injecting dependencies.
+   *
+   * @example
+   *
+   * ```javascript
+   * injector.instantiate(Car);
+   * ```
+   */
+  instantiate<T>(constructor: Constructor<T>): T;
+
+  /**
+   * Instantiate the given type, injecting dependencies provided in array notation.
+   *
+   * @example
+   *
+   * ```javascript
+   * injector.instantiate([ 'hifi', Car ]);
+   * ```
+   */
+  instantiate<T>(constructor: ArrayConstructor<T>): T;
+
+  /**
+   * Create a child injector.
+   */
   createChild(modules: ModuleDefinition[], forceNewInstances?: string[]): Injector;
 
   /**

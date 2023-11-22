@@ -239,6 +239,9 @@ describe('typed', function() {
       });
 
       expect(result.five).to.eql(5);
+
+      expect(injector.invoke(() => {})).not.to.exist;
+
     });
 
   });
