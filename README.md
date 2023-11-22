@@ -12,7 +12,7 @@ Using [`didi`](https://github.com/nikku/didi) you follow the [dependency injecti
 
 ## Example
 
-```js
+```ts
 import { Injector } from 'didi';
 
 function Car(engine) {
@@ -29,13 +29,16 @@ function createPetrolEngine(power) {
   };
 }
 
-// define a (didi) module
-// it declares available components by name and specifies how these are provided
+// define a (didi) module - it declares available
+// components by name and specifies how these are provided
 const carModule = {
+
   // asked for 'car', the injector will call new Car(...) to produce it
   'car': ['type', Car],
+
   // asked for 'engine', the injector will call createPetrolEngine(...) to produce it
   'engine': ['factory', createPetrolEngine],
+
   // asked for 'power', the injector will give it number 1184
   'power': ['value', 1184] // probably Bugatti Veyron
 };
@@ -48,10 +51,16 @@ const injector = new Injector([
 // use the injector API to retrieve components
 injector.get('car').start();
 
-// ...or invoke a function, injecting the arguments
+// alternatively invoke a function, injecting the arguments
 injector.invoke(function(car) {
   console.log('started', car);
 });
+
+// if you work with a TypeScript code base, retrieve
+// a typed instance of a component
+const car: Car = injector.get<Car>('car');
+
+car.start();
 ```
 
 For real-world examples, check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at their core. You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
