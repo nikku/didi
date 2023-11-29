@@ -94,10 +94,14 @@ describe('typed', function() {
       const bub = injector.get<BubType>('bub');
       const baz = injector.get('baz') as BazType;
 
+      const maybeBar = injector.get<string>('bar', false);
+
       // then
       expect(foo).to.eql('foo-value');
       expect(bar).to.eql('bar-value');
       expect(foop).to.eql('bar-value');
+
+      expect(maybeBar!.charAt(0)).to.eql('b');
 
       expect(bub).to.be.an.instanceof(BubType);
       expect(bub.bar).to.eql('bar-value');
@@ -133,7 +137,23 @@ describe('typed', function() {
 
       // then
       expect(bar).not.to.exist;
+
       expect(bub.bar).to.eql('bar-value');
+    });
+
+
+    it('should get dynamic', function() {
+
+      // given
+      const injector = new Injector([]);
+
+      // when
+      const get = (service: string, strict: boolean) => {
+        return injector.get(service, strict);
+      };
+
+      // then
+      expect(get('bar', false)).not.to.exist;
     });
 
   });

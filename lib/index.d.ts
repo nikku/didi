@@ -91,7 +91,7 @@ export class Injector {
   /**
    * Return a named service or `null`.
    */
-  get<T>(name: string, strict: false): T | null;
+  get<T>(name: string, strict: boolean): T | null;
 
   /**
    * Invoke the given function, injecting dependencies. Return the result.
