@@ -22,4 +22,4 @@ jobs:
       run: npm run all
     - name: Upload Coverage
       if: matrix.node-version == 20
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
