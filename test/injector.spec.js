@@ -372,6 +372,8 @@ describe('injector', function() {
       const injector = new Injector([]);
 
       injector.invoke((function() {
+
+        // @ts-expect-error
         expect(this).to.equal(context);
       }), context);
     });
@@ -393,10 +395,14 @@ describe('injector', function() {
       }).to.throw('Cannot invoke "abc". Expected a function!');
 
       expect(function() {
+
+        // @ts-expect-error
         return injector.invoke(null);
       }).to.throw('Cannot invoke "null". Expected a function!');
 
       expect(function() {
+
+        // @ts-expect-error
         return injector.invoke(void 0);
       }).to.throw('Cannot invoke "undefined". ' + 'Expected a function!');
 

@@ -1,18 +1,18 @@
 import pkg from './package.json';
 
-function pgl(plugins = []) {
-  return plugins;
-}
-
-const srcEntry = pkg.source;
+import { copy } from '@web/rollup-plugin-copy';
 
 export default [
   {
-    input: srcEntry,
+    input: 'lib/index.js',
     output: [
       { file: pkg.main, format: 'cjs' },
       { file: pkg.module, format: 'es' }
     ],
-    plugins: pgl()
+    plugins: [
+      copy({
+        patterns: '**/*.d.ts', rootDir: './lib'
+      })
+    ]
   }
 ];

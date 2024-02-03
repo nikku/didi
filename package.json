@@ -3,17 +3,23 @@
   "version": "10.0.1",
   "description": "Dependency Injection for JavaScript",
   "main": "dist/index.cjs",
-  "module": "dist/index.esm.js",
-  "types": "lib/index.d.ts",
-  "source": "lib/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
   "type": "module",
   "scripts": {
-    "all": "run-s lint test bundle check-types integration-test",
+    "all": "run-s lint bundle test check-types integration-test",
     "bundle": "cross-env NODE_ENV=production rollup -c --bundleConfigAsCjs",
-    "lint": "run-s lint:*",
-    "lint:eslint": "eslint --ext ts,js,cjs .",
-    "lint:tsc": "tsc --pretty --noEmit",
+    "lint": "eslint --ext ts,js,cjs .",
     "check-types": "run-s check-types:*",
+    "check-types:lib": "tsc --pretty --noEmit",
     "check-types:test": "tsc --project test --pretty --noEmit",
     "check-types:integration": "tsc --project test/integration --pretty --noEmit",
     "test": "nyc --reporter=lcov mocha test/*.spec.js",
@@ -40,9 +46,9 @@
     "@types/node": "^20.11.16",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",
+    "@web/rollup-plugin-copy": "^0.5.1",
     "chai": "^4.4.1",
     "cross-env": "^7.0.3",
-    "didi": "file:",
     "eslint": "^8.56.0",
     "eslint-plugin-bpmn-io": "^1.0.0",
     "mocha": "^10.2.0",
@@ -56,7 +62,6 @@
   "license": "MIT",
   "sideEffects": false,
   "files": [
-    "dist",
-    "lib/index.d.ts"
+    "dist"
   ]
 }

@@ -1,13 +1,11 @@
 {
   "compilerOptions": {
-    "target": "ES2018",
     "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "checkJs": true,
     "rootDir": ".",
-    "strict": false,
-    "skipLibCheck": true,
-    "resolveJsonModule": true,
-    "esModuleInterop": true
+    "strict": true,
+    "noImplicitAny": false
   },
   "include": [
     "lib"
