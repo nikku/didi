@@ -47,7 +47,7 @@ export type ValueDefinition<T> = T;
 
 export type ServiceDefinition<T> = FactoryDefinition<T> | TypeDefinition<T> | ValueDefinition<T>;
 
-type TypedDeclaration<T, D> = [ T, D ] | [ T, D, 'private' ];
+export type TypedDeclaration<T, D> = [ T, D ] | [ T, D, 'private' ];
 
 export type ServiceDeclaration<T> =
   TypedDeclaration<ValueType, ValueDefinition<T>> |
