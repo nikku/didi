@@ -90,6 +90,9 @@ describe('typed', function() {
       // we still accept it
       const boolBar = injector.get<boolean>('bar');
       expect(boolBar).to.exist;
+
+      // @ts-expect-error illegal type conversion
+      const invalidFoo : string = injector.get('foo');
     });
 
   });
@@ -127,6 +130,7 @@ describe('typed', function() {
       const bub = injector.get<BubType>('bub');
       const baz = injector.get('baz') as BazType;
 
+      const typedFoo : string = injector.get('foo');
       const maybeBar = injector.get<string>('bar', false);
 
       // then
@@ -135,6 +139,7 @@ describe('typed', function() {
       expect(foop).to.eql('bar-value');
 
       expect(maybeBar!.charAt(0)).to.eql('b');
+      expect(typedFoo).to.eql('foo-value');
 
       expect(bub).to.be.an.instanceof(BubType);
       expect(bub.bar).to.eql('bar-value');
