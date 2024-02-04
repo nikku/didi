@@ -71,12 +71,20 @@ export type LocalsMap = {
 
 export type ModuleDefinition = ModuleDeclaration;
 
-export class Injector {
+
+export class Injector<
+  ServiceMap = null
+> {
 
   /**
    * Create an injector from a set of modules.
    */
   constructor(modules: ModuleDefinition[], parent?: InjectorContext);
+
+  /**
+   * Return a named service, looked up from the existing service map.
+   */
+  get<Name extends keyof ServiceMap>(name: Name): ServiceMap[Name];
 
   /**
    * Return a named service, and throws if it is not found.
