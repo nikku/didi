@@ -216,6 +216,38 @@ const injector = new Injector([
 ```
 
 
+### Type Service Retrival
+
+[`didi`](https://github.com/nikku/didi) ships type declarations that allow you to use it in a type safe manner.
+
+#### Explicit Typing
+
+Pass a type attribute to `Injector#get` to retrieve a service as a known type:
+
+```typescript
+const hifiComponent = injector.get<HifiComponent>('hifiComponent');
+
+// typed as <HifiComponent>
+hifiComponent.toggle();
+```
+
+#### Implicit Typing
+
+Configure the `Injector` through a service map and automatically cast services
+to known types:
+
+```typescript
+type ServiceMap = {
+  'hifiComponent': HifiComponent
+};
+
+const injector = new Injector<ServiceMap>(...);
+
+const hifiComponent = injector.get('hifiComponent');
+// typed as <HifiComponent>
+```
+
+
 ## Credits
 
 This library builds on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification safe array notation, and other features.
