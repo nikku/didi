@@ -59,6 +59,39 @@ describe('typed', function() {
       expect(injector).to.exist;
     });
 
+
+    it('should offer typed injections', function() {
+
+      // given
+      type ServiceMap = {
+        'foo': 1,
+        'bar': 'BAR'
+      };
+
+      // when
+      const injector = new Injector<ServiceMap>([
+        {
+          foo: [ 'value', 1 ],
+          bar: [ 'value', 'BAR' ]
+        }
+      ]);
+
+      // then
+      const foo = injector.get('foo');
+      expect(foo).to.eql(1);
+
+      const bar = injector.get('bar');
+      expect(bar).to.eql('BAR');
+
+      const baz = injector.get('baz', false);
+      expect(baz).not.to.exist;
+
+      // illegal usage, but if you think you know better
+      // we still accept it
+      const boolBar = injector.get<boolean>('bar');
+      expect(boolBar).to.exist;
+    });
+
   });
 
 
