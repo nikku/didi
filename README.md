@@ -216,7 +216,7 @@ const injector = new Injector([
 ```
 
 
-### Type Service Retrival
+### Type-safe Service Retrival
 
 [`didi`](https://github.com/nikku/didi) ships type declarations that allow you to use it in a type safe manner.
 
