@@ -6,6 +6,10 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 10.2.1
+
+* `FIX`: remove broken `main` entry
+
 ## 10.2.0
 
 * `FEAT`: add ability provide wellknown services ([#33](https://github.com/nikku/didi/pull/33))
