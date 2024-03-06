@@ -9,8 +9,8 @@ export default [
   {
     input: 'lib/index.js',
     output: [
-      { file: pkgExport.require, format: 'cjs' },
-      { file: pkgExport.import, format: 'es' }
+      { file: pkgExport.require, format: 'cjs', sourcemap: true },
+      { file: pkgExport.import, format: 'es', sourcemap: true }
     ],
     plugins: [
       copy({
