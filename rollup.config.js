@@ -1,13 +1,16 @@
+import { copy } from '@web/rollup-plugin-copy';
+
 import pkg from './package.json';
 
-import { copy } from '@web/rollup-plugin-copy';
+
+const pkgExport = pkg.exports['.'];
 
 export default [
   {
     input: 'lib/index.js',
     output: [
-      { file: pkg.main, format: 'cjs' },
-      { file: pkg.module, format: 'es' }
+      { file: pkgExport.require, format: 'cjs' },
+      { file: pkgExport.import, format: 'es' }
     ],
     plugins: [
       copy({
