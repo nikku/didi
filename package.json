@@ -1,6 +1,6 @@
 {
   "name": "didi",
-  "version": "10.2.1",
+  "version": "10.2.2",
   "description": "Dependency Injection for JavaScript",
   "types": "dist/index.d.ts",
   "main": "dist/index.cjs",
