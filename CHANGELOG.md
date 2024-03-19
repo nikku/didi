@@ -6,6 +6,12 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 10.2.2
+
+_Reverts `v10.2.1`._
+
+* `FIX`: restore `main` entry ([#36](https://github.com/nikku/didi/issues/36))
+
 ## 10.2.1
 
 * `FIX`: remove broken `main` entry
