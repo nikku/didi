@@ -21,7 +21,7 @@
     "check-types": "run-s check-types:*",
     "check-types:lib": "tsc --pretty --noEmit",
     "check-types:test": "tsc --project test --pretty --noEmit",
-    "check-types:integration": "tsc --project test/integration --pretty --noEmit",
+    "check-types:integration": "tsc -p test/integration/tsconfig.json --pretty --noEmit",
     "test": "nyc --reporter=lcov mocha test/*.spec.js",
     "integration-test": "(cd test/integration && mocha --loader=ts-node/esm *.spec.{cjs,ts})",
     "prepare": "run-s bundle"

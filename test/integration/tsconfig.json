@@ -3,7 +3,9 @@
     "rootDir": ".",
     "strict": true,
     "target": "ES2018",
-    "module": "NodeNext"
+    "module": "NodeNext",
+    "noImplicitAny": false,
+    "checkJs": true
   },
   "include": [
     "node.spec.cjs",
