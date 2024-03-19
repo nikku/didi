@@ -3,6 +3,8 @@
   "version": "10.2.1",
   "description": "Dependency Injection for JavaScript",
   "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "exports": {
     ".": {
       "import": "./dist/index.js",
