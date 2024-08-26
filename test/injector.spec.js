@@ -713,6 +713,24 @@ describe('injector', function() {
     });
 
 
+    it('should not override global names', function() {
+
+      const injector = new Injector([
+        {
+          'foo': [ 'value', 'GLOBAL_FOO' ]
+        },
+        {
+          __exports__: [ 'bar' ],
+          'foo': [ 'value', 'LOCAL_FOO' ],
+          'bar': [ 'factory', (foo) => foo ]
+        }
+      ]);
+
+      expect(injector.get('foo')).to.equal('GLOBAL_FOO');
+      expect(injector.get('bar')).to.equal('LOCAL_FOO');
+    });
+
+
     it('should allow forcing new instance', function() {
 
       const injector = new Injector([
