@@ -5,9 +5,12 @@
     "checkJs": true,
     "rootDir": ".",
     "strict": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "resolveJsonModule": true
   },
-  "include": [
-    "lib"
+  "exclude": [
+    "dist",
+    "coverage",
+    ".nyc_output"
   ]
 }
