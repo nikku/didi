@@ -20,7 +20,7 @@
     "lint": "eslint .",
     "check-types": "tsc --pretty --noEmit",
     "test": "nyc --reporter=lcov mocha test/*.spec.js",
-    "integration-test": "(cd test/integration && mocha --loader=ts-node/esm *.spec.{cjs,ts})",
+    "integration-test": "(cd test/integration && mocha --import=tsx *.spec.{cjs,ts})",
     "prepare": "run-s bundle"
   },
   "repository": {
@@ -50,7 +50,7 @@
     "npm-run-all2": "^6.2.3",
     "nyc": "^17.1.0",
     "rollup": "^4.24.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.1",
     "typescript": "5.5.4",
     "typescript-eslint": "^8.8.1"
   },

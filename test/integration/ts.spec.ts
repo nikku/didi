@@ -125,7 +125,7 @@ describe('typed', function() {
 
       // when
       const foo = injector.get('foo') as string;
-      const bar = injector.get('bar') as string;
+      const _bar = injector.get('bar') as string;
       const foop = injector.get('foop') as string;
       const bub = injector.get<BubType>('bub');
       const baz = injector.get('baz') as BazType;
@@ -135,7 +135,7 @@ describe('typed', function() {
 
       // then
       expect(foo).to.eql('foo-value');
-      expect(bar).to.eql('bar-value');
+      expect(_bar).to.eql('bar-value');
       expect(foop).to.eql('bar-value');
 
       expect(maybeBar!.charAt(0)).to.eql('b');
