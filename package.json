@@ -48,7 +48,7 @@
     "eslint": "^9.12.0",
     "eslint-plugin-bpmn-io": "^2.0.2",
     "mocha": "^10.7.3",
-    "npm-run-all2": "^6.2.3",
+    "npm-run-all2": "^7.0.0",
     "rollup": "^4.24.0",
     "tsx": "^4.19.1",
     "typescript": "5.5.4",
