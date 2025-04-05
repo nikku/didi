@@ -63,7 +63,7 @@ const car: Car = injector.get<Car>('car');
 car.start();
 ```
 
-For real-world examples, check out [Karma](https://github.com/karma-runner/karma) or [diagram-js](https://github.com/bpmn-io/diagram-js), two libraries that heavily use dependency injection at their core. You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
+For real-world examples, check out [Karma](https://github.com/karma-runner/karma), [diagram-js](https://github.com/bpmn-io/diagram-js) or [Wuffle](https://github.com/nikku/wuffle/tree/main/packages/app)—libraries that heavily use dependency injection at their core. You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
 
 
 ## Usage
