@@ -1050,6 +1050,32 @@ describe('injector', function() {
     });
 
 
+    it('should execute only once', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          __init__: [ function(bar) {
+            bar.initCalled++;
+
+            return bar;
+          } ],
+          'bar': [ 'value', { initCalled: 0 } ]
+        }
+      ]);
+
+      injector.init();
+
+      // when
+      injector.init();
+
+      const bar = injector.get('bar');
+
+      // then
+      expect(bar.initCalled).to.eql(1);
+    });
+
+
     describe('private modules', function() {
 
       it('should init with child injector', function() {
