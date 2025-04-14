@@ -1,6 +1,6 @@
 import { copy } from '@web/rollup-plugin-copy';
 
-import pkg from './package.json';
+import pkg from './package.json' with { type: 'json' };
 
 
 const pkgExport = pkg.exports['.'];
