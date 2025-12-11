@@ -8,10 +8,11 @@ const pkgExport = pkg.exports['.'];
 export default [
   {
     input: 'lib/index.js',
-    output: [
-      { file: pkgExport.require, format: 'cjs', sourcemap: true },
-      { file: pkgExport.import, format: 'es', sourcemap: true }
-    ],
+    output: {
+      file: pkgExport,
+      format: 'es',
+      sourcemap: true
+    },
     plugins: [
       copy({
         patterns: '**/*.d.ts', rootDir: './lib'

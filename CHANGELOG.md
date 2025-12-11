@@ -6,6 +6,8 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+* `CHORE`: turn into ESM only module
+
 ## 10.2.2
 
 _Reverts `v10.2.1`._
