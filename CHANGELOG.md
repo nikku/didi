@@ -6,7 +6,13 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 11.0.0
+
 * `CHORE`: turn into ESM only module
+
+### Breaking Change
+
+* Require `Node >= 20.12` for use in CommonJS modules
 
 ## 10.2.2
 
