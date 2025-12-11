@@ -6,7 +6,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18, 20, 22]
+        node-version: [20, 24]
 
     steps:
     - name: Checkout
@@ -21,7 +21,7 @@ jobs:
     - name: Build
       run: npm run all
     - name: Upload Coverage
-      if: matrix.node-version == 20
+      if: matrix.node-version == 24
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
