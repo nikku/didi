@@ -77,7 +77,7 @@ export class Injector<
 > {
 
   /**
-   * Create an injector from a set of modules.
+   * Create a new injector with the given modules.
    */
   constructor(modules: ModuleDefinition[], parent?: InjectorContext);
 
