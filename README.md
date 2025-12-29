@@ -34,13 +34,13 @@ function createPetrolEngine(power) {
 const carModule = {
 
   // asked for 'car', the injector will call new Car(...) to produce it
-  'car': ['type', Car],
+  'car': [ 'type', Car ],
 
   // asked for 'engine', the injector will call createPetrolEngine(...) to produce it
-  'engine': ['factory', createPetrolEngine],
+  'engine': [ 'factory', createPetrolEngine ],
 
   // asked for 'power', the injector will give it number 1184
-  'power': ['value', 1184] // probably Bugatti Veyron
+  'power': [ 'value', 1184 ] // probably Bugatti Veyron
 };
 
 // instantiate an injector with a set of (didi) modules
@@ -81,7 +81,7 @@ By declaring a component as part of a `didi` module, you make it available to ot
 
 ```js
 const module = {
-  'engine': ['type', DieselEngine]
+  'engine': [ 'type', DieselEngine ]
 };
 ```
 
@@ -91,7 +91,7 @@ The injector produces the instance by calling `factoryFn` without any context. I
 
 ```js
 const module = {
-  'engine': ['factory', createDieselEngine]
+  'engine': [ 'factory', createDieselEngine ]
 };
 ```
 
@@ -101,7 +101,7 @@ Register a static value:
 
 ```js
 const module = {
-  'power': ['value', 1184]
+  'power': [ 'value', 1184 ]
 };
 ```
 
@@ -163,7 +163,7 @@ function Engine(/* config.engine.power */ power) {
 }
 
 const engineModule = {
-  'config': ['value', { engine: { power: 1184 }, other : {} }]
+  'config': [ 'value', { engine: { power: 1184 }, other : {} } ]
 };
 ```
 
