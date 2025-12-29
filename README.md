@@ -163,7 +163,7 @@ function Engine(/* config.engine.power */ power) {
 }
 
 const engineModule = {
-  'config': ['value', {engine: {power: 1184}, other : {}}]
+  'config': ['value', { engine: { power: 1184 }, other : {} }]
 };
 ```
 
@@ -203,8 +203,8 @@ You can override components by name. That can be beneficial for testing but also
 ```js
 import { Injector } from 'didi';
 
-import coreModule from './core';
-import HttpBackend from './test/mocks';
+import coreModule from './core.js';
+import { HttpBackend } from './test/mocks.js';
 
 const injector = new Injector([
   coreModule,
