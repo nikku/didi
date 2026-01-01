@@ -305,10 +305,10 @@ const hifiComponent = injector.get('hifiComponent');
 
 ## Credits
 
-This library builds on top of the (now unmaintained) [node-di][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification safe array notation, and other features.
+This library builds on top of the (now unmaintained) [`node-di`][node-di] library. `didi` is a maintained fork that adds support for ES6, the minification safe array notation, and [other features](#differences-to-node-di).
 
 
-## Differences to [node-di][node-di]
+## Differences to [`node-di`][node-di]
 
 - supports array notation
 - supports [ES2015](http://babeljs.io/learn-es2015/)
