@@ -106,7 +106,7 @@ const mainModule = {
 const injector = new Injector([ mainModule ]);
 ```
 
-Components declared by later modules [will override](#overriding-components) those declared earlier; this can be useful for customization and testing.
+Upon instantiation, the `Injector` resolves modules in definition order, collecting named components and their dependencies. For the purpose of testing or customization a module loaded later can [re-declare a named component](#overriding-components).
 
 ### Declaring components
 
