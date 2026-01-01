@@ -7,8 +7,9 @@ A tiny [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control
 
 ## About
 
-Using [`didi`](https://github.com/nikku/didi) you follow the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) pattern, decoupling component declaration from instantiation. Once declared, `didi` instantiates components as needed, transitively resolves their dependencies, and caches instances for re-use.
+Using [`didi`][didi] you follow the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) pattern, decoupling component (service) declaration from instantiation. 
 
+Components in `didi` are declared inside of modules. Unless declared otherwise they are singletons, instantiated by `didi` as needed, with resolved dependencies, and cached for future re-use. You may choose to [eagerly initialize](#initializing-components) components, too.
 
 ## Example
 
@@ -68,12 +69,48 @@ For real-world examples, check out [Karma](https://github.com/karma-runner/karma
 
 ## Usage
 
-Learn how to [declare](#declaring-components), [inject](#injecting-components) and [initialize](#initializing-components) your components.
+Learn how to [define modules](#defining-modules) that [declare](#declaring-components), [inject](#injecting-components) and [initialize](#initializing-components) your components.
 
+### Defining Modules
+
+You [declare your components](#declaring-components) by name as part of a `didi` module:
+
+```js
+const engineModule = {
+  'engine': [ 'type', DieselEngine ]
+};
+
+const carModule = {
+  'car': [ 'factory', function createCar(engine) { ... } ]
+};
+```
+
+A set of modules can be passed to instantiate the `didi` container:
+
+```js
+import { Injector } from 'didi';
+
+const injector = new Injector([
+  engineModule,
+  carModule
+]);
+```
+
+A module can depend on other modules through the `__depends__` tag, leading to dependencies being loaded, too:
+
+```js
+const mainModule = {
+  __depends__: [ carModule, engineModule ]
+};
+
+const injector = new Injector([ mainModule ]);
+```
+
+Components declared by later modules [will override](#overriding-components) those declared earlier; this can be useful for customization and testing.
 
 ### Declaring Components
 
-By declaring a component as part of a `didi` module, you make it available to other components.
+By declaring a component as part of a [`didi` module](#defining-modules), you make it available to other components.
 
 #### `type(token, Constructor)`
 
@@ -167,6 +204,24 @@ const engineModule = {
 };
 ```
 
+### Component Instantiation
+
+In [`didi`][didi] components are singletons, instantiated lazily, as needed, and cached for later re-use:
+
+```js
+// instantiates the <car> on first access
+const car = injector.get('car');
+
+injector.invoke(function(car) {
+  // re-uses <car> as instantiated earlier
+});
+```
+
+You may [flag a component for eager instantiation](#initializing-components).
+
+> [!IMPORTANT]  
+> `didi` only supports synchronous component instantiation. If you look for async instantiation, give [`async-didi`][async-didi] a try. 
+
 
 ### Initializing Components
 
@@ -218,7 +273,7 @@ const injector = new Injector([
 
 ### Type-safety
 
-[`didi`](https://github.com/nikku/didi) ships type declarations that allow you to use it in a type safe manner.
+[`didi`][didi] ships type declarations that allow you to use it in a type safe manner.
 
 #### Explicit Typing
 
@@ -268,3 +323,5 @@ MIT
 
 [AngularJS]: http://angularjs.org/
 [node-di]: https://github.com/vojtajina/node-di
+[didi]: https://github.com/nikku/didi
+[async-didi]: https://github.com/nikku/async-didi
