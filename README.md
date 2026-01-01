@@ -96,7 +96,7 @@ const injector = new Injector([
 ]);
 ```
 
-A module can depend on other modules through the `__depends__` tag- As a result, `didi` will load it transitively, too:
+A module can depend on other modules through the `__depends__` tag. As a result, `didi` will load it transitively, too:
 
 ```js
 const mainModule = {
