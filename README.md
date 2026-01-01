@@ -7,9 +7,9 @@ A tiny [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control
 
 ## About
 
-Using [`didi`][didi] you follow the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) pattern, decoupling component (service) declaration from instantiation. 
+Using [`didi`][didi], you follow the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) pattern. This means that you decouple component (service) declaration from instantiation. 
 
-Components in `didi` are declared inside of modules. Unless declared otherwise they are singletons, instantiated by `didi` as needed, with resolved dependencies, and cached for future re-use. You may choose to [eagerly initialize](#initializing-components) components, too.
+Components in `didi` are declared by name. Each component is a singleton. It is instantiated by `didi` as needed, and cached for future re-use. During instantiation, `didi` will do the heavy lifting to resolve component dependencies.
 
 ## Example
 
@@ -40,7 +40,7 @@ const carModule = {
   // asked for 'engine', the injector will call createPetrolEngine(...) to produce it
   'engine': [ 'factory', createPetrolEngine ],
 
-  // asked for 'power', the injector will give it number 1184
+  // asked for 'power', the injector will give it the number 1184
   'power': [ 'value', 1184 ] // probably Bugatti Veyron
 };
 
@@ -49,7 +49,7 @@ const injector = new Injector([
   carModule
 ]);
 
-// use the injector API to retrieve components
+// use the injector API to retrieve a component
 injector.get('car').start();
 
 // alternatively invoke a function, injecting the arguments
@@ -64,14 +64,14 @@ const car: Car = injector.get<Car>('car');
 car.start();
 ```
 
-For real-world examples, check out [Karma](https://github.com/karma-runner/karma), [diagram-js](https://github.com/bpmn-io/diagram-js) or [Wuffle](https://github.com/nikku/wuffle/tree/main/packages/app)—libraries that heavily use dependency injection at their core. You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
+For real-world examples, check out [Karma](https://github.com/karma-runner/karma), [diagram-js](https://github.com/bpmn-io/diagram-js), or [Wuffle](https://github.com/nikku/wuffle/tree/main/packages/app)—libraries that heavily use dependency injection at their core. You can also check out [the tests](https://github.com/nikku/didi/blob/master/test/injector.spec.js) to learn about all supported use cases.
 
 
 ## Usage
 
 Learn how to [define modules](#defining-modules) that [declare](#declaring-components), [inject](#injecting-components) and [initialize](#initializing-components) your components.
 
-### Defining Modules
+### Defining modules
 
 You [declare your components](#declaring-components) by name as part of a `didi` module:
 
@@ -85,7 +85,7 @@ const carModule = {
 };
 ```
 
-A set of modules can be passed to instantiate the `didi` container:
+You pass a set of modules to instantiate the `didi` container:
 
 ```js
 import { Injector } from 'didi';
@@ -96,7 +96,7 @@ const injector = new Injector([
 ]);
 ```
 
-A module can depend on other modules through the `__depends__` tag, leading to dependencies being loaded, too:
+A module can depend on other modules through the `__depends__` tag- As a result, `didi` will load it transitively, too:
 
 ```js
 const mainModule = {
@@ -108,13 +108,13 @@ const injector = new Injector([ mainModule ]);
 
 Components declared by later modules [will override](#overriding-components) those declared earlier; this can be useful for customization and testing.
 
-### Declaring Components
+### Declaring components
 
 By declaring a component as part of a [`didi` module](#defining-modules), you make it available to other components.
 
 #### `type(token, Constructor)`
 
-`Constructor` will be called with `new` operator to produce the instance:
+`Constructor` will be called with the `new` operator to produce the instance:
 
 ```js
 const module = {
@@ -143,13 +143,13 @@ const module = {
 ```
 
 
-### Injecting Components
+### Injecting components
 
 The injector looks up dependencies based on explicit annotations, comments, or function argument names.
 
-#### Argument Names
+#### Argument names
 
-If no further details are provided the injector parses dependency names from function arguments:
+If no further details are provided, the injector parses dependency names from function arguments:
 
 ```js
 function Car(engine, license) {
@@ -157,7 +157,7 @@ function Car(engine, license) {
 }
 ```
 
-#### Function Comments
+#### Function comments
 
 You can use comments to encode names:
 
@@ -167,9 +167,9 @@ function Car(/* engine */ e, /* x._weird */ x) {
 }
 ```
 
-#### `$inject` Annotation
+#### `$inject` annotation
 
-You can use a static `$inject` annotation to declare dependencies in a minification safe manner:
+You can use a static `$inject` annotation to declare dependencies in a minification-safe manner:
 
 ```js
 function Car(e, license) {
@@ -179,9 +179,9 @@ function Car(e, license) {
 Car.$inject = [ 'engine', 'license' ];
 ```
 
-#### Array Notation
+#### Array notation
 
-You can also the minification save array notation known from [AngularJS][AngularJS]:
+You can also use the minification save array notation known from [AngularJS][AngularJS]:
 
 ```js
 const Car = [ 'engine', 'trunk', function(e, t) {
@@ -189,7 +189,7 @@ const Car = [ 'engine', 'trunk', function(e, t) {
 }];
 ```
 
-#### Partial Injection
+#### Partial injection
 
 Sometimes it is helpful to inject only a specific property of some object:
 
@@ -204,7 +204,7 @@ const engineModule = {
 };
 ```
 
-### Component Instantiation
+### Component instantiation
 
 In [`didi`][didi] components are singletons, instantiated lazily, as needed, and cached for later re-use:
 
@@ -223,7 +223,7 @@ You may [flag a component for eager instantiation](#initializing-components).
 > `didi` only supports synchronous component instantiation. If you look for async instantiation, give [`async-didi`][async-didi] a try. 
 
 
-### Initializing Components
+### Initializing components
 
 Modules can use an `__init__` hook to declare components that shall eagerly load or functions to be invoked, i.e., trigger side-effects during initialization:
 
@@ -251,9 +251,9 @@ injector.init();
 ```
 
 
-### Overriding Components
+### Overriding components
 
-You can override components by name. That can be beneficial for testing but also for customizing:
+You can override components by name. That can be beneficial for testing, but also for customizing:
 
 ```js
 import { Injector } from 'didi';
@@ -273,9 +273,9 @@ const injector = new Injector([
 
 ### Type-safety
 
-[`didi`][didi] ships type declarations that allow you to use it in a type safe manner.
+[`didi`][didi] ships type declarations that allow you to use it in a type-safe manner.
 
-#### Explicit Typing
+#### Explicit typing
 
 Pass a type attribute to `Injector#get` to retrieve a service as a known type:
 
@@ -286,7 +286,7 @@ const hifiComponent = injector.get<HifiComponent>('hifiComponent');
 hifiComponent.toggle();
 ```
 
-#### Implicit Typing
+#### Implicit typing
 
 Configure the `Injector` through a service map and automatically cast services
 to known types:
