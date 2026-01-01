@@ -9,7 +9,7 @@ A tiny [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control
 
 Using [`didi`][didi], you follow the [dependency injection](https://en.wikipedia.org/wiki/Dependency_injection) / [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control) pattern. This means that you decouple component (service) declaration from instantiation. 
 
-Components in `didi` are declared by name. Each component is a singleton. It is instantiated by `didi` as needed, and cached for future re-use. During instantiation, `didi` will do the heavy lifting to resolve component dependencies.
+Components in `didi` are declared by name. Each component is a singleton. `didi` takes care of instantiating components and their dependencies as needed, caching them for future re-use. 
 
 ## Example
 
@@ -217,7 +217,7 @@ injector.invoke(function(car) {
 });
 ```
 
-You may [flag a component for eager instantiation](#initializing-components).
+You may define [module init hooks](#initializing-components) to mark components that should be eagerly loaded.
 
 > [!IMPORTANT]  
 > `didi` only supports synchronous component instantiation. If you look for async instantiation, give [`async-didi`][async-didi] a try. 
