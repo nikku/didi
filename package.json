@@ -38,7 +38,7 @@
     "@types/node": "^24.10.3",
     "@web/rollup-plugin-copy": "^0.5.1",
     "c8": "^11.0.0",
-    "chai": "^6.2.1",
+    "chai": "^6.2.2",
     "cross-env": "^10.0.0",
     "eslint": "^9.39.3",
     "eslint-plugin-bpmn-io": "^2.2.0",
