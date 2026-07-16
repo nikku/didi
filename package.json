@@ -40,7 +40,7 @@
     "c8": "^11.0.0",
     "chai": "^6.2.2",
     "cross-env": "^10.0.0",
-    "eslint": "^9.39.3",
+    "eslint": "^10.0.0",
     "eslint-plugin-bpmn-io": "^2.2.0",
     "mocha": "^11.7.5",
     "npm-run-all2": "^9.0.0",
