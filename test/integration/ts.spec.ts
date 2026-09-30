@@ -132,6 +132,11 @@ describe('typed', function() {
 
       const typedFoo : string = injector.get('foo');
       const maybeBar = injector.get<string>('bar', false);
+      const optionalBar = injector.get<string>('bar?');
+      const optionalOther = injector.get<string>('other?');
+
+      // @ts-expect-error optional service may be undefined
+      const strictlyTypedOther : string = injector.get<string>('other?');
 
       // then
       expect(foo).to.eql('foo-value');
@@ -139,6 +144,9 @@ describe('typed', function() {
       expect(foop).to.eql('bar-value');
 
       expect(maybeBar!.charAt(0)).to.eql('b');
+      expect(optionalBar!.charAt(0)).to.eql('b');
+      expect(optionalOther).not.to.exist;
+      expect(strictlyTypedOther).not.to.exist;
       expect(typedFoo).to.eql('foo-value');
 
       expect(bub).to.be.an.instanceof(BubType);

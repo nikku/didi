@@ -6,6 +6,16 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+* `FEAT`: support optional dependencies via `name?` annotations or default parameter values ([#68](https://github.com/nikku/didi/pull/68))
+* `FEAT`: resolve non-strict lookups of unresolvable services to `undefined` ([#68](https://github.com/nikku/didi/pull/68))
+* `FIX`: correct missing dotted path throwing in non-strict mode ([#68](https://github.com/nikku/didi/pull/68))
+* `FIX`: correctly parse argument names with default values ([#68](https://github.com/nikku/didi/pull/68))
+
+### Breaking Change
+
+* `injector.get(name, false)` returns `undefined` rather than `null` for unresolvable services, consistent with optional dependencies ([#68](https://github.com/nikku/didi/pull/68))
+* Service names containing `?` are interpreted as optional dependencies and can no longer be retrieved literally ([#68](https://github.com/nikku/didi/pull/68))
+
 ## 11.0.1
 
 * `FIX`: do not leak non-strict lookups into resolving chain
