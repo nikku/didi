@@ -209,6 +209,90 @@ describe('annotation', function() {
     });
 
 
+    describe('should parse default values as optional', function() {
+
+      it('function', function() {
+        const fn = function(a, b = 1000) {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'a', 'b?' ]);
+      });
+
+
+      it('lambda', function() {
+        const fn = (a, b = 1000) => {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'a', 'b?' ]);
+      });
+
+
+      it('async lambda', function() {
+        const fn = async (a, b = 1000) => {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'a', 'b?' ]);
+      });
+
+
+      it('class', function() {
+        class Foo {
+          constructor(a, b = 1000) {}
+        }
+
+        expect(parseAnnotations(Foo)).to.eql([ 'a', 'b?' ]);
+      });
+
+
+      it('with comment annotation', function() {
+        const fn = function(/* one */ a, /* two */ b = 1000, /* three? */ c, /* four? */ d = 1000) {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'one', 'two?', 'three?', 'four?' ]);
+      });
+
+
+      it('with dotted comment annotation', function() {
+        const fn = function(/* a.b.c */ a = 1, /* d.e?.f */ d = 1, /* g.h */ g) {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'a.b.c?', 'd.e?.f?', 'g.h' ]);
+      });
+
+
+      it('with <=> in comment annotation', function() {
+        const fn = function(/* foo=bar */ a, /* baz=qux */ b = 1) {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'foo=bar', 'baz=qux?' ]);
+      });
+
+
+      it('with simple default values', function() {
+        const SOME_CONSTANT = 1;
+
+        const fn = function(a, b = null, c = 'foo', d = SOME_CONSTANT, e = -1) {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'a', 'b?', 'c?', 'd?', 'e?' ]);
+      });
+
+    });
+
+
+    describe('should parse optional comment annotation', function() {
+
+      it('function', function() {
+        const fn = function(a, /* b? */ x) {};
+
+        expect(parseAnnotations(fn)).to.eql([ 'a', 'b?' ]);
+      });
+
+
+      it('class', function() {
+        class Foo {
+          constructor(a, /* b? */ x) {}
+        }
+
+        expect(parseAnnotations(Foo)).to.eql([ 'a', 'b?' ]);
+      });
+
+    });
+
+
     it('should throw error if a non function given', function() {
       expect(function() {
 

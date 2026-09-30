@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Injector } from 'didi';
+import { Injector, annotate } from 'didi';
 
 /**
  * @typedef {import('didi').ModuleDeclaration} ModuleDeclaration
@@ -286,11 +286,28 @@ describe('injector', function() {
     });
 
 
-    it('should return null if non-strict and no provider', function() {
+    it('should return undefined if non-strict and no provider', function() {
       const injector = new Injector([]);
       const notDefined = injector.get('not-defined', false);
 
-      expect(notDefined).to.be.null;
+      expect(notDefined).to.be.undefined;
+    });
+
+
+    it('should return undefined if non-strict and path does not exist', function() {
+
+      // given
+      const injector = new Injector([
+        { b: [ 'value', { c: 'C' } ] }
+      ]);
+
+      // then
+      expect(injector.get('x.c', false)).to.be.undefined;
+      expect(injector.get('b.x.c', false)).to.be.undefined;
+      expect(injector.get('b.c.x', false)).to.be.undefined;
+
+      expect(() => injector.get('x.c')).to.throw('No provider for "x"!');
+      expect(() => injector.get('b.x.c')).to.throw(TypeError);
     });
 
 
@@ -350,7 +367,7 @@ describe('injector', function() {
       const child = injector.createChild([]);
 
       // when
-      expect(child.get('not-defined', false)).to.be.null;
+      expect(child.get('not-defined', false)).to.be.undefined;
 
       // then
       expect(function() {
@@ -1294,6 +1311,562 @@ describe('injector', function() {
         'L1',
         'ROOT'
       ]);
+    });
+
+  });
+
+
+
+  describe('optional dependencies', function() {
+
+    describe('should annotate', function() {
+
+      const module = /** @type ModuleDeclaration */ ({
+        a: [ 'value', 'A' ]
+      });
+
+
+      it('via $inject', function() {
+
+        // given
+        function fn(a, b) {
+          return [ a, b ];
+        }
+
+        fn.$inject = [ 'a', 'b?' ];
+
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke(fn)).to.eql([ 'A', undefined ]);
+      });
+
+
+      it('via array notation', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke([ 'a', 'b?', (a, b) => [ a, b ] ])).to.eql([ 'A', undefined ]);
+      });
+
+
+      it('via annotate', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        const fn = annotate('a', 'b?', (a, b) => [ a, b ]);
+
+        // then
+        expect(injector.invoke(fn)).to.eql([ 'A', undefined ]);
+      });
+
+
+      it('via comment', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke(function(a, /* b? */ x) {
+          return [ a, x ];
+        })).to.eql([ 'A', undefined ]);
+      });
+
+
+      it('via default value', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke(function(a, b = 1000) {
+          return [ a, b ];
+        })).to.eql([ 'A', 1000 ]);
+      });
+
+
+      it('via default value (class constructor)', function() {
+
+        // given
+        class Foo {
+          constructor(a, b = 1000) {
+            this.a = a;
+            this.b = b;
+          }
+        }
+
+        const injector = new Injector([ module ]);
+
+        // when
+        const foo = injector.instantiate(Foo);
+
+        // then
+        expect(foo).to.include({ a: 'A', b: 1000 });
+      });
+
+
+      it('via default value (comment)', function() {
+
+        // given
+        const injector = new Injector([
+          { config: [ 'value', { foo: 'FOO' } ] }
+        ]);
+
+        // then
+        expect(injector.invoke(function(/* config.foo */ x = 1000, /* config.bar */ y = 1000) {
+          return [ x, y ];
+        })).to.eql([ 'FOO', 1000 ]);
+      });
+
+    });
+
+
+    describe('should resolve', function() {
+
+      it('existing service', function() {
+
+        // given
+        const injector = new Injector([
+          { b: [ 'value', 'B' ] }
+        ]);
+
+        // then
+        expect(injector.invoke([ 'b?', b => b ])).to.eql('B');
+        expect(injector.invoke(function(b = 1000) {
+          return b;
+        })).to.eql('B');
+      });
+
+
+      it('<injector>', function() {
+
+        // given
+        const injector = new Injector([]);
+
+        // then
+        expect(injector.invoke([ 'injector?', i => i ])).to.equal(injector);
+      });
+
+
+      it('provided <null>', function() {
+
+        // given
+        const injector = new Injector([
+          { b: [ 'value', null ] }
+        ]);
+
+        // then
+        expect(injector.invoke([ 'b?', b => b ])).to.be.null;
+      });
+
+
+      it('missing service as <undefined>', function() {
+
+        // given
+        const injector = new Injector([]);
+
+        // then
+        expect(injector.invoke([ 'b?', b => b ])).to.be.undefined;
+      });
+
+
+      it('missing service as default value', function() {
+
+        // given
+        const injector = new Injector([]);
+
+        // then
+        expect(injector.invoke([ 'b?', (b = 1000) => b ])).to.eql(1000);
+      });
+
+
+      it('local over service', function() {
+
+        // given
+        const injector = new Injector([
+          { b: [ 'value', 'B' ] }
+        ]);
+
+        // then
+        expect(injector.invoke([ 'b?', b => b ], null, { b: 5 })).to.eql(5);
+        expect(injector.invoke([ 'c?', c => c ], null, { c: 5 })).to.eql(5);
+        expect(injector.invoke([ 'c?', (c = 1000) => c ], null, { c: undefined })).to.eql(1000);
+        expect(injector.invoke(function(c = 1000) {
+          return c;
+        }, null, { c: 5 })).to.eql(5);
+      });
+
+    });
+
+
+    describe('should create component', function() {
+
+      it('via invoke on context', function() {
+
+        // given
+        function Renderer(eventBus, renderPriority = 1000) {
+          this.eventBus = eventBus;
+          this.renderPriority = renderPriority;
+        }
+
+        Renderer.$inject = [ 'eventBus', 'renderPriority?' ];
+
+        const injector = new Injector([
+          { eventBus: [ 'value', 'EVENT_BUS' ] }
+        ]);
+
+        const renderer = {};
+        const customRenderer = {};
+
+        // when
+        injector.invoke(Renderer, renderer);
+        injector.invoke(Renderer, customRenderer, { renderPriority: 9001 });
+
+        // then
+        expect(renderer).to.eql({ eventBus: 'EVENT_BUS', renderPriority: 1000 });
+        expect(customRenderer).to.eql({ eventBus: 'EVENT_BUS', renderPriority: 9001 });
+      });
+
+
+      it('via instantiate', function() {
+
+        // given
+        class Foo {
+          constructor(a, b = 1000) {
+            this.b = b;
+          }
+        }
+
+        const injector = new Injector([
+          { a: [ 'value', 'A' ] }
+        ]);
+
+        // then
+        expect(injector.instantiate(Foo).b).to.eql(1000);
+        expect(injector.instantiate([ 'a', 'b?', Foo ]).b).to.eql(1000);
+      });
+
+
+      it('via <type>', function() {
+
+        // given
+        class Foo {
+          constructor(b = 1000) {
+            this.b = b;
+          }
+        }
+
+        const injector = new Injector([
+          {
+            foo: [ 'type', Foo ],
+            bar: [ 'type', [ 'b?', Foo ] ]
+          }
+        ]);
+
+        // then
+        expect(injector.get('foo').b).to.eql(1000);
+        expect(injector.get('bar').b).to.eql(1000);
+      });
+
+
+      it('via <factory>', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            foo: [ 'factory', function(b = 1000) {
+              return b;
+            } ],
+            bar: [ 'factory', [ 'b?', b => b ] ]
+          }
+        ]);
+
+        // then
+        expect(injector.get('foo')).to.eql(1000);
+        expect(injector.get('bar')).to.be.undefined;
+      });
+
+    });
+
+
+    describe('should resolve partially', function() {
+
+      const module = /** @type ModuleDeclaration */ ({
+        config: [ 'value', { foo: { bar: 'BAR' }, nil: null } ],
+        'a.b': [ 'value', { c: 'A.B.C' } ],
+        'a.b.c': [ 'value', 'NOT_MATCHED' ]
+      });
+
+
+      it('existing path', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke([ 'config.foo.bar?', v => v ])).to.eql('BAR');
+        expect(injector.invoke([ 'config.nil?', v => v ])).to.be.null;
+      });
+
+
+      it('direct binding', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke([ 'a.b?', v => v ])).to.eql({ c: 'A.B.C' });
+      });
+
+
+      it('missing path as <undefined>', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke([ 'other.foo?', v => v ])).to.be.undefined;
+        expect(injector.invoke([ 'config.other.foo?', v => v ])).to.be.undefined;
+        expect(injector.invoke([ 'config.nil.foo?', v => v ])).to.be.undefined;
+        expect(injector.invoke([ 'config.foo.other?', v => v ])).to.be.undefined;
+      });
+
+
+      it('name before <?>', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke([ 'a.b?.c', v => v ])).to.eql('A.B.C');
+        expect(injector.invoke([ 'a?.b', v => v ])).to.be.undefined;
+      });
+
+
+      it('chain akin to optional chaining', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.invoke([ 'config?.foo.bar', v => v ])).to.eql('BAR');
+        expect(injector.invoke([ 'config.foo?.bar', v => v ])).to.eql('BAR');
+        expect(injector.invoke([ 'other?.foo.bar', v => v ])).to.be.undefined;
+        expect(injector.invoke([ 'config.nil?.foo', v => v ])).to.be.undefined;
+        expect(injector.invoke([ 'config.other?.foo', v => v ])).to.be.undefined;
+
+        expect(() => injector.invoke([ 'config?.other.foo', v => v ])).to.throw(TypeError);
+      });
+
+    });
+
+
+    describe('should resolve across scopes', function() {
+
+      it('from parent injector', function() {
+
+        // given
+        const parent = new Injector([
+          { b: [ 'value', 'B' ] }
+        ]);
+
+        const child = parent.createChild([
+          { a: [ 'value', 'A' ] }
+        ]);
+
+        // then
+        expect(child.invoke([ 'a?', 'b?', 'c?', (a, b, c) => [ a, b, c ] ])).to.eql([ 'A', 'B', undefined ]);
+      });
+
+
+      it('from grand parent injector', function() {
+
+        // given
+        const grandParent = new Injector([
+          { b: [ 'value', 'B' ] }
+        ]);
+
+        const child = grandParent.createChild([]).createChild([]);
+
+        // then
+        expect(child.invoke([ 'b?', 'c?', (b, c) => [ b, c ] ])).to.eql([ 'B', undefined ]);
+      });
+
+
+      it('with forced new instance', function() {
+
+        // given
+        const parent = new Injector([
+          {
+            b: [ 'factory', () => ({}) ],
+            foo: [ 'factory', [ 'b?', 'c?', (b, c) => ({ b, c }) ] ]
+          }
+        ]);
+
+        const child = parent.createChild([], [ 'foo' ]);
+
+        // when
+        const foo = child.get('foo');
+
+        // then
+        expect(foo).not.to.equal(parent.get('foo'));
+        expect(foo.b).to.equal(parent.get('b'));
+        expect(foo.c).to.be.undefined;
+      });
+
+
+      it('within private module', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            __exports__: [ 'foo' ],
+            foo: [ 'factory', [ 'bar?', 'baz?', 'public?', (bar, baz, p) => ({ bar, baz, p }) ] ],
+            bar: [ 'value', 'BAR' ]
+          },
+          {
+            public: [ 'value', 'PUBLIC' ],
+            other: [ 'factory', [ 'bar?', 'foo?', (bar, foo) => ({ bar, foo }) ] ]
+          }
+        ]);
+
+        // when
+        const foo = injector.get('foo');
+        const other = injector.get('other');
+
+        // then
+        expect(foo).to.eql({ bar: 'BAR', baz: undefined, p: 'PUBLIC' });
+        expect(other.bar).to.be.undefined;
+        expect(other.foo).to.equal(foo);
+      });
+
+    });
+
+
+    describe('should get', function() {
+
+      const module = /** @type ModuleDeclaration */ ({
+        b: [ 'value', { c: 'C' } ]
+      });
+
+
+      it('existing service', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.get('b?')).to.eql({ c: 'C' });
+        expect(injector.get('b?.c')).to.eql('C');
+        expect(injector.get('injector?')).to.equal(injector);
+      });
+
+
+      it('missing service as <undefined>', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        expect(injector.get('x?')).to.be.undefined;
+        expect(injector.get('x.c?')).to.be.undefined;
+        expect(injector.get('b.x?.c')).to.be.undefined;
+      });
+
+
+      it('equal to non-strict lookup', function() {
+
+        // given
+        const injector = new Injector([ module ]);
+
+        // then
+        for (const name of [ 'b', 'b.c', 'x', 'x.c', 'b.x.c', 'b.c.x' ]) {
+          expect(injector.get(name, false), name).to.equal(injector.get(`${ name }?`));
+        }
+      });
+
+    });
+
+
+    describe('should throw', function() {
+
+      it('on circular dependency', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            a: [ 'factory', [ 'b?', (b) => 'A' ] ],
+            b: [ 'factory', [ 'a?', (a) => 'B' ] ]
+          }
+        ]);
+
+        // then
+        expect(() => injector.get('a')).to.throw(
+          'Cannot resolve circular dependency! (Resolving: a -> b -> a)'
+        );
+      });
+
+
+      it('on provider error', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            a: [ 'factory', () => {
+              throw new Error('failed');
+            } ]
+          }
+        ]);
+
+        // then
+        expect(() => injector.invoke([ 'a?', a => a ])).to.throw('failed');
+      });
+
+
+      it('on missing transitive dependency', function() {
+
+        // given
+        const injector = new Injector([
+          {
+            a: [ 'factory', [ 'c', (c) => 'A' ] ]
+          }
+        ]);
+
+        // then
+        expect(() => injector.invoke([ 'a?', a => a ])).to.throw(
+          'No provider for "c"! (Resolving: a -> c)'
+        );
+      });
+
+    });
+
+
+    it('should not leak into resolving chain', function() {
+
+      // given
+      const injector = new Injector([
+        {
+          a: [ 'factory', [ 'b?', 'c', (b, c) => 'A' ] ]
+        }
+      ]);
+
+      const child = injector.createChild([]);
+
+      // when
+      injector.invoke([ 'x?', x => x ]);
+      child.invoke([ 'y?', y => y ]);
+
+      // then
+      expect(() => injector.get('a')).to.throw(
+        'No provider for "c"! (Resolving: a -> c)'
+      );
+
+      expect(() => child.get('d')).to.throw(
+        'No provider for "d"! (Resolving: d)'
+      );
     });
 
   });

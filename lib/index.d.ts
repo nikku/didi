@@ -87,6 +87,11 @@ export class Injector<
   get<Name extends keyof ServiceMap>(name: Name): ServiceMap[Name];
 
   /**
+   * Return an optional named service or `undefined`.
+   */
+  get<T>(name: `${string}?${string}`): T | undefined;
+
+  /**
    * Return a named service, and throws if it is not found.
    */
   get<T>(name: string): T;
@@ -97,9 +102,9 @@ export class Injector<
   get<T>(name: string, strict: true): T;
 
   /**
-   * Return a named service or `null`.
+   * Return a named service or `undefined`.
    */
-  get<T>(name: string, strict: boolean): T | null;
+  get<T>(name: string, strict: boolean): T | undefined;
 
   /**
    * Invoke the given function, injecting dependencies. Return the result.

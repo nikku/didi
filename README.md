@@ -204,6 +204,31 @@ const engineModule = {
 };
 ```
 
+#### Optional dependencies
+
+Mark a dependency as optional by appending `?`. If it does not exist, `undefined` is injected:
+
+```js
+function Car(e, r) {
+  // will inject 'engine' and 'radio' (if present)
+}
+
+Car.$inject = [ 'engine', 'radio?' ];
+```
+
+For [partial injection](#partial-injection), the name before `?` is resolved optionally, what follows is accessed akin to [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining): `config.engine?.power` resolves to `undefined` if `config` or `config.engine` does not exist. Use `injector.get('radio?')` or `injector.get('radio', false)` to retrieve an optional component.
+
+Arguments with a default value are implicitly optional:
+
+```js
+function Car(engine, radio = null, /* config.engine.power */ power = 1000) {
+  // will inject 'engine', 'radio?' and 'config.engine.power?'
+}
+```
+
+> [!IMPORTANT]
+> Default values containing `,` or `)` cannot be parsed; use explicit annotations in that case.
+
 ### Component instantiation
 
 In [`didi`][didi] components are singletons, instantiated lazily, as needed, and cached for later re-use:
