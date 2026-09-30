@@ -294,6 +294,75 @@ describe('injector', function() {
     });
 
 
+    it('should not leak non-strict lookup into resolving chain', function() {
+
+      // given
+      function aFn(b) {
+        return 'a-value';
+      }
+
+      const injector = new Injector([ {
+        a: [ 'factory', aFn ]
+      } ]);
+
+      // when
+      injector.get('not-defined', false);
+
+      // then
+      expect(function() {
+        return injector.get('a');
+      }).to.throw('No provider for "b"! (Resolving: a -> b)');
+    });
+
+
+    it('should not leak nested non-strict lookup into resolving chain', function() {
+
+      // given
+      const injector = new Injector([ {
+        a: [ 'factory', [ 'injector', function(injector) {
+          injector.get('not-defined', false);
+
+          return injector.get('b');
+        } ] ],
+        b: [ 'factory', [ 'c', function(c) {
+          return 'b-value';
+        } ] ]
+      } ]);
+
+      // then
+      expect(function() {
+        return injector.get('a');
+      }).to.throw('No provider for "c"! (Resolving: a -> b -> c)');
+    });
+
+
+    it('should not leak non-strict lookup via child into resolving chain', function() {
+
+      // given
+      function aFn(b) {
+        return 'a-value';
+      }
+
+      const injector = new Injector([ {
+        a: [ 'factory', aFn ]
+      } ]);
+
+      const child = injector.createChild([]);
+
+      // when
+      expect(child.get('not-defined', false)).to.be.null;
+
+      // then
+      expect(function() {
+        return injector.get('a');
+      }).to.throw('No provider for "b"! (Resolving: a -> b)');
+
+      expect(function() {
+        return child.get('a');
+      }).to.throw('No provider for "b"! (Resolving: a -> b)');
+    });
+
+
     it('should throw error if circular dependency', function() {
       function aFn(b) {
         return 'a-value';

@@ -6,6 +6,8 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+* `FIX`: do not leak non-strict lookups into resolving chain
+
 ## 11.0.0
 
 * `CHORE`: turn into ESM only module
