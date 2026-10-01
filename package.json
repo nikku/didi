@@ -40,14 +40,14 @@
     "c8": "^12.0.0",
     "chai": "^6.2.2",
     "cross-env": "^10.0.0",
-    "eslint": "^9.39.3",
-    "eslint-plugin-bpmn-io": "^2.2.0",
+    "eslint": "^9.39.5",
+    "eslint-plugin-bpmn-io": "^2.4.0",
     "mocha": "^12.0.2",
     "npm-run-all2": "^9.0.0",
     "rollup": "^4.63.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.56.1"
+    "typescript-eslint": "^8.70.1"
   },
   "author": "Nico Rehwaldt <https://github.com/nikku>",
   "license": "MIT",
