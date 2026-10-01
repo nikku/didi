@@ -6,6 +6,8 @@ All notable changes to [didi](https://github.com/nikku/didi) are documented here
 
 ___Note:__ Yet to be released changes appear here._
 
+## 12.0.0
+
 * `FEAT`: support optional dependencies via `name?` annotations or default parameter values ([#68](https://github.com/nikku/didi/pull/68))
 * `FEAT`: resolve non-strict lookups of unresolvable services to `undefined` ([#68](https://github.com/nikku/didi/pull/68))
 * `FIX`: correct missing dotted path throwing in non-strict mode ([#68](https://github.com/nikku/didi/pull/68))
