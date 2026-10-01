@@ -15,7 +15,9 @@ export default [
     },
     plugins: [
       copy({
-        patterns: '**/*.d.ts', rootDir: './lib'
+        patterns: '**/*.d.ts',
+        rootDir: './lib',
+        exclude: []
       })
     ]
   }
